@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -26,7 +25,7 @@
       href="%PUBLIC_URL%/plugins/icheck-bootstrap/icheck-bootstrap.min.css"
     />
     <!-- JQVMap -->
-    <link rel="stylesheet" href="%PUBLIC_URL%/plugins/jqvmap/jqvmap.min.css" />
+    <!-- <link rel="stylesheet" href="%PUBLIC_URL%/plugins/jqvmap/jqvmap.min.css" /> -->
     <!-- Theme style -->
     <link rel="stylesheet" href="%PUBLIC_URL%/static/css/adminlte.min.css" />
     <!-- overlayScrollbars -->
@@ -121,31 +120,61 @@
     <!-- AdminLTE for demo purposes -->
     <script src="%PUBLIC_URL%/static/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="%PUBLIC_URL%/static/js/pages/dashboard.js"></script>
+    <!-- <script src="%PUBLIC_URL%/static/js/pages/dashboard.js"></script> -->
     <!-- DataTables  & Plugins -->
     <script src="%PUBLIC_URL%/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <!-- <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script> -->
     <script src="%PUBLIC_URL%/plugins/jszip/jszip.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/pdfmake/pdfmake.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <!-- <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.colVis.min.js"></script> -->
     <script src="%PUBLIC_URL%/fontawesomefree/js/all.min.js"></script>
     
-    !-- select2 -->
+    <!-- select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js" integrity="sha256-AFAYEOkzB6iIKnTYZOdUf9FFje6lOTYdwRJKwTN5mks=" crossorigin="anonymous"></script>
 
     <script>
+      $(document).ready(function () {
+        var t = $('#example1').DataTable({
+          "language": {
+          "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",}
+          
+        });
+        $.ajax({
+          type: "GET",
+          url: "https://localhost:5001/api/productos",
+         
+          success: function(json_data) {
+            for (let i = 0; i < json_data.length; i++) {
+              t.row.add([
+                json_data[i]['cod_prod'], 
+                json_data[i]['description_typeP'], 
+                json_data[i]['name_product'], 
+                json_data[i]['full_name'], 
+                json_data[i]['unid_med'], 
+                json_data[i]['user_register'], 
+                json_data[i]['creation_date']
+              ]).draw(false);
+                
+            }
+          }
+        })
+     
+     });
+
+
      $(document).ready(function() {
       $('.js-data-example-ajax').select2({
         width:'75%',
         ajax: {
-          url: 'https://api.github.com/search/repositories',
+          type: "GET",
+          url: 'https://localhost:5001/api/tipo_producto',
           dataType: 'json'
           // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
         }
@@ -153,33 +182,37 @@
       
     $('.js-example-basic-single').select2({
           width:'75%',
-          placeholder: '<-- Selecione una area -->',
-          allowClear: true
+          
         })
 
       });
       
-      $(function (){
-        $("#example1").DataTable({
-        //   "language": {
-        //   "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-        // },
-          "responsive": true, "lengthChange": true, "autoWidth": true,
-          "buttons": ["copy", "csv", "excel", "pdf", "print"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $('#example2').DataTable({
-          "paging": true,
-          "lengthChange": false,
-          "searching": false,
-          "ordering": true,
-          "info": true,
-          "autoWidth": false,
-          "responsive": true,
+      // $(function (){
+      //   $("#example1").DataTable({
+      //     "language": {
+      //     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      //   },
+      //     "responsive": true, "lengthChange": true, "autoWidth": true,
+      //     "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      //   }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      //   $('#example2').DataTable({
+      //     "paging": true,
+      //     "lengthChange": false,
+      //     "searching": false,
+      //     "ordering": true,
+      //     "info": true,
+      //     "autoWidth": false,
+      //     "responsive": true,
           
-        });
+      //   });
   
 
-      })
+      // })
+
+
+
+
+      
     </script>
   </body>
 </html>

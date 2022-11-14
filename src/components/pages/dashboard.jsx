@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 export default function Dashboard(props) {
   document.querySelector('title').textContent = 'Clinica | Principal';
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const cookies = new Cookies();
   
   useEffect(()=>{
@@ -48,7 +49,7 @@ export default function Dashboard(props) {
             <div className="icon">
               <i className="ion ion-bag" />
             </div>
-            <a href="/" className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a>
+            <a href="/Detalle/Productos" className="small-box-footer">Mas info <i className="fas fa-arrow-circle-right" /></a>
           </div>
         </div>
         {/* ./col */}

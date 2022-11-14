@@ -1,5 +1,6 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
+import logo from "../img/logo-seajoy.jpg"
 
 export default function Menu() {
  
@@ -16,16 +17,16 @@ export default function Menu() {
      
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
     {/* Brand Logo */}
-    <a href="index3.html" className="brand-link">
-      <img src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" className="brand-image img-circle elevation-3" style={{opacity: '.8'}} />
-      <span className="brand-text font-weight-light">{useri}</span>
+    <a href="/dashboard" className="brand-link">
+      <img src={logo} alt="" className="border brand-image rounded  border-dark responsive"/>
+      <span className="brand-text font-weight-light">SEAJOY</span>
     </a>
     {/* Sidebar */}
     <div className="sidebar">
       {/* Sidebar user panel (optional) */}
       <div className="user-panel  ml-2 mt-3 pb-3 mb-3 d-flex">
-        <div className="image">
-          <i class="fa fa-user text-white">  </i>
+        <div className="image mt-2">
+          <i className="fa fa-user text-white">  </i>
         </div>
         <div className="info">
           <a href className="d-block">  {cookies.get('user')}</a>
@@ -61,9 +62,9 @@ export default function Menu() {
                 </a>
               </li>
               <li className="nav-item">
-                <a href="pages/tables/jsgrid.html" className="nav-link">
+                <a href="/Detalle/Productos" className="nav-link">
                   <i className="far fa-circle nav-icon" />
-                  <p>jsGrid</p>
+                  <p>Detalle Productos</p>
                 </a>
               </li>
             </ul>

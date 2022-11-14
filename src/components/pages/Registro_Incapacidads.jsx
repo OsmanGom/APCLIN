@@ -1,13 +1,10 @@
 import React , {useEffect}from "react";
 import Cookies from 'universal-cookie';
-import Select from '../common/select'
 
 
 
 export default function Ficapacidades(props){
-  
-
-  const url = 'https://localhost:5001/api/area'
+  // const url = 'https://localhost:5001/api/area'
     document.querySelector('title').textContent = 'Clinica | Incapacidades';
     const cookies = new Cookies();
     useEffect(()=>{
@@ -21,10 +18,9 @@ export default function Ficapacidades(props){
     var class1 = 'form-control form-control-border is-invalid';
     const form = ()=>{
         var formu = document.getElementById('quickForm');
-        if (formu.area.value === ''){
-            formu.area.className = 'custom-select form-control-border  select2 is-invalid';
-        }if(formu.codigo.value === ''){
-            formu.codigo.className = class1
+        
+        if(formu.codigo.value === ''){
+            formu.codigo.className = 'js-data-example-ajax is-invalid'
         } if(formu.nombre.value === ''){
             formu.nombre.className = class1;
         }if(formu.identidad.value === ''){
@@ -36,14 +32,6 @@ export default function Ficapacidades(props){
         }
         
     }
-    
-    
-
-      
-   
-   
-
-
 
     return (
         // 
@@ -81,19 +69,15 @@ export default function Ficapacidades(props){
                     <div class="card-body">
                         <div className="row">
                         
-                        <select class="js-data-example-ajax"></select>
+                        
                             <div class="form-group col-md-5">
-                                <label>Area</label>
-                                <Select/>
-                            </div> 
-                            <div class="form-group col-md-4 mt-2">
-                            <label ></label>
-                                <input type="text" name="codigo" class="form-control form-control-border" id="exampleInputEmail1" placeholder="Codigo"/>
+                                <label>Codigo</label>
+                                <select class="js-data-example-ajax " name="codigo"></select>
                                 <div class="invalid-feedback">
                                     Campo vacio.
                                 </div>
-                            </div>
-                        
+                            </div> 
+                          
                         
                             <div class="form-group col-md-6">
                                 
