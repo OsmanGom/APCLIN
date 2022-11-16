@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import logo from "../img/sea1.png"
 
 
 export default function Login(props) {
   document.querySelector('title').textContent = 'Clinica | Login';
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const a = urlSearchParams.get("a");
-  if (a === 1){
-    alert('session ya ha expirado!!')
-  }
+  
 
   const url = 'https://localhost:5001/api/users'
   const cookies = new Cookies();
@@ -51,7 +48,8 @@ export default function Login(props) {
             cookies.set('user', respuesta.username, { path: '/' });
             cookies.set('user_type', respuesta.user_type, { path: '/' });
             
-            props.history.push('/dashboard')
+            // props.history.push('/dashboard')
+            window.location.href=('/dashboard')
           }else{
             document.getElementById('validationL').innerText = 'Usuario o contraseña incorrecta!!';
           }
@@ -76,11 +74,11 @@ export default function Login(props) {
         <div className="hold-transition login-page">
    <div className="login-box">
   <div className="login-logo">
-    <a href="../../index2.html"><b>Login</b>L</a>
+    <a href="/"><img src={logo} alt="" width={'200px'}/></a>
   </div>
   {/* /.login-logo */}
-  <div className="card">
-    <div className="card-body login-card-body">
+  <div className="card mt-4 card-danger card-outline ">
+    <div className="card-body login-card-body shadow rounded">
       <p className="login-box-msg">Inicio de session</p>
       <p class="text-danger" id="validationL"></p>
       <form >

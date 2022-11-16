@@ -3,15 +3,50 @@ import Cookies from 'universal-cookie';
 import axios from 'axios'
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
-import Selectr from '../common/Selectr'
+import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
+// import "alertify.min.js"
 
 
 
+$(document).ready(function () {
+  var t = $('#example1').DataTable({
+    "language": {
+    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+  },
+    "responsive": true, "lengthChange": true, "autoWidth": true,
+    
+  });
+  $.ajax({
+    type: "GET",
+    url: "https://localhost:5001/api/productos",
+   
+    success: function(json_data) {
+      if (json_data !== 'Not Data'){
+
+        for (let i = 0; i < json_data.length; i++) {
+          t.row.add([
+            json_data[i]['cod_prod'], 
+            json_data[i]['description_typeP'], 
+            json_data[i]['name_product'], 
+            json_data[i]['full_name'], 
+            json_data[i]['unid_med'], 
+            json_data[i]['user_register'], 
+            json_data[i]['creation_date']
+          ]).draw(false);
+            
+        }
+      }
+    }
+  })
+
+});
 
 export default function Produtos_D(props) {
     document.querySelector('title').textContent = 'Clinica | Detalle Productos';
     
     const cookies = new Cookies();
+    
     useEffect(()=>{
       if(cookies.get('ID')){
         props.history.push('/Detalle/Productos');
@@ -49,6 +84,12 @@ export default function Produtos_D(props) {
     const remove_data=()=>{
       const  s = document.querySelectorAll('#idselect option')
       s.forEach(o => o.remove());
+      var formu = document.getElementById('formdata');
+      formu.id_type_p.className = 'form-control select2';
+      formu.name_product.className = 'form-control form-control-border';
+      formu.full_name.className = 'form-control form-control-border';
+      formu.unit_price.className = 'form-control form-control-border';
+
     }
 
     document.body.addEventListener("keydown", function(event) {
@@ -60,25 +101,95 @@ export default function Produtos_D(props) {
     });
     
     // 
-
+    
     // Save data for method post =>>> ajax
-      const SaveData=()=>{
-        console.log($('#formdata').serialize())
-        
-        
-          // $.ajax({
-          //   type: "POST", 
-          //   url: "https://localhost:5001/api/productos",
-          //   data: $('#formdata').serialize(),
-          //   success: function (data){
-          //      alert('Datos enviados !!!'); 
-          //     } 
-          // }).error(function (){
-          //   console.log('error')
-          // });
-      }
-    // 
+    const SaveData=(a,formu)=>{
+      if (a === true){
+        $.ajax({
+          type: 'post', 
+          url: 'https://localhost:5001/api/productos',
+          headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+          },
+          data: JSON.stringify({
+            id_type_p:parseInt(formu.id_type_p.value),
+            name_product:formu.name_product.value,
+            full_name:formu.full_name.value,
+            unit_price:parseFloat(formu.unit_price.value),
+            user_register:formu.user_register.value,
+          }),
+          success: function (res){
+            console.log(res)
+            alert(res)
+            window.location.href=('/Detalle/Productos')
+            
+          } 
+        })
 
+      //   axios({
+      //     method: 'post',
+      //     url: 'https://localhost:5001/api/productos',
+      //     headers:{
+      //       'Accept':'application/json',
+      //       'Content-Type':'application/json'
+      //     },
+      //     data:JSON.stringify({
+      //       id_type_p:parseInt(formu.id_type_p.value),
+      //       name_product:formu.name_product.value,
+      //       full_name:formu.full_name.value,
+      //       unit_price:parseFloat(formu.unit_price.value),
+      //       user_register:formu.user_register.value,
+      //     })
+      // })
+      // .then(res => res.json())
+      // .then((result)=>{
+      //   console.log(result)
+      // },
+      // (error)=>{
+      //   console.log(error)
+      // })
+      }
+    }
+          // 
+          
+          // Validations
+    var classSuccess = 'form-control is-valid form-control-border';
+    var classWarning = 'form-control form-control-border is-invalid';
+    const form = ()=>{
+        var formu = document.getElementById('formdata');
+        var a,b,c,d,e = false;
+
+        if(formu.id_type_p.value === ''){
+          b = false
+          formu.id_type_p.className = 'form-control select2 is-invalid'
+        }else{
+          b = true
+          formu.id_type_p.className = 'form-control select2 is-valid'
+        } if(formu.name_product.value === ''){
+          c = false
+          formu.name_product.className = classWarning;
+        }else{
+          c = true
+          formu.name_product.className = classSuccess;
+        }if(formu.full_name.value === ''){
+          d = false
+          formu.full_name.className = classWarning
+        }else{
+          d = true
+          formu.full_name.className = classSuccess;
+        }if(formu.unit_price.value === ''){
+          e = false
+          formu.unit_price.className = classWarning;
+        }else{
+          e = true
+          formu.unit_price.className = classSuccess;
+        }
+        if (b===true && c===true && d===true && e===true){
+          a = true;
+        }
+        SaveData(a,formu)
+    }
 
     return (
       
@@ -105,15 +216,15 @@ export default function Produtos_D(props) {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-12">
-                <div className="card">
+                <div className="card shadow rounded">
                   <div className="card-header d-flex">
                     <h1 className="card-title">Tabla Prodcutos</h1>
                     <button type="button" class="btn btn-primary btn-sm ml-auto" data-toggle="modal" data-target="#modal-product"  onClick={selectData}>
                         Agregar Producto
                     </button>
                   </div>
-                  <div className="card-body table-responsive">
-                    <table id="example1" className="table table-bordered table-striped row-border hover order-column">
+                  <div className="card-body table-responsive" id='data1'>
+                    <table id="example1" className="table order-column table-striped row-border hover order-column">
                       <thead>
 
                         <tr>
@@ -163,59 +274,51 @@ export default function Produtos_D(props) {
               <form id='formdata'>
                 {/*  */}
                 <div className="row">
-                        
-                        
-                        <div class="form-group col-md-5">
-                            <label>Tipo Producto</label>
-                            <div className="select2-purple">
-                                <select className='form-control select2' id='idselect' name='id_type_p' >
-                                  
-                                </select>
-                            </div>
-                            
-                            <div class="invalid-feedback">
-                                Campo vacio.
-                            </div>
-                        </div> 
-                      
-                    
-                        <div class="form-group col-md-6 mt-4 mr-4">
-                            
-                            <input type="text" name="name_product" class="form-control form-control-border" placeholder="Nombre Producto"/>
-                            <div class="invalid-feedback">
-                                Campo vacio.
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4">
-                            
-                            <input type="text" name="full_name" class="form-control form-control-border " placeholder="Nombre Completo"/>
-                            <div class="invalid-feedback">
-                                Campo vacio.
-                            </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                            
-                            <input type="text" name="unit_price" class="form-control form-control-border ml-2"  placeholder="Precio Unidad"/>
-                            <div class="invalid-feedback">
-                                Campo vacio.
-                            </div>
-                        </div>
-                        
+                  <div class="form-group col-md-5">
+                      <label>Tipo Producto</label>
+                      <div className="select2-purple">
+                          <select className='form-control select2 ' id='idselect' name='id_type_p' >
+                          </select>
+                      </div>
+                      <div class="invalid-feedback">
+                          Campo vacio.
+                      </div>
+                  </div> 
+                  <div class="form-group col-md-5 mt-4 mr-4">
+                    <label></label>
+                      <input type="text" name="name_product"  className="form-control form-control-border" placeholder="Nombre Producto"/>
+                      <div class="invalid-feedback">
+                            Campo vacio.
+                      </div>
+                  </div>
+                  <div class="form-group col-md-5 mt-2">
+                    <input type="text" name="full_name" className="form-control form-control-border " placeholder="Nombre Completo"/>
+                    <div class="invalid-feedback">
+                        Campo vacio.
                     </div>
+                  </div>
+                  <div class="form-group col-md-3 mt-2">
+                    <input type="text" name="unit_price" className="form-control form-control-border ml-2"  placeholder="Precio Unidad"/>
+                    <div class="invalid-feedback">
+                        Campo vacio.
+                    </div>
+                  </div>
+                </div>
                     
                 {/*  */}
-                  <div class="modal-footer  justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onClick={remove_data}>Cancelar</button>
-                    <button type="button" name="user_register" value={cookies.get('user')} class="btn btn-primary" onClick={SaveData}>Registrar</button>
-                  </div>
+                <div class="modal-footer  justify-content-between">
+                  <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={remove_data}>Cancelar</button>
+                  <button type="button" name="user_register" value={cookies.get('user')} className="btn btn-primary" onClick={form}>Registrar</button>
+                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
       {/*  */}
+      <br/><br/>
       </>
-
+      
     )
   
   }

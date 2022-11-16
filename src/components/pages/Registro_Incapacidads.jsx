@@ -20,7 +20,7 @@ export default function Ficapacidades(props){
         var formu = document.getElementById('quickForm');
         
         if(formu.codigo.value === ''){
-            formu.codigo.className = 'js-data-example-ajax is-invalid'
+            formu.codigo.className = 'form-control select2 is-invalid'
         } if(formu.nombre.value === ''){
             formu.nombre.className = class1;
         }if(formu.identidad.value === ''){
@@ -32,6 +32,10 @@ export default function Ficapacidades(props){
         }
         
     }
+    const selectitem=(a)=>{
+      console.log(a.target.value.toUpperCase());
+    }
+    
 
     return (
         // 
@@ -60,7 +64,7 @@ export default function Ficapacidades(props){
             {/* Small boxes (Stat box) */}
             <div className="row">
               <div className="col-md-11 ml-3">
-              <div className="card card-primary">
+              <div className="card card-primary shadow">
                 <div class="card-header">
                     <h3 class="card-title">Registro <small>Incapacidades</small></h3>
                 </div>
@@ -71,8 +75,13 @@ export default function Ficapacidades(props){
                         
                         
                             <div class="form-group col-md-5">
-                                <label>Codigo</label>
-                                <select class="js-data-example-ajax " name="codigo"></select>
+                                <label>Codigo Empleado</label>
+                                <select class="form-control select2 " name="codigo" onChange={selectitem}>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                </select>
                                 <div class="invalid-feedback">
                                     Campo vacio.
                                 </div>
@@ -81,7 +90,7 @@ export default function Ficapacidades(props){
                         
                             <div class="form-group col-md-6">
                                 
-                                <input type="text" name="nombre" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Nombre"/>
+                                <input type="text" name="nombre" class="form-control form-control-border " id="exampleInputPassword1" placeholder="Nombre" onChange={selectitem}/>
                                 <div class="invalid-feedback">
                                     Campo vacio.
                                 </div>
@@ -93,13 +102,14 @@ export default function Ficapacidades(props){
                                     Campo vacio.
                                 </div>
                             </div>
-                            <div class="form-group col-md-1">
-                                
+                            <div class="form-group col-md-3">
                                 <input type="text" name="dias" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Dias"/>
                                 <div class="invalid-feedback">
                                     Campo vacio.
                                 </div>
                             </div>
+                        </div>
+                        <div className="row">
                             <div class="form-group col-md-5">
                                 
                                 <input type="text" name="condicion" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Condicion"/>
@@ -107,8 +117,6 @@ export default function Ficapacidades(props){
                                     Campo vacio.
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
                             <div class="form-group col-md-6">
                              <label>Diagnostico</label>
                             <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>

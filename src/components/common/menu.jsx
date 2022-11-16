@@ -1,6 +1,8 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
-import logo from "../img/logo-seajoy.jpg"
+import logo from "../img/sea1.png"
+import Ihospital from "../img/hostital.svg"
+
 
 export default function Menu() {
  
@@ -17,19 +19,19 @@ export default function Menu() {
      
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
     {/* Brand Logo */}
-    <a href="/dashboard" className="brand-link">
-      <img src={logo} alt="" className="border brand-image rounded  border-dark responsive"/>
-      <span className="brand-text font-weight-light">SEAJOY</span>
+    <a href="/dashboard" className="brand-link mb-4 ">
+      <img src={logo} alt="" className="border brand-image rounded  border-dark  ml-4"/>
+      <span className="   text-danger">&nbsp;</span>
     </a>
     {/* Sidebar */}
     <div className="sidebar">
       {/* Sidebar user panel (optional) */}
-      <div className="user-panel  ml-2 mt-3 pb-3 mb-3 d-flex">
+      <div className="user-panel  ml-2 mt-2  d-flex">
         <div className="image mt-2">
           <i className="fa fa-user text-white">  </i>
         </div>
         <div className="info">
-          <a href className="d-block">  {cookies.get('user')}</a>
+          <a href className="d-block ">  {cookies.get('user')}</a>
         </div>
       </div>
       {/* SidebarSearch Form */}
@@ -69,19 +71,35 @@ export default function Menu() {
               </li>
             </ul>
           </li>
-          <li className="nav-header">EXAMPLES</li>
+          <li className="nav-header">Inventario</li>
           <li className="nav-item">
-            <a href="pages/calendar.html" className="nav-link">
-              <i className="nav-icon far fa-calendar-alt" />
+            <a href="/kardex" className="nav-link">
+            <i class="nav-icon fas fa-table"></i>
               <p>
-                Calendar
-                <span className="badge badge-info right">2</span>
+                Kardex
+                <i class="nav-icon far fa-circle text-info right"></i>
               </p>
             </a>
           </li>
         
-          <li className="nav-header">MISCELLANEOUS</li>
-          
+          <li className="nav-header">Registros</li>
+          <li className="nav-item">
+            <a href className="nav-link active">
+            <i class="nav-icon fas fa-edit"/>
+              <p>
+                Options
+                <i className="fas fa-angle-left right" />
+              </p>
+            </a>
+            <ul className="nav nav-treeview">
+              <li className="nav-item">
+                <a href="/Registro/Tipo/Producto" className="nav-link">
+                  <i className="far fa-circle nav-icon" />
+                  <p>Tipo Producto</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           
         </ul>
       </nav>

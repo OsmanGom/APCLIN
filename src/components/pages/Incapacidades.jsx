@@ -1,5 +1,42 @@
 import React from 'react'
-import axios from 'axios'
+// import axios from 'axios'
+import "jquery/dist/jquery.min.js";
+import $ from "jquery";
+import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
+
+
+$(function (){
+  var t2 = $("#example").DataTable({
+    "language": {
+    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+  },
+    "responsive": true, "lengthChange": true, "autoWidth": true,
+  })
+  $.ajax({
+      type: "GET",
+      url: "https://localhost:5001/api/incapacidades",
+    
+      success: function(json_data) {
+        if (json_data !== 'Not Data'){
+
+          for (let i = 0; i < json_data.length; i++) {
+            t2.row.add([
+              json_data[i]['id'], 
+              json_data[i]['cod_employed'], 
+              json_data[i]['days'], 
+              json_data[i]['condition'], 
+              json_data[i]['user_register'],
+              json_data[i]['creation_date'], 
+              json_data[i]['diagnostic'], 
+            ]).draw(false);
+              
+          }
+
+        }
+      }
+    })
+});
 
 
 export default function Incapacidades() {
@@ -25,34 +62,41 @@ export default function Incapacidades() {
     {/*Sections of tables  */}
   <section className="content">
     <div className="container-fluid">
-        <div className="row mb-2">
+        <div className="row mb-2 ">
             <div className="col-12">
-                <div className="card">
-                    <div className="card-header">
+                <div className="card shadow rounded">
+                    <div className="card-header ">
                         <h1 className="card-title">Tabla Incapacitados</h1>
                     </div>
-                    <div className="card-body">
-                    <button id="addRow" className='btn btn-primary '>Add new row</button>
-                    <table id="example" className="table table-bordered table-striped row-border hover order-column">
-                        <thead>
-                            <tr>
-                                <th>Column 1</th>
-                                <th>Column 2</th>
-                                <th>Column 3</th>
-                                <th>Column 4</th>
-                                <th>Column 5</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Column 1</th>
-                                <th>Column 2</th>
-                                <th>Column 3</th>
-                                <th>Column 4</th>
-                                <th>Column 5</th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <div className="card-body table-responsive">
+                      
+                      <table id="example" className="table order-column table-striped row-border hover order-column">
+                          <thead>
+                              <tr>
+                                  <th>ID</th>
+                                  <th>Codigo de Empleado</th>
+                                  <th>Dias de incapacidad</th>
+                                  <th>Condicion</th>
+                                  <th>Usuario Registro</th>
+                                  <th>Fecha de creacion</th>
+                                  <th>Diagnostico</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+
+                          </tbody>
+                          <tfoot>
+                              <tr>
+                                <th>ID</th>
+                                <th>Codigo de Empleado</th>
+                                <th>Dias de incapacidad</th>
+                                <th>Condicion</th>
+                                <th>Usuario Registro</th>
+                                <th>Fecha de creacion</th>
+                                <th>Diagnostico</th>
+                              </tr>
+                          </tfoot>
+                      </table>
                     </div>{/* /.col */}
                 </div>
             </div>

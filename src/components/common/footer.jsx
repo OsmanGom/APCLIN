@@ -3,7 +3,7 @@ import React from 'react'
 export default function Footer() {
     if (window.location.pathname === '/') return null;
     return (
-       <footer className="main-footer">
+       <footer className="main-footer mt-2">
         <strong>Copyright © 2022 <b>SEAJOY.</b> </strong>
          All rights reserved.
         <div className="float-right d-none d-sm-inline-block">
