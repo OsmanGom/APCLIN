@@ -13,6 +13,7 @@ import Incapacidades from './components/pages/Incapacidades'
 import Produtos_D from './components/pages/Productos_detalle'
 import Kardex from './components/pages/kardex'
 import R_Tipo_Producto from './components/pages/Registro_Tipo_Producto'
+import TrazaKardez from './components/pages/TranzaKardex'
 
 
 export default function App() {
@@ -31,7 +32,8 @@ export default function App() {
           <Route exact path="/Detalle/Incapacidades" component={Incapacidades}/>
           <Route exact path="/Detalle/Productos" component={Produtos_D}/>
           <Route exact path="/kardex" component={Kardex}/>
-          <Route exact path="/Registro/Tipo/Producto" component={R_Tipo_Producto}/>
+          <Route exact path="/Registros/Base" component={R_Tipo_Producto}/>
+          <Route exact path="/Kardez/Trazabilidad" component={TrazaKardez}/>
         </div>
     </Switch>
     <Footer/>

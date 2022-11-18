@@ -5,7 +5,7 @@ import Cookies from 'universal-cookie';
 
 export default function Ficapacidades(props){
   // const url = 'https://localhost:5001/api/area'
-    document.querySelector('title').textContent = 'Clinica | Incapacidades';
+    document.querySelector('title').textContent = 'Clinica | Registros';
     const cookies = new Cookies();
     useEffect(()=>{
       if(cookies.get('ID')){
@@ -68,9 +68,9 @@ export default function Ficapacidades(props){
                 <div class="card-header">
                     <h3 class="card-title">Registro <small>Incapacidades</small></h3>
                 </div>
-                <h3 class="text-danger ml-5 mt-2" id="validationL">xx</h3>
-                <form id="quickForm">
-                    <div class="card-body">
+                {/* <h3 class="text-danger ml-5 mt-2" id="validationL">xx</h3> */}
+                <form id="quickForm ">
+                    <div class="card-body mt-3">
                         <div className="row">
                         
                         

@@ -1,5 +1,5 @@
-import React from 'react'
-// import axios from 'axios'
+import React,{useEffect} from 'react'
+import Cookies from 'universal-cookie';
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables"
@@ -39,10 +39,19 @@ $(function (){
 });
 
 
-export default function Incapacidades() {
+export default function Incapacidades(props) {
+
+  document.querySelector('title').textContent = 'Clinica | Detalle Incapacidad';
+    const cookies = new Cookies();
+    useEffect(()=>{
+      if(cookies.get('ID')){
+        props.history.push('/Detalle/Incapacidades');
+      }else{
+        props.history.push('/');
+      }
+        },[]); 
     return (
 <div className="content-wrapper">
-  
   <div className="content-header">
     <div className="container-fluid">
       <div className="row mb-2">
@@ -62,7 +71,7 @@ export default function Incapacidades() {
     {/*Sections of tables  */}
   <section className="content">
     <div className="container-fluid">
-        <div className="row mb-2 ">
+        <div className="row ">
             <div className="col-12">
                 <div className="card shadow rounded">
                     <div className="card-header ">

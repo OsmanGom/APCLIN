@@ -127,28 +127,6 @@ export default function Produtos_D(props) {
           } 
         })
 
-      //   axios({
-      //     method: 'post',
-      //     url: 'https://localhost:5001/api/productos',
-      //     headers:{
-      //       'Accept':'application/json',
-      //       'Content-Type':'application/json'
-      //     },
-      //     data:JSON.stringify({
-      //       id_type_p:parseInt(formu.id_type_p.value),
-      //       name_product:formu.name_product.value,
-      //       full_name:formu.full_name.value,
-      //       unit_price:parseFloat(formu.unit_price.value),
-      //       user_register:formu.user_register.value,
-      //     })
-      // })
-      // .then(res => res.json())
-      // .then((result)=>{
-      //   console.log(result)
-      // },
-      // (error)=>{
-      //   console.log(error)
-      // })
       }
     }
           // 
@@ -193,8 +171,8 @@ export default function Produtos_D(props) {
 
     return (
       
-      <><div className="content-wrapper">
-
+      <><div className="content-wrapper mb-3">
+      
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
@@ -316,7 +294,6 @@ export default function Produtos_D(props) {
         </div>
       </div>
       {/*  */}
-      <br/><br/>
       </>
       
     )

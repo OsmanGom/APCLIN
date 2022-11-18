@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-   
+    <link rel="shortcut icon" href="/src/components/img/sea.png"> 
     <!-- Google Font: Source Sans Pro -->
     <link
       rel="stylesheet"
@@ -24,8 +24,6 @@
       rel="stylesheet"
       href="%PUBLIC_URL%/plugins/icheck-bootstrap/icheck-bootstrap.min.css"
     />
-    <!-- JQVMap -->
-    <!-- <link rel="stylesheet" href="%PUBLIC_URL%/plugins/jqvmap/jqvmap.min.css" /> -->
     <!-- Theme style -->
     <link rel="stylesheet" href="%PUBLIC_URL%/static/css/adminlte.min.css" />
     <!-- overlayScrollbars -->
@@ -38,6 +36,7 @@
       rel="stylesheet"
       href="%PUBLIC_URL%/plugins/daterangepicker/daterangepicker.css"
     />
+    
     <!-- summernote -->
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -75,7 +74,7 @@
   <!-- select2-bootstrap4-theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css"> <!-- for live demo page -->
     <!-- dropzonejs -->
-    <title>Clinica Deli</title>
+    <title></title>
   </head>
   
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -132,40 +131,11 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js" integrity="sha256-AFAYEOkzB6iIKnTYZOdUf9FFje6lOTYdwRJKwTN5mks=" crossorigin="anonymous"></script>
 
     <script>
-    //   $(document).ready(function () {
-    //     var t = $('#example1').DataTable({
-    //       "language": {
-    //       "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
-    //     },
-    //       "responsive": true, "lengthChange": true, "autoWidth": true,
-          
-    //     });
-    //     $.ajax({
-    //       type: "GET",
-    //       url: "https://localhost:5001/api/productos",
-         
-    //       success: function(json_data) {
-    //         for (let i = 0; i < json_data.length; i++) {
-    //           t.row.add([
-    //             json_data[i]['cod_prod'], 
-    //             json_data[i]['description_typeP'], 
-    //             json_data[i]['name_product'], 
-    //             json_data[i]['full_name'], 
-    //             json_data[i]['unid_med'], 
-    //             json_data[i]['user_register'], 
-    //             json_data[i]['creation_date']
-    //           ]).draw(false);
-                
-    //         }
-    //       }
-    //     })
-     
-    //  });
-
+   
 
      $(document).ready(function() {
-      $('.js-data-example-ajax').select2({
-        width:'75%',
+      $('.js-data-example-ajax-almacen').select2({
+        width:'100%',
         ajax: {
           type: "GET",
           url: 'https://localhost:5001/api/tipo_producto',
@@ -173,45 +143,32 @@
           // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
         }
       });
+      $('.js-data-example-ajax-cod-producto').select2({
+        width:'100%',
+        // theme: "classic",
+        ajax: {
+          type: "GET",
+          url: 'https://localhost:5001/api/productos',
+          dataType: 'json'
+          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+        }
+      });
+      $('.js-data-example-ajax-tipo-movimiento').select2({
+        width:'100%',
+        ajax: {
+          type: "GET",
+          url: 'https://localhost:5001/api/tipo_movimiento',
+          dataType: 'json'
+          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+        }
+      });
       
-    $('.js-example-basic-single').select2({
-          width:'75%',
-          
-        })
+      $('.js-example-basic-single1').select2({
+            width:'75%',
+            
+          })
 
       });
-
-    // $(function (){
-    //   var t2 = $("#example").DataTable({
-    //     "language": {
-    //     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-    //   },
-    //     "responsive": true, "lengthChange": true, "autoWidth": true,
-    //   })
-    //   $.ajax({
-    //       type: "GET",
-    //       url: "https://localhost:5001/api/incapacidades",
-        
-    //       success: function(json_data) {
-    //         for (let i = 0; i < json_data.length; i++) {
-    //           t2.row.add([
-    //             json_data[i]['id'], 
-    //             json_data[i]['cod_employed'], 
-    //             json_data[i]['days'], 
-    //             json_data[i]['condition'], 
-    //             json_data[i]['user_register'],
-    //             json_data[i]['creation_date'], 
-    //             json_data[i]['diagnostic'], 
-    //           ]).draw(false);
-                
-    //         }
-    //       }
-    //     })
-    // });
-
-
-
-      
     </script>
   </body>
 </html>

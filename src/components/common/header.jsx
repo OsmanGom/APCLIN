@@ -1,8 +1,24 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
+import logod from '../img/user.svg'
+import logoa from '../img/admin.svg'
+import logoe from '../img/nurse.svg'
 
 export default function Header(props) {
   const cookies = new Cookies();
+
+  var useri = '';
+  var logo
+  if(cookies.get('user_type') === '1' ){
+        useri = 'Admin';
+        logo = logoa
+  }else if (cookies.get('user_type') === '2'){
+        useri = 'Doctora';
+        logo = logod
+  }else{
+      useri = 'Enfermera';
+      logo = logoe
+  }
  
   const remove_cookies=()=>{
     cookies.remove('ID', {path: '/'});
@@ -55,59 +71,14 @@ inactivityTime()
           <a href="/dashboard" className="nav-link">Home</a>
         </li>
         <li className="nav-item d-none d-sm-inline-block">
-          <a href className="nav-link">Soporte</a>
+          {/* <a href className="nav-link">Soporte</a> */}
         </li>
       </ul>
       {/* Right navbar links */}
       <ul className="navbar-nav ml-auto">
-        {/* Navbar Search */}
         
-        {/* Messages Dropdown Menu */}
-        <li className="nav-item dropdown">
-          <a className="nav-link" data-toggle="dropdown" href>
-            <i className="far fa-comments" />
-            <span className="badge badge-danger navbar-badge">3</span>
-          </a>
-          <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-
-            <div className="dropdown-divider" />
-            <a href className="dropdown-item">
-              {/* Message Start */}
-              <div className="media">
-                <img src="dist/img/user8-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
-                <div className="media-body">
-                  <h3 className="dropdown-item-title">
-                    John Pierce
-                    <span className="float-right text-sm text-muted"><i className="fas fa-star" /></span>
-                  </h3>
-                  <p className="text-sm">I got your message bro</p>
-                  <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
-                </div>
-              </div>
-              {/* Message End */}
-            </a>
-            <div className="dropdown-divider" />
-            <a href className="dropdown-item">
-              {/* Message Start */}
-              <div className="media">
-                <img src="dist/img/user3-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
-                <div className="media-body">
-                  <h3 className="dropdown-item-title">
-                    Nora Silvester
-                    <span className="float-right text-sm text-warning"><i className="fas fa-star" /></span>
-                  </h3>
-                  <p className="text-sm">The subject goes here</p>
-                  <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
-                </div>
-              </div>
-              {/* Message End */}
-            </a>
-            <div className="dropdown-divider" />
-            <a href className="dropdown-item dropdown-footer">See All Messages</a>
-          </div>
-        </li>
         {/* Notifications Dropdown Menu */}
-        <li className="nav-item dropdown">
+        {/* <li className="nav-item dropdown">
           <a className="nav-link" data-toggle="dropdown" href>
             <i className="far fa-bell" />
             <span className="badge badge-warning navbar-badge">15</span>
@@ -132,36 +103,42 @@ inactivityTime()
             <div className="dropdown-divider" />
             <a href className="dropdown-item dropdown-footer">See All Notifications</a>
           </div>
-        </li>
+        </li> */}
         <li className="nav-item">
           <a className="nav-link" data-widget="fullscreen" href role="button">
             <i className="fas fa-expand-arrows-alt" />
           </a>
         </li>
         {/* User  Dropdown panel */}
-        <li className="nav-item dropdown">
-          <a className="nav-link" data-toggle="dropdown" href>
-            <i class="fa fa-user"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <span className="dropdown-item dropdown-header">Panel</span>
-            <div className="dropdown-divider" />
-            <a href className="dropdown-item">
-              {cookies.get('user')}
-              <span className="float-right text-sm text-dark"><i class="fa fa-user"></i></span>
-            </a>
-            <div className="dropdown-divider" />
-            <a href className="dropdown-item" onClick={cerrarSesion}>
-              Cerrar session
-              <span className="float-right text-sm text-dark"><i class="fa fa-arrow-right"></i></span>
-            </a>
+        
+{/*  */}
+        <li class="nav-item dropdown user-menu">
+        <a href class="nav-link dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-user"></i>
+      
+        </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right card-dark card-outline shadow rounded">
+          
+          <li class="user-header bg-info">
+            <img src={logo} className="img-circle elevation-2 " alt=""/>
 
-            <div className="dropdown-divider" />
+            <p>
+            {cookies.get('user')}
+              <small>{useri}</small>
+            </p>
+          </li>
+         
+          <li class="user-body">
 
-            <div className="dropdown-divider" />
-
-          </div>
-        </li>
+           
+          </li>
+          
+          <li class="user-footer">
+            <button className='btn btn-secondary btn-flat rounded'>Profile</button>
+            <button className='btn  btn-flat float-right btn-danger rounded' onClick={cerrarSesion}>Cerrar sesion</button>
+          </li>
+        </ul>
+      </li>
       </ul>
     </nav>
     {/* <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" id="xd">
