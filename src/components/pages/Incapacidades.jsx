@@ -19,11 +19,12 @@ $(function (){
     
       success: function(json_data) {
         if (json_data !== 'Not Data'){
-
           for (let i = 0; i < json_data.length; i++) {
             t2.row.add([
-              json_data[i]['id'], 
-              json_data[i]['cod_employed'], 
+              json_data[i]['exp_codigo_alternativo'], 
+              json_data[i]['exp_nombres_apellidos'], 
+              json_data[i]['departamento'],
+              json_data[i]['puesto'], 
               json_data[i]['days'], 
               json_data[i]['condition'], 
               json_data[i]['user_register'],
@@ -82,13 +83,15 @@ export default function Incapacidades(props) {
                       <table id="example" className="table order-column table-striped row-border hover order-column">
                           <thead>
                               <tr>
-                                  <th>ID</th>
-                                  <th>Codigo de Empleado</th>
-                                  <th>Dias de incapacidad</th>
-                                  <th>Condicion</th>
-                                  <th>Usuario Registro</th>
-                                  <th>Fecha de creacion</th>
-                                  <th>Diagnostico</th>
+                                <th>Codigo de Empleado</th>
+                                <th>Nombre</th>
+                                <th>Departamento</th>
+                                <th>Cargo</th>
+                                <th>Dias de incapacidad</th>
+                                <th>Condicion</th>
+                                <th>Usuario Registro</th>
+                                <th>Fecha de creacion</th>
+                                <th>Diagnostico</th>
                               </tr>
                           </thead>
                           <tbody>
@@ -96,8 +99,10 @@ export default function Incapacidades(props) {
                           </tbody>
                           <tfoot>
                               <tr>
-                                <th>ID</th>
                                 <th>Codigo de Empleado</th>
+                                <th>Nombre</th>
+                                <th>Departamento</th>
+                                <th>Cargo</th>
                                 <th>Dias de incapacidad</th>
                                 <th>Condicion</th>
                                 <th>Usuario Registro</th>

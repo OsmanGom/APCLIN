@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="shortcut icon" href="/src/components/img/sea.png"> 
+    <link rel="shortcut icon" href="%PUBLIC_URL%/public/static/img/home-medical.ico"> 
     <!-- Google Font: Source Sans Pro -->
     <link
       rel="stylesheet"
@@ -36,6 +36,8 @@
       rel="stylesheet"
       href="%PUBLIC_URL%/plugins/daterangepicker/daterangepicker.css"
     />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  
     
     <!-- summernote -->
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css" />
@@ -68,11 +70,11 @@
     <link rel="stylesheet" href="%PUBLIC_URL%/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet" href="%PUBLIC_URL%/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <!-- select2 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous">
+   
+    <!-- BS Stepper -->
+  <link rel="stylesheet" href="%PUBLIC_URL%/plugins/bs-stepper/css/bs-stepper.min.css">
 
-  <!-- select2-bootstrap4-theme -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css"> <!-- for live demo page -->
+  
     <!-- dropzonejs -->
     <title></title>
   </head>
@@ -126,49 +128,173 @@
     <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.colVis.min.js"></script> -->
     <script src="%PUBLIC_URL%/fontawesomefree/js/all.min.js"></script>
-    
+    <!-- BS-Stepper -->
+    <script src="%PUBLIC_URL%/plugins/bs-stepper/js/bs-stepper.min.js"></script>
     <!-- select2 -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js" integrity="sha256-AFAYEOkzB6iIKnTYZOdUf9FFje6lOTYdwRJKwTN5mks=" crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
    
 
-     $(document).ready(function() {
-      $('.js-data-example-ajax-almacen').select2({
-        width:'100%',
-        ajax: {
-          type: "GET",
-          url: 'https://localhost:5001/api/tipo_producto',
-          dataType: 'json'
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-        }
-      });
-      $('.js-data-example-ajax-cod-producto').select2({
-        width:'100%',
-        // theme: "classic",
-        ajax: {
-          type: "GET",
-          url: 'https://localhost:5001/api/productos',
-          dataType: 'json'
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-        }
-      });
-      $('.js-data-example-ajax-tipo-movimiento').select2({
-        width:'100%',
-        ajax: {
-          type: "GET",
-          url: 'https://localhost:5001/api/tipo_movimiento',
-          dataType: 'json'
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-        }
-      });
-      
-      $('.js-example-basic-single1').select2({
-            width:'75%',
-            
-          })
+    $(document).ready(function() {
 
+      $('.js-data-example2').select2({
+        width:'70%',
       });
+      $('.js-data-example').select2({
+        width:'100%',
+      });
+
+      var em = document.getElementById('id_select_em')
+      const selectEmployed=()=>{
+        if (em != null){
+          $.ajax({
+            type: "GET", 
+            url:"https://localhost:5001/api/empleados",
+            success:function(json_data) {  
+              const po = document.createElement('option') 
+              po.value = ''
+              po.text = '------ Seleccione -------'
+              em.appendChild(po)
+              for (let i = 0; i < json_data.length; i++) {
+                const option = document.createElement('option')
+                option.value = json_data[i]['exp_codigo_alternativo']
+                option.text = json_data[i]['exp_codigo_alternativo']+' '+json_data[i]['exp_nombres_apellidos']+' | '+json_data[i]['departamento']
+                em.appendChild(option);
+              }
+            }
+          })
+        }
+      }
+      selectEmployed()
+
+
+      var s = document.getElementById('id_select_lote')
+      const selectLot=()=>{
+        if (s != null){
+          $.ajax({
+            type: "GET", 
+            url:"https://localhost:5001/api/lot",
+            success:function(json_data) {  
+              const op = document.createElement('option') 
+              op.value = ''
+              op.text = '------ Seleccione -------'
+              s.appendChild(op)
+              for (let i = 0; i < json_data.length; i++) {
+                const option = document.createElement('option')
+                option.value = json_data[i]['cod_lot']
+                option.text = json_data[i]['cod_lot']
+                s.appendChild(option);
+              }
+            }
+          })
+        }
+      }
+      selectLot()
+    
+      
+      var p = document.getElementById('id_select_pro')
+      const selectProd=()=>{
+        if (p != null){
+          $.ajax({
+            type: "GET", 
+            url:"https://localhost:5001/api/productos",
+            success:function(json_data) {  
+              const po = document.createElement('option') 
+              po.value = ''
+              po.text = '------ Seleccione -------'
+              p.appendChild(po)
+              for (let i = 0; i < json_data.length; i++) {
+                const option = document.createElement('option')
+                option.value = json_data[i]['cod_prod']
+                option.text = json_data[i]['cod_prod']+' | '+json_data[i]['name_product']+'-'+json_data[i]['unid_med']
+                p.appendChild(option);
+              }
+            }
+          })
+        }
+      }
+      selectProd()
+
+      var ps = document.getElementById('id_select_pros')
+      const selectProds=()=>{
+        if (ps != null){
+          $.ajax({
+            type: "GET", 
+            url:"https://localhost:5001/api/DetalleLot",
+            success:function(json_data) {  
+              const po = document.createElement('option') 
+              po.value = ''
+              po.text = '------ Seleccione -------'
+              ps.appendChild(po)
+              for (let i = 0; i < json_data.length; i++) {
+                const option = document.createElement('option')
+                option.value = json_data[i]['id']
+                option.text = json_data[i]['cod_prod']+' | '+json_data[i]['product']+'  Lote-'+json_data[i]['cod_lot']
+                option.title = json_data[i]['cod_lot']
+                option.name = json_data[i]['cod_prod']
+                ps.appendChild(option);
+              }
+            }
+          })
+        }
+      }
+      selectProds()
+     
+
+      var st = document.getElementById('select_al')
+      const selectStor=()=>{
+        if (st != null){
+          $.ajax({
+            type: "GET", 
+            url:"https://localhost:5001/api/almacen",
+            success:function(json_data) {  
+              const po = document.createElement('option') 
+              po.value = ''
+              po.text = '------ Seleccione -------'
+              st.appendChild(po)
+              for (let i = 0; i < json_data.length; i++) {
+                const option = document.createElement('option')
+                option.value = json_data[i]['detail_store']
+                option.text = json_data[i]['detail_store']+' '+json_data[i]['cia_abreviatura']+'-'+json_data[i]['cia_descripcion']
+                st.appendChild(option);
+              }
+            }
+          })
+        }
+      }
+    selectStor()
+
+   
+
+    var tm = document.getElementById('select_tm')
+    const selectTmov=()=>{
+      if (tm != null){
+        $.ajax({
+          type: "GET", 
+          url:"https://localhost:5001/api/tipo_movimiento",
+          success:function(json_data) {  
+            const po = document.createElement('option') 
+            po.value = ''
+            po.text = '------ Seleccione -------'
+            tm.appendChild(po)
+            for (let i = 0; i < json_data.length; i++) {
+              const option = document.createElement('option')
+              option.value = json_data[i]['id']
+              option.text = json_data[i]['cod_type_move']+'-'+json_data[i]['detail']
+              option.title = json_data[i]['option_move']
+              tm.appendChild(option);
+            }
+          }
+        })
+      }
+    }
+    selectTmov()
+      
+
+    });
+
+    
+
     </script>
   </body>
 </html>

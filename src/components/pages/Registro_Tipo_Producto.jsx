@@ -2,6 +2,7 @@ import React , {useEffect}from "react";
 import Cookies from 'universal-cookie';
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
+import toast, { Toaster } from "react-hot-toast"
 
 $(document).ready(function () {
     var p = document.getElementById('idempresa')
@@ -19,8 +20,8 @@ $(document).ready(function () {
             if (json_data !== 'Not Data'){
                 for (let i = 0; i < json_data.length; i++) {
                     const option = document.createElement('option')
-                    option.value = json_data[i]['cod_enterprise']
-                    option.text = json_data[i]['detail_enterprise']+'-'+json_data[i]['abbreviation']
+                    option.value = json_data[i]['cia_codigo']
+                    option.text = json_data[i]['cia_descripcion']+'-'+json_data[i]['cia_abreviatura']
                     p.appendChild(option);
                 }
             }
@@ -71,11 +72,11 @@ export default function R_Tipo_Producto(props){
         var formual = document.getElementById('formal');
         var d,e,f = false
         
-         if(formual.deatil_store.value === ''){
-            formual.deatil_store.className = classWarning;
+         if(formual.detail_store.value === ''){
+            formual.detail_store.className = classWarning;
         }else{
             e = true
-            formual.deatil_store.className = classSuccess;
+            formual.detail_store.className = classSuccess;
         }if(formual.cod_enterprise.value === ''){
             formual.cod_enterprise.className = 'form-control select2  is-invalid'
         }else{
@@ -106,7 +107,7 @@ export default function R_Tipo_Producto(props){
                 }),
                 success: function (res){
                     console.log(res)
-                    alert(res)
+                    toast.success(res,{duration: 6000, position:"top-right"})
                     formutp.description_typeP.value = ''
                     formutp.unid_med.value = ''
                     formutp.description_typeP.className = 'form-control form-control-border'
@@ -120,7 +121,6 @@ export default function R_Tipo_Producto(props){
      // Almacen
      const SaveDataA=(d,formual)=>{
         if (d === true){
-           
             $.ajax({
                 type: 'post', 
                 url: 'https://localhost:5001/api/almacen',
@@ -129,15 +129,15 @@ export default function R_Tipo_Producto(props){
                 'Content-Type':'application/json'
                 },
                 data: JSON.stringify({
-                    deatil_store:formual.deatil_store.value,
+                    detail_store:formual.detail_store.value,
                     cod_enterprise:parseInt(formual.cod_enterprise.value),
                 }),
                 success: function (res){
                     console.log(res)
-                    alert(res)
-                    formual.deatil_store.value = ''
+                    toast.success(res,{duration: 6000, position:"top-right"})
+                    formual.detail_store.value = ''
                     formual.cod_enterprise.value = ''
-                    formual.deatil_store.className = 'form-control form-control-border'
+                    formual.detail_store.className = 'form-control form-control-border'
                     formual.cod_enterprise.className = 'form-control select2 '
                     //   window.location.href=('/Registro/Tipo/Producto')
                 } 
@@ -145,13 +145,13 @@ export default function R_Tipo_Producto(props){
         }
     }
     
- 
     return (
 
         // 
         <>
             
             <div className="content-wrapper">
+            <div><Toaster/></div>
                 {/* Content Header (Page header) */}
                 <div className="content-header">
                     <div className="container-fluid">
@@ -253,17 +253,17 @@ export default function R_Tipo_Producto(props){
                                                         <div className="row">
                                                             <div class="form-group col-md-6">
                                                                 <label>Almacen</label>
-                                                                <input type="text" name="deatil_store" class="form-control form-control-border"  placeholder="Almacen" />
+                                                                <input type="text" name="detail_store" class="form-control form-control-border"  placeholder="Almacen" />
                                                                 <div class="invalid-feedback">
                                                                     Campo vacio.
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-md-6 ">
                                                                 <label>Empresa</label>
-                                                                <div className="select2-purple">
-                                                                    <select className='form-control select2 ' id='idempresa' name='cod_enterprise' >
+                                                                
+                                                                    <select className='form-control select2' id='idempresa' name='cod_enterprise' >
                                                                     </select>
-                                                                </div>
+                                                                
                                                                 <div class="invalid-feedback">
                                                                     Campo vacio.
                                                                 </div>

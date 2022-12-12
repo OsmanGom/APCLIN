@@ -1,11 +1,16 @@
 import React , {useEffect}from "react";
 import Cookies from 'universal-cookie';
-
+import "jquery/dist/jquery.min.js";
+import $ from "jquery";
+import toast, { Toaster } from "react-hot-toast"
 
 
 export default function Ficapacidades(props){
   // const url = 'https://localhost:5001/api/area'
     document.querySelector('title').textContent = 'Clinica | Registros';
+    var classSuccess = 'form-control is-valid form-control-border';
+    var classWarning = 'form-control form-control-border is-invalid';
+
     const cookies = new Cookies();
     useEffect(()=>{
       if(cookies.get('ID')){
@@ -15,23 +20,56 @@ export default function Ficapacidades(props){
       }
         },[]); 
     // Validations
-    var class1 = 'form-control form-control-border is-invalid';
-    const form = ()=>{
-        var formu = document.getElementById('quickForm');
-        
-        if(formu.codigo.value === ''){
-            formu.codigo.className = 'form-control select2 is-invalid'
-        } if(formu.nombre.value === ''){
-            formu.nombre.className = class1;
-        }if(formu.identidad.value === ''){
-            formu.identidad.className = class1
-        }if(formu.dias.value === ''){
-            formu.dias.className = class1;
-        }if(formu.condicion.value === ''){
-            formu.condicion.className = class1;
+    
+    var formu = document.getElementById('quickForm1');
+    const form =()=>{
+        var a = false
+        if(formu.days.value === ''){
+          formu.days.className = classWarning
+        } else{
+          a = true
+          formu.days.className = classSuccess
+          formu.condition.className = classSuccess;
+          formu.diagnostic.className = classSuccess;
         }
         
+        if (a){
+          SaveDataic(formu)
+        }
     }
+
+    const SaveDataic=(formu)=>{
+      $.ajax({
+          type: 'post', 
+          url: 'https://localhost:5001/api/incapacidades',
+          headers:{
+          'Accept':'application/json',
+          'Content-Type':'application/json'
+          },
+          data: JSON.stringify({
+            cod_employed:formu.cod_employed.value.toUpperCase(),
+            days:parseInt(formu.days.value),
+            condition:formu.condition.value,
+            diagnostic:formu.diagnostic.value,
+            user_register:cookies.get('user'),
+          }),
+          success: function (res){
+              console.log(res)
+              toast.success(res,{duration: 6000, position:"top-right"})
+              formu.cod_employed.value = ''
+              formu.days.value = ''
+              formu.condition.value = ''
+              formu.diagnostic.value = ''
+
+              formu.days.className = 'form-control form-control-border'
+              formu.condition.className = 'form-control form-control-border'
+              formu.diagnostic.className = 'form-control'
+              //   window.location.href=('/Registro/Tipo/Producto')
+          } 
+      })
+  }
+
+
     const selectitem=(a)=>{
       console.log(a.target.value.toUpperCase());
     }
@@ -47,6 +85,7 @@ export default function Ficapacidades(props){
               <div className="col-sm-6">
                 {/* <h1 className="m-0">{cookies.get('user')}</h1> */}
                 <h1>Incapacidades</h1>
+                <div><Toaster/></div>
               </div>{/* /.col */}
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -68,65 +107,43 @@ export default function Ficapacidades(props){
                 <div class="card-header">
                     <h3 class="card-title">Registro <small>Incapacidades</small></h3>
                 </div>
-                {/* <h3 class="text-danger ml-5 mt-2" id="validationL">xx</h3> */}
-                <form id="quickForm ">
-                    <div class="card-body mt-3">
-                        <div className="row">
+                <form id="quickForm1">
+                  <div class="card-body mt-3">
+                    <div className="row">
                         
+                        <div class="form-group col-md-9">
+                          <div class="input-group input-group-sm mb-3"> 
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Codigo empleado</label>
+                            </div>
+                            <select class=" custom-select  form-control-border js-data-example2 " name="cod_employed" onChange={selectitem} id='id_select_em'>
+                            </select> 
+                          </div>
+                        </div> 
                         
-                            <div class="form-group col-md-5">
-                                <label>Codigo Empleado</label>
-                                <select class="form-control select2 " name="codigo" onChange={selectitem}>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Campo vacio.
-                                </div>
-                            </div> 
-                          
-                        
-                            <div class="form-group col-md-6">
-                                
-                                <input type="text" name="nombre" class="form-control form-control-border " id="exampleInputPassword1" placeholder="Nombre" onChange={selectitem}/>
-                                <div class="invalid-feedback">
-                                    Campo vacio.
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                
-                                <input type="text" name="identidad" class="form-control form-control-border"id="exampleInputPassword1" placeholder="Identidad"/>
-                                <div class="invalid-feedback">
-                                    Campo vacio.
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <input type="text" name="dias" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Dias"/>
-                                <div class="invalid-feedback">
-                                    Campo vacio.
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div class="form-group col-md-5">
-                                
-                                <input type="text" name="condicion" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Condicion"/>
-                                <div class="invalid-feedback">
-                                    Campo vacio.
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                             <label>Diagnostico</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
-                        </div>
-                        </div>
-                            
                     </div>
-                    <div class="card-footer">
-                     <button type="button" class="btn btn-primary" onClick={form}>Registrar</button>
+                    <div className="row">
+                      <div class="form-group col-md-2">
+                          <input type="text" name="days" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Dias"/>
+                          <div class="invalid-feedback">
+                            Campo vacio.
+                          </div>
+                      </div>
+                      <div class="form-group col-md-5">
+                        <input type="text" name="condition" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Condicion"/>
+                          <div class="invalid-feedback">
+                            Campo vacio.
+                          </div>
+                      </div>
+                        <div class="form-group col-md-7">
+                          <label>Diagnostico</label>
+                        <textarea class="form-control " name="diagnostic" rows="4" placeholder="Enter ..."></textarea>
+                      </div>
                     </div>
+                  </div>
+                  <div class="card-footer">
+                    <button type="button" class="btn btn-primary" onClick={form}>Registrar</button>
+                  </div>
                 </form>
       
      

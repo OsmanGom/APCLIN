@@ -16,36 +16,37 @@ $(document).ready(function () {
     "responsive": true, "lengthChange": true, "autoWidth": true,
     
   });
-  $.ajax({
-    type: "GET",
-    url: "https://localhost:5001/api/kardex",
+  // $.ajax({
+  //   type: "GET",
+  //   url: "https://localhost:5001/api/kardex",
    
-    success: function(json_data) {
+  //   success: function(json_data) {
       
-      if (json_data !== 'Not Data'){
+  //     if (json_data !== 'Not Data'){
           
-        for (let i = 0; i < json_data.length; i++) {
-          t.row.add([
-            json_data[i]['cod_correlative'], 
-            json_data[i]['Cod_store'], 
-            json_data[i]['deatil_store'], 
-            json_data[i]['cod_prod'], 
-            json_data[i]['product'], 
-            json_data[i]['reference'], 
-            json_data[i]['origin_product'],
-            json_data[i]['quantity'], 
-            json_data[i]['cod_employed'], 
-            json_data[i]['description_typeP'], 
-            json_data[i]['lot_number'], 
-            json_data[i]['date_exp'], 
-            json_data[i]['user_register'], 
-            json_data[i]['date_create']
-          ]).draw(false);
+  //       for (let i = 0; i < json_data.length; i++) {
+  //         t.row.add([
+  //           // json_data[i]['cod_correlative'], 
+  //           json_data[i]['detail'],
+  //           json_data[i]['n_tranzability'],
+  //           json_data[i]['Cod_store']+'-'+json_data[i]['deatil_store'], 
+  //           json_data[i]['cod_enterprise'],  
+  //           json_data[i]['cod_prod'], 
+  //           json_data[i]['product'], 
+  //           json_data[i]['reference'], 
+  //           json_data[i]['origin_product'],
+  //           json_data[i]['quantity'], 
+  //           json_data[i]['cod_employed'], 
+  //           json_data[i]['cod_lot'], 
+  //           json_data[i]['date_exp'], 
+  //           json_data[i]['user_register'], 
+  //           json_data[i]['date_create']
+  //         ]).draw(false);
             
-        }
-      }
-    }
-  })
+  //       }
+  //     }
+  //   }
+  // })
 
 });
 
@@ -97,16 +98,17 @@ export default function Kardex(props) {
                       <thead>
 
                         <tr>
-                          <th>Correlative</th>
-                          <th>Codigo Tienda</th>
-                          <th>Tienta</th>
-                          <th>Codigo Empresa</th>
-                          <th>Codigo Porducto</th>
+                          <th>Tipo Movimiento</th>
+                          <th>Codigo Trazabilidad</th>
+                          <th>Almacen</th>
+                          <th>Empresa</th>
+                          <th>Codigo Producto</th>
                           <th>Producto</th>
                           <th>Referencia</th>
                           <th>Origen</th>
                           <th>Cantidad</th>
                           <th>Codigo Empleado</th>
+                          <th>Codigo Lote</th>
                           <th>Fecha Expiracion</th>
                           <th>Usuario Registro</th>
                           <th>Fecha Creacion</th>
@@ -117,16 +119,17 @@ export default function Kardex(props) {
                       </tbody>
                       <tfoot>
                         <tr>
-                        <th>Correlative</th>
-                          <th>Codigo Tienda</th>
-                          <th>Tienta</th>
-                          <th>Codigo Empresa</th>
+                          <th>Tipo Movimiento</th>
+                          <th>Codigo Trazabilidad</th>
+                          <th>Almacen</th>
+                          <th>Empresa</th>
                           <th>Codigo Porducto</th>
                           <th>Producto</th>
                           <th>Referencia</th>
                           <th>Origen</th>
                           <th>Cantidad</th>
                           <th>Codigo Empleado</th>
+                          <th>Codigo Lote</th>
                           <th>Fecha Expiracion</th>
                           <th>Usuario Registro</th>
                           <th>Fecha Creacion</th>

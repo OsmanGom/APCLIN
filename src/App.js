@@ -1,7 +1,5 @@
 import React  from 'react'
-import { BrowserRouter, Route, Switch  } from 'react-router-dom';
-
-
+import { BrowserRouter, Route, Switch, Redirect  } from 'react-router-dom';
 
 import Footer from './components/common/footer.jsx'
 import Header from './components/common/header.jsx'
@@ -23,10 +21,10 @@ export default function App() {
     <BrowserRouter  >
     <Switch>
       <Route exact path="/" component={Login} />
+      
         <div>
           <Header/>
           <Menu/>
-          
           <Route exact path="/dashboard" component={Dashboard}/>
           <Route exact path="/Incapacidades" component={Ficapacidades}/>
           <Route exact path="/Detalle/Incapacidades" component={Incapacidades}/>
@@ -40,3 +38,4 @@ export default function App() {
     </BrowserRouter>
   )
 }
+
