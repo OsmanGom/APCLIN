@@ -101,6 +101,14 @@ export default function Menu() {
                 </a>
               </li>
             </ul>
+            <ul className="nav nav-treeview">
+              <li className="nav-item">
+                <a href="/barcode" className="nav-link">
+                  <i className="far fa-circle nav-icon" />
+                  <p>Generar Codigo Barras</p>
+                </a>
+              </li>
+            </ul>
           </li>
           
         </ul>

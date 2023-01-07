@@ -3,6 +3,7 @@ import Cookies from 'universal-cookie';
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import toast, { Toaster } from "react-hot-toast"
+const cookies = new Cookies();
 
 $(document).ready(function () {
     var p = document.getElementById('idempresa')
@@ -10,7 +11,7 @@ $(document).ready(function () {
     if (p != null){
         $.ajax({
             type: "GET", 
-            url: "https://localhost:5001/api/empresa",
+            url: `${cookies.get('server')}/api/empresa`,
         
             success: function(json_data) {  
             const op = document.createElement('option') 
@@ -29,10 +30,11 @@ $(document).ready(function () {
         })
     }
 })
+
 export default function R_Tipo_Producto(props){
   // const url = 'https://localhost:5001/api/area'
     document.querySelector('title').textContent = 'Clinica | Tipo Producto';
-    const cookies = new Cookies();
+    
     useEffect(()=>{
       if(cookies.get('ID')){
         props.history.push('/Registros/Base');
@@ -89,6 +91,27 @@ export default function R_Tipo_Producto(props){
         SaveDataA(d,formual)
     }
 
+    const formTM = ()=>{
+        let formutm = document.getElementById('formTM');
+        let a,e,f = false
+        
+        if(formutm.detail.value === ''){
+            formutm.detail.className = classWarning;
+        }else{
+            e = true
+            formutm.detail.className = classSuccess;
+        }if(formutm.option_move.value === ''){
+            formutm.option_move.className = classWarning
+        }else{
+            f = true
+            formutm.option_move.className = classSuccess
+        }
+        if (e && f ){
+            a = true
+            SaveDataTM(a,formutm)
+        }
+    }
+
     // Formulario
     // tipo producto
     const SaveDatatp=(a,formutp)=>{
@@ -96,7 +119,7 @@ export default function R_Tipo_Producto(props){
             
             $.ajax({
                 type: 'post', 
-                url: 'https://localhost:5001/api/tipo_producto',
+                url: `${cookies.get('server')}/api/tipo_producto`,
                 headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
@@ -123,7 +146,7 @@ export default function R_Tipo_Producto(props){
         if (d === true){
             $.ajax({
                 type: 'post', 
-                url: 'https://localhost:5001/api/almacen',
+                url: `${cookies.get('server')}/api/almacen`,
                 headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
@@ -145,6 +168,32 @@ export default function R_Tipo_Producto(props){
         }
     }
     
+    const SaveDataTM=(a,formutm)=>{
+        if (a === true){
+            console.log(formutm.detail.value, formutm.option_move.value)
+            $.ajax({
+                type: 'post', 
+                url: `${cookies.get('server')}/api/tipo_movimiento`,
+                headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+                },
+                data: JSON.stringify({
+                    detail:formutm.detail.value,
+                    option_move:parseInt(formutm.option_move.value)
+                }),
+                success: function (res){
+                    console.log(res)
+                    toast.success(res,{duration: 6000, position:"top-right"})
+                    formutm.detail.value = ''
+                    formutm.option_move.value = ''
+                    formutm.detail.className = 'form-control form-control-border'
+                    formutm.option_move.className = 'form-control form-control-border'
+                } 
+            })
+        }
+    }
+
     return (
 
         // 
@@ -261,7 +310,7 @@ export default function R_Tipo_Producto(props){
                                                             <div class="form-group col-md-6 ">
                                                                 <label>Empresa</label>
                                                                 
-                                                                    <select className='form-control select2' id='idempresa' name='cod_enterprise' >
+                                                                    <select className='custom-select form-control-border' id='idempresa' name='cod_enterprise' >
                                                                     </select>
                                                                 
                                                                 <div class="invalid-feedback">
@@ -285,6 +334,72 @@ export default function R_Tipo_Producto(props){
                                     </div>
                                 </div>
                         </div>
+                        
+                    </div>
+                    {/*  */}
+                    <div class="container-fluid col-6 float-md-left responsive">
+                        <div class="card card-danger card-outline collapsed-card shadow ">
+                                        <div class="card-header bg-warning">
+                                            
+                                            <h3 class="card-title"><i class="fa fa-street-view mr-5 "></i>Registro Movimientos</h3>
+                                            
+                                            <div class="card-tools">
+                                                <button type="button" class="btn btn-tool "  data-card-widget="collapse">
+                                                    <i class="fas fa-plus "></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body mt-2">
+                                            <div class="row">
+                                                {/*  */}
+
+                                                <div className="col-lg-12 ">
+                                                    <form id="formTM">
+                                                        <div class="card-body">
+                                                            <div className="row">
+                                                                
+                                                                <div class="form-group col-md-7">
+                                                                    <label>Movimiento</label>        
+                                                                    <input type="text" name="detail" class="form-control form-control-border"  placeholder="Entrada.Salida.Traslado etc" />
+                                                                    <div class="invalid-feedback">
+                                                                        Campo vacio.
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3  ml-3 mt-3">
+                                                                    <div class="form-group">
+                                                                        <div class="custom-control custom-radio">
+                                                                            <input class="custom-control-input" value="1" type="radio" id="customRadio1" name="option_move"/>
+                                                                            <label for="customRadio1"  class="custom-control-label">Entrada</label>
+                                                                        </div>
+                                                                        <div class="custom-control custom-radio">
+                                                                            <input class="custom-control-input" value="0" type="radio" id="customRadio2" name="option_move" />
+                                                                            <label for="customRadio2" class="custom-control-label">Salida</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                {/* <div class="form-group col-md-3">
+                                                                    <label>Opcion</label>        
+                                                                    <input type="text" name="option_move" title="0-1-2" class="form-control form-control-border"  placeholder="" />
+                                                                    <div class="invalid-feedback">
+                                                                        Campo vacio.
+                                                                    </div>
+                                                                </div> */}
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <button type="button" class="btn btn-primary" onClick={formTM}>Registrar</button>
+                                                        </div>
+                                                    </form>
+                                            
+                                                </div>
+                                                {/*  */}
+                                                
+                                                {/*  */}
+                                            </div>
+                                        </div>
+                        </div>  
                     </div>
                 </section>
                 

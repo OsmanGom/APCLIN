@@ -3,12 +3,30 @@ import Cookies from 'universal-cookie';
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import toast, { Toaster } from "react-hot-toast"
+const cookies = new Cookies();
 
-
+const Correlative_Header_Kardex = () =>{
+    $.ajax({
+      type: "get", 
+      url:`${cookies.get('server')}/api/HeaderKardex/${cookies.get('enterprise')}`,
+      success:function(json_data) {  
+        const cod = document.getElementById('n_tranzability')
+        if (json_data !== 'Not Data'){
+          cod.innerText = json_data[0]['correlative']
+          cod.value = json_data[0]['correlative']
+        }else{
+            
+          cod.innerText = 'No existen registros'
+          cod.value = ''
+        }
+      }
+    })
+  }
+  
 
 
 export default function TrazaKardez(props){
-  // const url = 'https://localhost:5001/api/area'
+  
 //   variables globals
     var position_head = document.getElementById('custom-tabs-one-home-tab')
     var position_detail = document.getElementById('custom-tabs-one-profile-tab')
@@ -19,7 +37,7 @@ export default function TrazaKardez(props){
     
     document.querySelector('title').textContent = 'Clinica | Trazabilidad Kardex';
     
-    const cookies = new Cookies();
+    
     useEffect(()=>{
       if(cookies.get('ID')){
         props.history.push('/Kardez/Trazabilidad');
@@ -68,16 +86,19 @@ export default function TrazaKardez(props){
     }
 
     const selectitemData=(a)=>{
-        console.log(a.target.options[a.target.selectedIndex].title);
-        console.log(a.target.value)
+        
         document.getElementById('opv').value = a.target.options[a.target.selectedIndex].title
-        var emplo = document.getElementById('employed')
-        var tablae = document.getElementById('tablita')
-        var tablas = document.getElementById('tablitas')
-        var mensaje = ''
-        var titulo = document.getElementById('titulo')
-        var btne = document.getElementById('btne')
-        var btns = document.getElementById('btns')
+        let emplo = document.getElementById('employed')
+        let tablae = document.getElementById('tablita')
+        let tablas = document.getElementById('tablitas')
+        let proe = document.getElementById('pro_en')
+        let pros = document.getElementById('pro_salidas')
+        let mensaje = ''
+        let titulo = document.getElementById('titulo')
+        let btne = document.getElementById('btne')
+        let btns = document.getElementById('btns')
+        let bode = document.getElementById('id_bodega')
+        
         mensaje = a.target.options[a.target.selectedIndex].text
         if(a.target.options[a.target.selectedIndex].title === '1'){
             emplo.style.display = 'none';
@@ -85,13 +106,18 @@ export default function TrazaKardez(props){
             tablas.style.display = 'none'
             btne.style.display = 'block'
             btns.style.display = 'none'
-
+            proe.style.display = 'block'
+            pros.style.display = 'none'
+            bode.style.display = 'block'
         }else if(a.target.options[a.target.selectedIndex].title === '0'){
             emplo.style.display = 'block';
             tablae.style.display = 'none'
             tablas.style.display = 'block'
             btne.style.display = 'none'
             btns.style.display = 'block'
+            proe.style.display = 'none'
+            pros.style.display = 'block'
+            bode.style.display = 'none'
         }
 
         titulo.innerHTML = mensaje
@@ -99,24 +125,67 @@ export default function TrazaKardez(props){
     }
 
     const clearData = ()=>{
-        var form1 = document.getElementById('formk')
+        let form1 = document.getElementById('formk')
         form1.type_move.value = ''
         form1.n_tranzability.value = ''
         form1.origin_product.value = ''
         form1.date_tranzaction.value = ''
         form1.reference.value = ''
         document.getElementById('titulo').innerHTML = ''
+        selectstock()
+        selectProd()
+        selectEmployed()
+        $("#id_creacion > tr").remove();
+        $("#id_creacions > tr").remove();
     }
     
     // ******************* SELECTS *********************
+
+    const selectEmployed=()=>{
+        var em = document.getElementById('id_select_em')
+        if (em != null){
+            let options = document.querySelectorAll('#id_select_em option');
+            options.forEach(o => o.remove());
+          $.ajax({
+            type: "GET", 
+            url:`${cookies.get('server')}/api/empleados/${cookies.get('enterprise')}`,
+            success:function(json_data) {  
+              const po = document.createElement('option')
+              
+              if(json_data === 'Not Data'){
+                
+                po.value = ''
+                po.text = 'No data'
+                // op.disabled = true
+                em.appendChild(po)
+              }else{ 
+                po.value = ''
+                po.text = '------ Seleccione -------'
+                em.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['exp_codigo_alternativo']
+                  option.text = json_data[i]['exp_codigo_alternativo']+' '+json_data[i]['exp_nombres_apellidos']+' | '+json_data[i]['departamento']
+                  em.appendChild(option);
+                }
+              }
+            }
+          })
+        }
+      }
+    
+
+
+
+    //Select Lote
     const cargarlot=()=>{
-        var s = document.getElementById('id_select_lote')
+        let s = document.getElementById('id_select_lote')
         if (s != null){
-            var options = document.querySelectorAll('#id_select_lote option');
+            let options = document.querySelectorAll('#id_select_lote option');
             options.forEach(o => o.remove());
             $.ajax({
                 type: "GET", 
-                url:"https://localhost:5001/api/lot",
+                url:`${cookies.get('server')}/api/lot/${cookies.get('enterprise')}`,
                 success:function(json_data) {  
                     const op = document.createElement('option') 
                     op.value = ''
@@ -124,7 +193,7 @@ export default function TrazaKardez(props){
                     s.appendChild(op)
                     for (let i = 0; i < json_data.length; i++) {
                         const option = document.createElement('option')
-                        option.value = json_data[i]['correlative']
+                        option.value = json_data[i]['cod_lot']
                         option.text = json_data[i]['cod_lot']
                         s.appendChild(option);
                     }
@@ -136,13 +205,13 @@ export default function TrazaKardez(props){
     
     // select detalle lotes 
     const selectProds=()=>{
-        var ps = document.getElementById('id_select_pros')
+        let ps = document.getElementById('id_select_pros')
         if (ps != null){
-            var options = document.querySelectorAll('#id_select_pros option');
+            let options = document.querySelectorAll('#id_select_pros option');
             options.forEach(o => o.remove());
           $.ajax({
             type: "GET", 
-            url:"https://localhost:5001/api/DetalleLot",
+            url:`${cookies.get('server')}/api/DetalleLot/${cookies.get('enterprise')}`,
             success:function(json_data) {  
               const po = document.createElement('option') 
               po.value = ''
@@ -162,13 +231,13 @@ export default function TrazaKardez(props){
     }
     // Select Almacen
     const selectStor=()=>{
-        var st = document.getElementById('select_al')
+        let st = document.getElementById('select_al')
         if (st != null){
-            var options = document.querySelectorAll('#select_al option');
+            let options = document.querySelectorAll('#select_al option');
             options.forEach(o => o.remove());
           $.ajax({
             type: "GET", 
-            url:"https://localhost:5001/api/almacen",
+            url:`${cookies.get('server')}/api/almacen/${cookies.get('enterprise')}`,
             success:function(json_data) {  
               const po = document.createElement('option') 
               po.value = ''
@@ -188,13 +257,13 @@ export default function TrazaKardez(props){
 
     // Selects Productos
     const selectProd=()=>{
-        var p = document.getElementById('id_select_pro')
+        let p = document.getElementById('id_select_pro')
         if (p != null){
-            var options = document.querySelectorAll('#id_select_pro option');
+            let options = document.querySelectorAll('#id_select_pro option');
             options.forEach(o => o.remove());
           $.ajax({
             type: "GET", 
-            url:"https://localhost:5001/api/productos",
+            url:`${cookies.get('server')}/api/productos`,
             success:function(json_data) {  
               const po = document.createElement('option') 
               po.value = ''
@@ -210,6 +279,42 @@ export default function TrazaKardez(props){
           })
         }
       }
+
+    const selectstock=()=>{
+        let ls = document.getElementById('id_select_prost')
+        if (ls != null){
+            let options = document.querySelectorAll('#id_select_prost option');
+            options.forEach(o => o.remove());
+          $.ajax({
+            type: "GET", 
+            url:`${cookies.get('server')}/api/stock/${cookies.get('enterprise')}`,
+            success:function(json_data) {  
+              
+                const po = document.createElement('option') 
+                if (json_data !== 'Not Data'){
+                    po.value = ''
+                    po.text = '------ Seleccione -------'
+                    ls.appendChild(po)
+
+                    for (let i = 0; i < json_data.length; i++) {
+                        const option = document.createElement('option')
+                        option.value = json_data[i]['id']
+                        option.text = json_data[i]['detail_store']+' || Lote-'+json_data[i]['cod_lot']+' | '+ json_data[i]['cod_prod']+' | '+json_data[i]['name_product']+' | Existencia '+json_data[i]['total_quantity']
+                        option.title = json_data[i]['cod_lot']
+                        option.name = json_data[i]['cod_prod']
+                        option.placeholder = json_data[i]['detail_store']
+                        option.role = json_data[i]['total_quantity']
+                        ls.appendChild(option);
+                    }
+
+                }else{
+                    po.value = ''
+                    po.text = 'No existen registros'
+              }
+            }
+          })
+        }
+    }
       
     //   FIN SELECTS
 
@@ -218,8 +323,8 @@ export default function TrazaKardez(props){
     // Registro Lote
     const addLote=()=>{
         const idlot = document.getElementById('formlote')
-        var a, b = false
-        console.log(idlot)
+        let a, b = false
+        
         if (idlot.lotea.value === ''){
 
             idlot.lotea.className = classWarning
@@ -238,14 +343,16 @@ export default function TrazaKardez(props){
         if(a && b){
             $.ajax({
                 type: 'post', 
-                url: 'https://localhost:5001/api/lot',
+                url: `${cookies.get('server')}/api/lot`,
                 headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
                 },
                 data: JSON.stringify({
                     cod_lot:idlot.lotea.value,
-                    date_exp:idlot.date_exp.value
+                    date_exp:idlot.date_exp.value,
+                    user_register:cookies.get('user'),
+                    cod_enterprise:cookies.get('enterprise')
                 }),
                 success: function (res){
                     idlot.lotea.className = classSuccess
@@ -265,8 +372,8 @@ export default function TrazaKardez(props){
 
     // Registro Detalle
     const Rformdetalle=()=>{
-        var rd = document.getElementById('formdetalle')
-        var a = false
+        let rd = document.getElementById('formdetalle')
+        let a = false
         
         if(rd.cod_prod.value === '' || rd.cod_lot.value === ''){
             toast.error('Campos vacios',{duration: 6000, position:"top-right"})
@@ -275,7 +382,7 @@ export default function TrazaKardez(props){
         if (a === true){
             $.ajax({
                 type: 'post', 
-                url: 'https://localhost:5001/api/DetalleLot',
+                url: `${cookies.get('server')}/api/DetalleLot`,
                 headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
@@ -285,7 +392,6 @@ export default function TrazaKardez(props){
                     cod_lot:rd.cod_lot.value
                 }),
                 success: function (res){
-                    console.log(res)
                     toast.success(res,{duration: 6000, position:"top-right"})
                     cargarlot()
                     selectProd()
@@ -300,138 +406,161 @@ export default function TrazaKardez(props){
 
     // Registro Kardex
     const prueba=()=>{
-        var form1 = document.getElementById('formk')
-
+        let form1 = document.getElementById('formk')
+        let value, id_header, tbs
         if (document.getElementById('opv').value === '1'){
-            var tbs = $("#tablita tbody tr").length;
-    
-            console.log('Numero de filas ',tbs)
+            tbs = $("#tablita tbody tr").length;
+            value = 1
             if (tbs > 0){
-                var id_header
-                console.log(form1.type_move.value, form1.n_tranzability.value, form1.origin_product.value,  form1.date_tranzaction.value, typeof form1.reference.value)
-                    // $.ajax({
-                    //     type: 'post', 
-                    //     url: 'https://localhost:5001/api/HeaderKardex',
-                    //     headers:{
-                    //     'Accept':'application/json',
-                    //     'Content-Type':'application/json'
-                    //     },
-                    //     data: JSON.stringify({
-                    //         type_move:parseInt(form1.type_move.value),
-                    //         n_tranzability:form1.n_tranzability.value,
-                    //         origin_product:parseInt(form1.origin_product.value),
-                    //         date_tranzaction:form1.date_tranzaction.value,
-                    //         reference:form1.reference.value,
-                    //         user_register:cookies.get('user')
-                    //     }),
-                    //     success: function (json_data){
-                    //         console.log(json_data)
-                    //         id_header = json_data[0]['id']
-                    //     }, error: function(error){
-                    //         console.log(error)
-                    //     }
-                    // })
-
-                for (var i = 1, row; row = document.getElementById('tablita').rows[i]; i++) {
-                
-                    console.log( parseInt(row.cells[0].innerHTML))//Detalle
-                    console.log(row.cells[2].innerHTML)// Bodega
-                    console.log(parseInt(row.cells[4].innerHTML))// Cantidad
-                    console.log(cookies.get('user'))
-                    var formuk2 = document.getElementById('formk2');
-                    var employed
-                    if(formuk2.cod_employed.value === ''){
-                    employed = null
-                    }else{employed = formuk2.cod_employed.value}
-
-                    console.log('este es e empleado', employed)
-                    console.log(formuk2.cod_employed.value)
-                    
-
-                    // $.ajax({
-                    //     type: 'post', 
-                    //     url: 'https://localhost:5001/api/DetailKardex',
-                    //     headers:{
-                    //     'Accept':'application/json',
-                    //     'Content-Type':'application/json'
-                    //     },
-                    //     data: JSON.stringify({
-                    //         header_id:parseInt(id_header),
-                    //         cod_store:row.cells[2].innerHTML,
-                    //         id_detail_lot:parseInt(row.cells[0].innerHTML),
-                    //         quantity:parseInt(parseInt(row.cells[4].innerHTML)),
-                    //         cod_employed:form1.date_tranzaction.value,
-                    //         user_register:cookies.get('user')
-                    //     }),
-                    //     success: function (res){
-                    //         console.log(res)
-                    //         toast.success(res,{duration: 6000, position:"top-right"})
-                    //     }, error: function(error){
-                    //         console.log(error.responseJSON.errors.cod_store[0])
-                    //     }
-                    // })
-
-               }$("#id_creacion > tr").remove();
+                $.ajax({
+                    type: 'post', 
+                    url: `${cookies.get('server')}/api/HeaderKardex`,
+                    headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json'
+                    },
+                    data: JSON.stringify({
+                        type_move:parseInt(form1.type_move.value),
+                        n_trazability:form1.n_tranzability.value,
+                        origin_product:parseInt(form1.origin_product.value),
+                        date_tranzaction:form1.date_tranzaction.value,
+                        reference:form1.reference.value,
+                        user_register:cookies.get('user')
+                    }),
+                    success: function (json_data){
+                        id_header = json_data[0]['header_id']
+                        AddDetailKardex(id_header, value)
+                    }, error: function(error){
+                        console.log(error)
+                    }
+                })
            }else{
             toast.error('Deben existir registros en la tabla',{duration: 6000, position:"top-right"})
            }
 
+        } else{
+            tbs = $("#tablitas tbody tr").length;
+            value = 0
+            if (tbs > 0){
+                $.ajax({
+                    type: 'post', 
+                    url: `${cookies.get('server')}/api/HeaderKardex`,
+                    headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json'
+                    },
+                    data: JSON.stringify({
+                        type_move:parseInt(form1.type_move.value),
+                        n_trazability:form1.n_tranzability.value,
+                        origin_product:parseInt(form1.origin_product.value),
+                        date_tranzaction:form1.date_tranzaction.value,
+                        reference:form1.reference.value,
+                        user_register:cookies.get('user')
+                    }),
+                    success: function (json_data){
+                        id_header = json_data[0]['header_id']
+                        AddDetailKardex(id_header, value)
+                    }, error: function(error){
+                        console.log(error)
+                    }
+                })
+           }else{
+            toast.error('Deben existir registros en la tabla',{duration: 6000, position:"top-right"})
+           }
+
+           
+        }       
+    }
+    // id_header, valor
+    const AddDetailKardex=(id_header, valor)=>{
+        let formuk2 = document.getElementById('formk2');
+        let employed
+        
+        if (valor === 1){
+            if(formuk2.cod_employed.value === ''){
+            employed = null
+            }else{employed = formuk2.cod_employed.value}
+
+            for (let i = 1, row; row = document.getElementById('tablita').rows[i]; i++) {
+                let quantity 
+                quantity = parseInt(parseInt(row.cells[4].innerHTML))
+
+                $.ajax({
+                    type: 'post', 
+                    url: `${cookies.get('server')}/api/DetailKardex/${cookies.get('enterprise')}`,
+                    headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json'
+                    },
+                    data: JSON.stringify({
+                        header_id:parseInt(id_header),
+                        cod_store:row.cells[2].innerHTML,
+                        id_detail_lot:parseInt(row.cells[0].innerHTML),
+                        quantity:quantity,
+                        cod_employed:employed,
+                        user_register:cookies.get('user')
+                    }),
+                    success: function (res){
+                        console.log(res)
+                        
+                    }, error: function(error){
+                        console.log(error.responseJSON)
+                    }
+                })
+            }
+            toast.success('Added Successfully!!',{duration: 6000, position:"top-right"})
+            $("#id_creacion > tr").remove();
+            
+
+        }else{
+            for (let i = 1, row; row = document.getElementById('tablitas').rows[i]; i++) {
+                let quantity 
+                quantity = -parseInt(parseInt(row.cells[5].innerHTML))
+
+                if(row.cells[1].innerHTML === ''){
+                    employed = null
+                }else{
+                    employed = row.cells[1].innerHTML
+                }
+
+                $.ajax({
+                    type: 'post', 
+                    url: `${cookies.get('server')}/api/DetailKardex/${cookies.get('enterprise')}`,
+                    headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json'
+                    },
+                    data: JSON.stringify({
+                        header_id:parseInt(id_header),
+                        cod_store:row.cells[3].innerHTML,
+                        id_detail_lot:parseInt(row.cells[0].innerHTML),
+                        quantity:quantity,
+                        cod_employed:employed,
+                        user_register:cookies.get('user')
+                    }),
+                    success: function (res){
+                        console.log(res)
+                        
+                        
+                    }, error: function(error){
+                        console.log(error.responseJSON.errors)
+                    }
+                })
         }
-        // else if(document.getElementById('opv').value === '0'){
+        toast.success('Added Successfully!!',{duration: 6000, position:"top-right"})
+        $("#id_creacions > tr").remove();
+        }
 
-        //     var tbs = $("#tablitas tbody tr").length;
-    
-        //      console.log('Numero de filas ',tbs)
-        //      if (tbs > 0){
-        //         for (var i = 1, row; row = document.getElementById('tablitas').rows[i]; i++) {
-        //             console.log(form1.type_move.value, form1.origin_product.value, form1.cod_store.value, form2.n_tranzability.value)
-        //             let elements = document.querySelectorAll('table');
-        //             console.log(row.cells[0].innerHTML)
-        //             console.log(row.cells[1].innerHTML)
-        //             console.log(row.cells[2].innerHTML)
-        //             console.log(row.cells[3].innerHTML)
-        //             console.log(row.cells[4].innerHTML)
-        //             console.log(row.cells[5].innerHTML)
-        //             console.log(row.cells[6])
-        //             console.log(elements)
-        //             console.log(cookies.get('user'))
-        //             // $.ajax({
-        //             //     type: 'post', 
-        //             //     url: 'https://localhost:5001/api/kardex',
-        //             //     headers:{
-        //             //     'Accept':'application/json',
-        //             //     'Content-Type':'application/json'
-        //             //     },
-        //             //     data: JSON.stringify({
-        //             //         type_move:parseInt(form1.type_move.value),
-        //             //         origin_product:parseInt(form1.origin_product.value),
-        //             //         cod_store:parseInt(form1.cod_store.value),
-        //             //         n_tranzability:form2.n_tranzability.value,
-        //             //         cod_prod:row.cells[0].innerHTML,
-
-
-
-        //             //     }),
-        //             //     success: function (res){
-        //             //         console.log(res)
-        //             //         toast.success(res,{duration: 6000, position:"top-right"})
-        //             //     } 
-        //             // })
-        //         }
-        //     }
-        // }
-                    
     }
 
     // ************************ Funciones **************************
     // Funcion tabla Entradas
     const add_tablaE=()=>{
-        var formuk2 = document.getElementById('formk2');
+        let formuk2 = document.getElementById('formk2');
         if (formuk2.cod_prod.value !== '' && formuk2.cod_store.value !== '' && formuk2.quantity.value !== '' ){
-            console.log(formuk2.cod_prod.value, formuk2.cod_prod.options[formuk2.cod_prod.selectedIndex].name, formuk2.cod_store.value, formuk2.cod_prod.options[formuk2.cod_prod.selectedIndex].title, formuk2.quantity.value)
-           
+            
             var fila = "<tr><td>"+formuk2.cod_prod.value+"</td><td>"+formuk2.cod_prod.options[formuk2.cod_prod.selectedIndex].name+"</td><td className='celdas'>"+formuk2.cod_store.value+"</td><td>"+formuk2.cod_prod.options[formuk2.cod_prod.selectedIndex].title+"</td><td>"+formuk2.quantity.value+"</td><td><button class='btn btn-danger  btn-sm' value='eliminar' title='Eliminar dato' onClick={this.closest('tr').remove()} type='button'><i class='fas fa-trash'></i></button></td></tr>"
-             var btn = document.createElement("TR");
+            var btn = document.createElement("TR");
              btn.innerHTML=fila;
             document.getElementById("id_creacion").appendChild(btn);
             
@@ -446,22 +575,32 @@ export default function TrazaKardez(props){
 
     // Funcion Tabla salidas
     const add_tablaS=()=>{
+        
         var formuk2 = document.getElementById('formk2');
-        if (formuk2.cod_prods.value !== ''  && formuk2.quantity.value !== '' ){
-           
-            var fila = "<tr><td>"+formuk2.cod_prods.value+"</td><td>"+formuk2.n_tranzability.value+"</td><td className='celdas'>"+formuk2.cod_prods.options[formuk2.cod_prods.selectedIndex].title+"</td><td>"+formuk2.quantity.value+"</td><td>"+formuk2.cod_employed.value.toUpperCase()+"</td><td>"+formuk2.reference.value+"</td><td><button class='btn btn-danger  btn-sm' value='"+formuk2.cod_prods.options[formuk2.cod_prods.selectedIndex].name+"'  title='Eliminar dato' onClick={this.closest('tr').remove()} type='button' name='b"+formuk2.cod_prods.options[formuk2.cod_prods.selectedIndex].name+"'><i class='fas fa-trash'></i></button></td></tr>"
-            var btn = document.createElement("TR");
-            btn.innerHTML=fila;
-            document.getElementById("id_creacions").appendChild(btn);
-            
-            formuk2.cod_prods.value = ''
-            formuk2.quantity.value = ''
-            formuk2.n_tranzability.value = ''
-            formuk2.cod_employed.value = ''
-            formuk2.reference.value = ''
-
+        
+        if(parseInt(formuk2.quantity.value) > parseInt(formuk2.cod_prods.options[formuk2.cod_prods.selectedIndex].role)){
+            toast.error('Cantidad exede a la existente',{duration: 6000, position:"top-right"})
+        }else if(typeof parseInt(formuk2.quantity.value) !== 'number'){
+            toast.error('Cantidad debe ser un numero!!',{duration: 6000, position:"top-right"})
         }else{
-            toast.error('Campos vacios',{duration: 6000, position:"top-right"})
+            if (formuk2.cod_prods.value !== ''  && formuk2.quantity.value !== '' ){
+               
+            
+                var fila = "<tr><td>"+formuk2.cod_prods.value+"</td><td>"+formuk2.cod_employed.value+"</td><td>"+formuk2.cod_prods.options[formuk2.cod_prods.selectedIndex].name+"</td><td className='celdas'>"+formuk2.cod_prods.options[formuk2.cod_prods.selectedIndex].placeholder+"</td><td>"+formuk2.cod_prods.options[formuk2.cod_prods.selectedIndex].title+"</td><td>"+formuk2.quantity.value+"</td><td><button class='btn btn-danger  btn-sm' value='eliminar' title='Eliminar dato' onClick={this.closest('tr').remove()} type='button'><i class='fas fa-trash'></i></button></td></tr>"
+                var btn = document.createElement("TR");
+                btn.innerHTML=fila;
+                document.getElementById("id_creacions").appendChild(btn);
+                
+                selectProds()
+                selectStor()
+                selectstock()
+                formuk2.quantity.value = ''
+                formuk2.cod_employed.value = ''
+                selectEmployed()
+
+            }else{
+                toast.error('Campos vacios',{duration: 6000, position:"top-right"})
+            }
         }
     }
 
@@ -545,7 +684,7 @@ export default function TrazaKardez(props){
                                                         <div className="row">
                                                             <div class="form-group col-md-4">
                                                                 <label>Tipo Movimiento</label>
-                                                                <select class="form-control form-control-sm" name="type_move" id="select_tm" onChange={selectitemData}>
+                                                                <select class="custom-select form-control-sm form-control-border" name="type_move" id="select_tm" onChange={selectitemData}>
                                                                 </select>
                                                                 <div class="invalid-feedback">
                                                                     Campo vacio.
@@ -553,7 +692,11 @@ export default function TrazaKardez(props){
                                                             </div>
                                                             <div class="form-group col-md-3 ml-1">
                                                                 <label>&nbsp;</label>
-                                                                <input type="text" name="n_tranzability" class="form-control form-control-border "  placeholder="N de tranzaccion" />
+                                                                <button type="button" class="btn btn-secondary float-right  btn-sm" title="Generar Correlativo" onClick={Correlative_Header_Kardex}>
+                                                                    <i class="fa fa-spinner"></i>
+                                                                </button>
+                                                                
+                                                                <input type="text" name="n_tranzability" class="form-control form-control-border "  placeholder="N de tranzaccion" id="n_tranzability" />
                                                                 <div class="invalid-feedback">
                                                                     Campo vacio.
                                                                 </div>
@@ -582,7 +725,7 @@ export default function TrazaKardez(props){
                                                             </div>
                                                             <div class="form-group col-md-8 mr-2">
                                                                 <label>Referencias</label>
-                                                                <textarea class="form-control" rows="4" placeholder="Enter ..." name="reference"></textarea>
+                                                                <textarea class="form-control form-control-border" rows="4" placeholder="Enter ..." name="reference"></textarea>
                                                             </div>
                                                         </div> 
                                                     </div>
@@ -601,7 +744,7 @@ export default function TrazaKardez(props){
                                                     <div class="card-body ">
                                                         <div className="row">
                                                             
-                                                            <div class="form-group col-md-7" id='pro_salida'>
+                                                            <div class="form-group col-md-7" id='pro_en'>
                                                                 <label>Producto</label>
                                                                 <button type="button" class="btn btn-success float-right  btn-sm" data-toggle="modal" data-target="#modalDetalle" >
                                                                     <i class="fas fa-plus"></i>
@@ -612,33 +755,49 @@ export default function TrazaKardez(props){
                                                                     Campo vacio.
                                                                 </div>
                                                             </div>
-                                                         
-                                                            {/* SALIDA */}
-                                                            
-                                                            <div class="form-group col-md-5">
-                                                                <label >Codigo Bodega</label>
-                                                                <select class="js-data-example" name="cod_store" id="select_al" >
+
+                                                            <div class="form-group col-md-10" id='pro_salidas'>
+                                                                <label>Producto</label>
+                                                                
+                                                                <select class="js-data-example" name="cod_prods" id="id_select_prost">
                                                                 </select>
                                                                 <div class="invalid-feedback">
                                                                     Campo vacio.
                                                                 </div>
+                                                            </div>
+                                                         
+                                                            {/* SALIDA */}
+                                                            
+                                                            <div class="form-group col-md-5" id="id_bodega">
+                                                                <label >Codigo Bodega</label>
+                                                                <select class="js-data-example" name="cod_store" id="select_al" >
+                                                                </select>
                                                             </div> 
                                                             
                                                             <div class="form-group col-md-2">
                                                                 <label>&nbsp;</label>
-                                                                <input type="text" name="quantity" class="form-control form-control-border "  placeholder="Cantidad" />
+                                                                <input type="number" name="quantity" class="form-control form-control-border "  placeholder="Cantidad" />
                                                                 <div class="invalid-feedback">
                                                                     Campo vacio.
                                                                 </div>
                                                             </div>
                                                             
-                                                            <div class="form-group col-md-3" id="employed">
+                                                            {/* <div class="form-group col-md-3" id="employed">
                                                                 <label>&nbsp;</label>
                                                                 <input type="text" name="cod_employed" class="form-control form-control-border "  placeholder="Codigo Empleado" />
                                                                 <div class="invalid-feedback">
                                                                     Campo vacio.
                                                                 </div>
-                                                            </div>
+                                                            </div> */}
+                                                            {/*  */}
+                                                            <div class="form-group col-md-7" id="employed">
+                                                                
+                                                                    <label>Codigo Empleado</label>
+                                                                    <select class=" js-data-example " name="cod_employed"  id='id_select_em'>
+                                                                    </select> 
+                                                                
+                                                            </div> 
+                                                            {/*  */}
                                                             
                                                             
                                                         </div>  
@@ -647,7 +806,7 @@ export default function TrazaKardez(props){
                                                                 <button type="button" className="btn btn-info float-right   mb-2" id="btne" onClick={add_tablaE}>
                                                                     <i class="fas fa-plus-circle" >&nbsp; Agregar</i> 
                                                                 </button>   
-                                                                <button type="button" className="btn btn-info float-right   mb-2" id="btns" onClick={add_tablaS}>
+                                                                <button type="button" className="btn btn-info float-right   mb-2"  id="btns" onClick={add_tablaS}>
                                                                     <i class="fas fa-plus-circle" >&nbsp; Agregar</i> 
                                                                 </button> 
                                                         </div>
@@ -669,12 +828,12 @@ export default function TrazaKardez(props){
                                                             <table class="table table-hover" id="tablitas">
                                                                 <thead>
                                                                     <tr>
+                                                                        <th>Detalle</th>
+                                                                        <th>Cod Empleado</th>
                                                                         <th>Producto </th>
-                                                                        <th>N° Trazabilidad</th>
+                                                                        <th>Bodega</th>
                                                                         <th >Lote</th>
                                                                         <th >Cantidad</th>
-                                                                        <th >Codigo Empleado</th>
-                                                                        <th>Referecias</th>
                                                                         <th >Eliminar</th>
                                                                     </tr>
                                                                 </thead>

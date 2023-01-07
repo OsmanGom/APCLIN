@@ -25,6 +25,9 @@ export default function Header(props) {
     cookies.remove('user', {path: '/'});
     cookies.remove('password', {path: '/'});
     cookies.remove('user_type', {path: '/'});
+    cookies.remove('enterprise', {path: '/'});
+    document.getElementById('root').value = ''
+    document.getElementById('root').placeholder = ''
   }
 
   const cerrarSesion=()=>{

@@ -6,54 +6,68 @@ import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
 // import "alertify.min.js"
 
+const cookies = new Cookies();
 
 
 $(document).ready(function () {
+  if(document.getElementById('root').value){
+
   var t = $('#example2').DataTable({
     "language": {
     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
-  },
+  },order: [[15,'desc']],
     "responsive": true, "lengthChange": true, "autoWidth": true,
     
-  });
-  // $.ajax({
-  //   type: "GET",
-  //   url: "https://localhost:5001/api/kardex",
+  }); 
+  $.ajax({
+    type: "GET",
+    url: `${cookies.get('server')}/api/kardex/${cookies.get('enterprise')}`,
    
-  //   success: function(json_data) {
+    success: function(json_data) {
       
-  //     if (json_data !== 'Not Data'){
+      if (json_data !== 'Not Data'){
           
-  //       for (let i = 0; i < json_data.length; i++) {
-  //         t.row.add([
-  //           // json_data[i]['cod_correlative'], 
-  //           json_data[i]['detail'],
-  //           json_data[i]['n_tranzability'],
-  //           json_data[i]['Cod_store']+'-'+json_data[i]['deatil_store'], 
-  //           json_data[i]['cod_enterprise'],  
-  //           json_data[i]['cod_prod'], 
-  //           json_data[i]['product'], 
-  //           json_data[i]['reference'], 
-  //           json_data[i]['origin_product'],
-  //           json_data[i]['quantity'], 
-  //           json_data[i]['cod_employed'], 
-  //           json_data[i]['cod_lot'], 
-  //           json_data[i]['date_exp'], 
-  //           json_data[i]['user_register'], 
-  //           json_data[i]['date_create']
-  //         ]).draw(false);
-            
-  //       }
-  //     }
-  //   }
-  // })
+        for (let i = 0; i < json_data.length; i++) {
+          let bool, emp
 
+          if (json_data[i]['origin_product'] === true){
+            bool = 'Empresa'
+          }else{bool = 'Seguro Social'}
+
+          if (json_data[i]['cod_employed'] === '' || json_data[i]['cod_employed'] === null){
+            emp = 'Vacio'
+          }else{emp = json_data[i]['cod_employed']}
+          
+          t.row.add([
+            json_data[i]['detail'],
+            json_data[i]['option_move'], 
+            json_data[i]['n_trazability'],
+            bool,
+            json_data[i]['cod_prod'],
+            json_data[i]['name_product'],  
+            json_data[i]['cod_lot'], 
+            json_data[i]['detail_store'], 
+            json_data[i]['quantity'], 
+            json_data[i]['cia_descripcion'],  
+            json_data[i]['reference'], 
+            json_data[i]['date_exp'], 
+            json_data[i]['user_register'], 
+            emp, 
+            json_data[i]['date_tranzaction'],
+            json_data[i]['date_create'] 
+          ]).draw(false);
+            
+        }
+      }
+    }
+  })
+  }
 });
 
 export default function Kardex(props) {
     document.querySelector('title').textContent = 'Clinica |  Kardex';
     
-    const cookies = new Cookies();
+    
     
     useEffect(()=>{
       if(cookies.get('ID')){
@@ -63,7 +77,13 @@ export default function Kardex(props) {
       }
     },[]); 
 
+    const Report_Entradas=()=>{
+      console.log('Entradas')
+    }
     
+    const Report_Salidas=()=>{
+      console.log('Salidas')
+    }
     return (
       
       <><div className="content-wrapper">
@@ -90,8 +110,14 @@ export default function Kardex(props) {
             <div className="row mb-2">
               <div className="col-12">
                 <div className="card shadow rounded">
-                  <div className="card-header d-flex">
-                    
+                  <div className="card-header ">
+                  <h1 className="card-title">Trazabilidad Movimientos</h1>
+                  <button type="button" class="btn btn-warning btn-sm ml-1  float-right" title='Generar Reporte' onClick={Report_Salidas}>
+                    <i class="fa fa-file"></i> Salidas
+                  </button>
+                  <button type="button" class="btn btn-warning btn-sm ml-1  float-right" title='Generar Reporte' onClick={Report_Entradas}>
+                    <i class="fa fa-file"></i> Entradas
+                  </button>
                   </div>
                   <div className="card-body table-responsive" id='data1'>
                     <table id="example2" className="table order-column table-striped row-border hover order-column">
@@ -99,19 +125,21 @@ export default function Kardex(props) {
 
                         <tr>
                           <th>Tipo Movimiento</th>
-                          <th>Codigo Trazabilidad</th>
-                          <th>Almacen</th>
-                          <th>Empresa</th>
-                          <th>Codigo Producto</th>
-                          <th>Producto</th>
-                          <th>Referencia</th>
+                          <th>Opcion</th>
+                          <th>Nº Transacción</th>
                           <th>Origen</th>
+                          <th>Cod Producto</th>
+                          <th>Producto</th>
+                          <th>Lote</th>
+                          <th>Almacén</th>
                           <th>Cantidad</th>
-                          <th>Codigo Empleado</th>
-                          <th>Codigo Lote</th>
-                          <th>Fecha Expiracion</th>
+                          <th>Empresa</th>
+                          <th>Referencia</th>
+                          <th>Fecha de expiración</th>
                           <th>Usuario Registro</th>
-                          <th>Fecha Creacion</th>
+                          <th>Codigo Empleado</th>
+                          <th>Fecha Transacción</th>
+                          <th>Fecha Creación</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -120,19 +148,21 @@ export default function Kardex(props) {
                       <tfoot>
                         <tr>
                           <th>Tipo Movimiento</th>
-                          <th>Codigo Trazabilidad</th>
-                          <th>Almacen</th>
-                          <th>Empresa</th>
-                          <th>Codigo Porducto</th>
-                          <th>Producto</th>
-                          <th>Referencia</th>
+                          <th>Opcion</th>
+                          <th>Nº Transacción</th>
                           <th>Origen</th>
+                          <th>Cod Producto</th>
+                          <th>Producto</th>
+                          <th>Lote</th>
+                          <th>Almacén</th>
                           <th>Cantidad</th>
-                          <th>Codigo Empleado</th>
-                          <th>Codigo Lote</th>
-                          <th>Fecha Expiracion</th>
+                          <th>Empresa</th>
+                          <th>Referencia</th>
+                          <th>Fecha de expiración</th>
                           <th>Usuario Registro</th>
-                          <th>Fecha Creacion</th>
+                          <th>Codigo Empleado</th>
+                          <th>Fecha Transacción</th>
+                          <th>Fecha Creación</th>
                         </tr>
                       </tfoot>
                     </table>

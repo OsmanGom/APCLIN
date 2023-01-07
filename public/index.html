@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/public/static/img/home-medical.ico"> 
@@ -7,6 +7,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
     />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <!-- Font Awesome -->
     <link
       rel="stylesheet"
@@ -50,10 +51,7 @@
     
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     
-    <!-- DataTables -->
-  <link rel="stylesheet" href="%PUBLIC_URL%/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="%PUBLIC_URL%/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="%PUBLIC_URL%/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+   
     
     <link
       rel="stylesheet"
@@ -124,42 +122,65 @@
     <script src="%PUBLIC_URL%/plugins/jszip/jszip.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/pdfmake/pdfmake.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/pdfmake/vfs_fonts.js"></script>
-    <!-- <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="%PUBLIC_URL%/plugins/datatables-buttons/js/buttons.colVis.min.js"></script> -->
-    <script src="%PUBLIC_URL%/fontawesomefree/js/all.min.js"></script>
+  
+    
     <!-- BS-Stepper -->
     <script src="%PUBLIC_URL%/plugins/bs-stepper/js/bs-stepper.min.js"></script>
     <!-- select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-   
+    <script src="https://unpkg.com/xlsx@latest/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+    <!-- <script src="%PUBLIC_URL%/../public/static/js/jspdf.debug.js"></script> -->
+    
+  <script>
+    const Reporte_Incapacidades_persona=(a,b)=>{
+      console.log(a+'\n'+b)
+      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&busqueda=${parametro}&pais=${parametro1}`);
+    }    
+
+    const Reporte_Firma_persona=(a,b)=>{
+      console.log(a+'\n'+b)
+      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&busqueda=${parametro}&pais=${parametro1}`);
+      
+    }
+
 
     $(document).ready(function() {
-
       $('.js-data-example2').select2({
         width:'70%',
       });
       $('.js-data-example').select2({
         width:'100%',
       });
-
-      var em = document.getElementById('id_select_em')
+if(document.getElementById('root').value){
+    let urlAPIS = document.getElementById('root').placeholder
+      
+    var em = document.getElementById('id_select_em')
       const selectEmployed=()=>{
         if (em != null){
           $.ajax({
             type: "GET", 
-            url:"https://localhost:5001/api/empleados",
+            url:`${urlAPIS}/api/empleados/${document.getElementById('root').value}`,
             success:function(json_data) {  
-              const po = document.createElement('option') 
-              po.value = ''
-              po.text = '------ Seleccione -------'
-              em.appendChild(po)
-              for (let i = 0; i < json_data.length; i++) {
-                const option = document.createElement('option')
-                option.value = json_data[i]['exp_codigo_alternativo']
-                option.text = json_data[i]['exp_codigo_alternativo']+' '+json_data[i]['exp_nombres_apellidos']+' | '+json_data[i]['departamento']
-                em.appendChild(option);
+              const po = document.createElement('option')
+              
+              if(json_data === 'Not Data'){
+                
+                po.value = ''
+                po.text = 'No data'
+                // op.disabled = true
+                em.appendChild(po)
+              }else{ 
+                po.value = ''
+                po.text = '------ Seleccione -------'
+                em.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['exp_codigo_alternativo']
+                  option.text = json_data[i]['exp_codigo_alternativo']+' '+json_data[i]['exp_nombres_apellidos']+' | '+json_data[i]['departamento']
+                  em.appendChild(option);
+                }
               }
             }
           })
@@ -173,17 +194,26 @@
         if (s != null){
           $.ajax({
             type: "GET", 
-            url:"https://localhost:5001/api/lot",
-            success:function(json_data) {  
+            url:`${urlAPIS}/api/lot/${document.getElementById('root').value}`,
+            success:function(json_data) {
+              
               const op = document.createElement('option') 
-              op.value = ''
-              op.text = '------ Seleccione -------'
-              s.appendChild(op)
-              for (let i = 0; i < json_data.length; i++) {
-                const option = document.createElement('option')
-                option.value = json_data[i]['cod_lot']
-                option.text = json_data[i]['cod_lot']
-                s.appendChild(option);
+              if(json_data === 'Not Data'){
+                
+                op.value = ''
+                op.text = 'No existen lotes creados'
+                // op.disabled = true
+                s.appendChild(op)
+              }else{
+                op.value = ''
+                op.text = '------ Seleccione -------'
+                s.appendChild(op)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['cod_lot']
+                  option.text = json_data[i]['cod_lot']
+                  s.appendChild(option);
+                }
               }
             }
           })
@@ -197,18 +227,26 @@
         if (p != null){
           $.ajax({
             type: "GET", 
-            url:"https://localhost:5001/api/productos",
+            url:`${urlAPIS}/api/productos`,
             success:function(json_data) {  
               const po = document.createElement('option') 
-              po.value = ''
-              po.text = '------ Seleccione -------'
-              p.appendChild(po)
-              for (let i = 0; i < json_data.length; i++) {
-                const option = document.createElement('option')
-                option.value = json_data[i]['cod_prod']
-                option.text = json_data[i]['cod_prod']+' | '+json_data[i]['name_product']+'-'+json_data[i]['unid_med']
-                p.appendChild(option);
-              }
+              if(json_data === 'Not Data'){
+                
+                op.value = ''
+                op.text = 'No existen productos agregados'
+                // op.disabled = true
+                p.appendChild(op)
+              }else{
+                po.value = ''
+                po.text = '------ Seleccione -------'
+                p.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['cod_prod']
+                  option.text = json_data[i]['cod_prod']+' | '+json_data[i]['name_product']+'-'+json_data[i]['unid_med']
+                  p.appendChild(option);
+                }
+            }
             }
           })
         }
@@ -220,19 +258,25 @@
         if (ps != null){
           $.ajax({
             type: "GET", 
-            url:"https://localhost:5001/api/DetalleLot",
+            url:`${urlAPIS}/api/DetalleLot/${document.getElementById('root').value}`,
             success:function(json_data) {  
               const po = document.createElement('option') 
-              po.value = ''
-              po.text = '------ Seleccione -------'
-              ps.appendChild(po)
-              for (let i = 0; i < json_data.length; i++) {
-                const option = document.createElement('option')
-                option.value = json_data[i]['id']
-                option.text = json_data[i]['cod_prod']+' | '+json_data[i]['product']+'  Lote-'+json_data[i]['cod_lot']
-                option.title = json_data[i]['cod_lot']
-                option.name = json_data[i]['cod_prod']
-                ps.appendChild(option);
+              if(json_data === 'Not Data'){
+                po.value = ''
+                po.text = 'No se han agregado productos a lotes'
+                ps.appendChild(po)
+              }else{
+                po.value = ''
+                po.text = '------ Seleccione -------'
+                ps.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['id']
+                  option.text = json_data[i]['cod_prod']+' | '+json_data[i]['product']+'  Lote-'+json_data[i]['cod_lot']
+                  option.title = json_data[i]['cod_lot']
+                  option.name = json_data[i]['cod_prod']
+                  ps.appendChild(option);
+                }
               }
             }
           })
@@ -246,18 +290,27 @@
         if (st != null){
           $.ajax({
             type: "GET", 
-            url:"https://localhost:5001/api/almacen",
-            success:function(json_data) {  
-              const po = document.createElement('option') 
-              po.value = ''
-              po.text = '------ Seleccione -------'
-              st.appendChild(po)
-              for (let i = 0; i < json_data.length; i++) {
-                const option = document.createElement('option')
-                option.value = json_data[i]['detail_store']
-                option.text = json_data[i]['detail_store']+' '+json_data[i]['cia_abreviatura']+'-'+json_data[i]['cia_descripcion']
-                st.appendChild(option);
-              }
+            url:`${urlAPIS}/api/almacen/${document.getElementById('root').value}`,
+            success:function(json_data) { 
+              
+              const op = document.createElement('option') 
+              if(json_data === 'Not Data'){
+                
+                op.value = ''
+                op.text = 'No existen almacenes creados'
+                
+                ts.appendChild(op)
+              }else{
+                op.value = ''
+                op.text = '------ Seleccione -------'
+                st.appendChild(op)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['detail_store']
+                  option.text = json_data[i]['detail_store']+' '+json_data[i]['cia_abreviatura']+'-'+json_data[i]['cia_descripcion']
+                  st.appendChild(option);
+                }
+            }
             }
           })
         }
@@ -271,26 +324,68 @@
       if (tm != null){
         $.ajax({
           type: "GET", 
-          url:"https://localhost:5001/api/tipo_movimiento",
+          url:`${urlAPIS}/api/tipo_movimiento`,
           success:function(json_data) {  
             const po = document.createElement('option') 
-            po.value = ''
-            po.text = '------ Seleccione -------'
-            tm.appendChild(po)
-            for (let i = 0; i < json_data.length; i++) {
-              const option = document.createElement('option')
-              option.value = json_data[i]['id']
-              option.text = json_data[i]['cod_type_move']+'-'+json_data[i]['detail']
-              option.title = json_data[i]['option_move']
-              tm.appendChild(option);
+            if (json_data !== 'Not Data'){
+
+              po.value = ''
+              po.text = '------ Seleccione -------'
+              tm.appendChild(po)
+              for (let i = 0; i < json_data.length; i++) {
+                const option = document.createElement('option')
+                option.value = json_data[i]['id']
+                option.text = json_data[i]['cod_type_move']+'-'+json_data[i]['detail']
+                option.title = json_data[i]['option_move']
+                tm.appendChild(option);
+              }
+            }else{
+              po.value = ''
+              po.text = 'No existen registros'
+              tm.appendChild(po);
             }
           }
         })
       }
     }
     selectTmov()
-      
+    
+    var ls = document.getElementById('id_select_prost')
+      const selectstock=()=>{
+        if (ls != null){
+          $.ajax({
+            type: "GET", 
+            url:`${urlAPIS}/api/stock/${document.getElementById('root').value}`,
+            success:function(json_data) {  
+              const po = document.createElement('option') 
+              if (json_data !== 'Not Data'){
 
+                po.value = ''
+                po.text = '------ Seleccione -------'
+                ls.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['id']
+                  option.text = json_data[i]['detail_store']+' || Lote-'+json_data[i]['cod_lot']+' | '+ json_data[i]['cod_prod']+' | '+json_data[i]['name_product']+' | Existencia '+json_data[i]['total_quantity']
+                  option.title = json_data[i]['cod_lot']
+                  option.name = json_data[i]['cod_prod']
+                  option.placeholder = json_data[i]['detail_store']
+                  option.role = json_data[i]['total_quantity']
+                  ls.appendChild(option);
+                }
+                
+              }else{
+                  po.value = ''
+                  po.text = 'No existen registros'
+                  ls.appendChild(po);
+              }
+            }
+          })
+        }
+      }
+      selectstock()
+
+    }
     });
 
     

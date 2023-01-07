@@ -4,11 +4,12 @@ import axios from 'axios';
 import logo from "../img/sea1.png"
 
 
+
 export default function Login(props) {
   document.querySelector('title').textContent = 'Clinica | Login';
   
 
-  const url = 'https://localhost:5001/api/users'
+  const url = 'https://localhost:5001'
   const cookies = new Cookies();
   
   
@@ -28,16 +29,18 @@ export default function Login(props) {
   }
 
   const login = async()=>{
-    var pass = document.getElementById('password');
-    var usern = document.getElementById('username');
+    let pass = document.getElementById('password');
+    let usern = document.getElementById('username');
+    let enterprise = document.getElementById('idempresa')
     
-    if (pass.value === '' || usern.value === ''){
+    if (pass.value === '' || usern.value === '' || enterprise.value === ''){
       pass.className = 'form-control is-invalid';
       usern.className = 'form-control is-invalid';
+      enterprise.className = 'custom-select form-control-border is-invalid'
     }else{
         // 
         
-        await axios.get(url+`/${form.username}/${form.password}`)
+        await axios.get(url+'/api/users'+`/${form.username}/${form.password}`)
         .then(Response=>{
           return Response.data;
         }).then(Response=>{
@@ -45,8 +48,11 @@ export default function Login(props) {
             var respuesta = Response[0];
             
             cookies.set('ID', respuesta.id, { path: '/' });
-            cookies.set('user', respuesta.username, { path: '/' });
+            cookies.set('user', usern.value, { path: '/' });
             cookies.set('user_type', respuesta.user_type, { path: '/' });
+            cookies.set('enterprise', enterprise.value, { path: '/' });
+            cookies.set('local', window.location.href , {path: '/'});
+            cookies.set('server', url , {path: '/'});
             
             // props.history.push('/dashboard')
             window.location.href=('/dashboard')
@@ -104,6 +110,12 @@ export default function Login(props) {
             Campo vacio.
           </div>
         </div>
+        
+        <div class="form-group col-mb-8 ">
+          <label>Empresa</label>
+          <select className='custom-select form-control-border' id='idempresa' name='cod_enterprise' >
+          </select>
+        </div>
         <div className="row">
           
           <div className="col-4">
@@ -114,10 +126,9 @@ export default function Login(props) {
         </div>
       </form>
       
+      
       {/* /.social-auth-links */}
-      <p className="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
-      </p>
+      
       
     </div>
     {/* /.login-card-body */}
