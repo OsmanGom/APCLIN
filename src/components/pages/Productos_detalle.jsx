@@ -9,12 +9,13 @@ import toast, { Toaster } from "react-hot-toast"
 const cookies = new Cookies();
 
 $(document).ready(function () {
+  // cargar data de los productos
   var t = $('#example1').DataTable({
     "language": {
     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
     
   },
-  order: [[5,'desc']],
+  order: [[6,'desc']],
     "responsive": true, "lengthChange": true, "autoWidth": true,
     
   });
@@ -44,29 +45,28 @@ $(document).ready(function () {
 });
 
 export default function Produtos_D(props) {
-    document.querySelector('title').textContent = 'Clinica | Detalle Productos';
+  document.querySelector('title').textContent = 'Clinica | Detalle Productos';
     
-    
-    
-    useEffect(()=>{
-      if(cookies.get('ID')){
-        props.history.push('/Detalle/Productos');
-      }else{
-        props.history.push('/');
-      }
-    },[]); 
-
-
-    // 
-   const Report_Product=()=>{
-      console.log('entro')
-      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&busqueda=${parametro}&pais=${parametro1}`);
+  useEffect(()=>{
+    if(cookies.get('ID')){
+      props.history.push('/Detalle/Productos');
+    }else{
+      props.history.push('/');
     }
+  },[props.history]); 
 
-    // Selects
-    const selectData=()=>{
-      let p = document.getElementById('idselect')
-      
+
+  // Reporte de los productos en el sistema
+  const Report_Product=()=>{
+    // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false`,'_blank');
+  }
+
+  // Inicio de cargar datos a los Selects
+  
+  // Select de tipo producto
+  const selectData=()=>{
+    let p = document.getElementById('idselect')
+    
     if (p != null){
       $.ajax({
         type: "GET", 
@@ -94,36 +94,37 @@ export default function Produtos_D(props) {
         }
       })
     }
-    }
-    
-    const cargarlot=()=>{
+  }
+  
+    // Select de Lote
+  const cargarlot=()=>{
       let s = document.getElementById('id_select_lote')
       if (s != null){
-          let options = document.querySelectorAll('#id_select_lote option');
-          options.forEach(o => o.remove());
-          $.ajax({
-              type: "GET", 
-              url:`${cookies.get('server')}/api/lot/${cookies.get('enterprise')}`,
-              success:function(json_data) {  
-                  const op = document.createElement('option') 
-                  if(json_data === 'Not Data'){
-                    
-                    op.value = ''
-                    op.text = 'No existen lotes creados'
-                    s.appendChild(op)
-                  }else{
-                    op.value = ''
-                    op.text = '------ Seleccione -------'
-                    s.appendChild(op)
-                    for (let i = 0; i < json_data.length; i++) {
-                        const option = document.createElement('option')
-                        option.value = json_data[i]['cod_lot']
-                        option.text = json_data[i]['cod_lot']
-                        s.appendChild(option);
-                    }
-                  }
+        let options = document.querySelectorAll('#id_select_lote option');
+        options.forEach(o => o.remove());
+        $.ajax({
+          type: "GET", 
+          url:`${cookies.get('server')}/api/lot/${cookies.get('enterprise')}`,
+          success:function(json_data) {  
+            const op = document.createElement('option') 
+            if(json_data === 'Not Data'){
+              
+              op.value = ''
+              op.text = 'No existen lotes creados'
+              s.appendChild(op)
+            }else{
+              op.value = ''
+              op.text = '------ Seleccione -------'
+              s.appendChild(op)
+              for (let i = 0; i < json_data.length; i++) {
+                const option = document.createElement('option')
+                option.value = json_data[i]['cod_lot']
+                option.text = json_data[i]['cod_lot']
+                s.appendChild(option);
               }
-          })
+            }
+          }
+        })
       }
   }
 
@@ -131,8 +132,8 @@ export default function Produtos_D(props) {
   const selectProds=()=>{
     let ps = document.getElementById('id_select_pros')
     if (ps != null){
-        let options = document.querySelectorAll('#id_select_pros option');
-        options.forEach(o => o.remove());
+      let options = document.querySelectorAll('#id_select_pros option');
+      options.forEach(o => o.remove());
       $.ajax({
         type: "GET", 
         url:`${cookies.get('server')}/api/DetalleLot${cookies.get('enterprise')}`,
@@ -165,8 +166,8 @@ export default function Produtos_D(props) {
   const selectProd=()=>{
     let p = document.getElementById('id_select_pro')
     if (p != null){
-        let options = document.querySelectorAll('#id_select_pro option');
-        options.forEach(o => o.remove());
+      let options = document.querySelectorAll('#id_select_pro option');
+      options.forEach(o => o.remove());
       $.ajax({
         type: "GET", 
         url:`${cookies.get('server')}/api/productos`,
@@ -186,6 +187,7 @@ export default function Produtos_D(props) {
     }
   }
 
+  // Eliminar estilos de inputs
   const remove_data=()=>{
     const  s = document.querySelectorAll('#idselect option')
     s.forEach(o => o.remove());
@@ -196,15 +198,29 @@ export default function Produtos_D(props) {
     formu.cod_prod.className = 'form-control form-control-border';
   }
 
-    document.body.addEventListener("keydown", function(event) {
-     
-      if (event.code === 'Escape' || event.keyCode === 27) {
-        // Aqui la lógica para el caso de Escape ...
-        remove_data()
-      }
-    });
+  // Funcion de tecla scape
+  document.body.addEventListener("keydown", function(event) {
     
+    if (event.code === 'Escape' || event.keyCode === 27) {
+      // Aqui la lógica para el caso de Escape ...
+      remove_data()
+    }
+  });
     
+    // 
+    const Gen_code = () =>{
+      $.ajax({
+        type: "get", 
+        url:`${cookies.get('server')}/api/login`,
+        success:function(json_data) {  
+          const cod = document.getElementById('cod_prod')
+          if (json_data !== 'Not Data'){
+            cod.innerText = json_data[0]['random_number']
+            cod.value = json_data[0]['random_number']
+          }
+        }
+      })
+    }
 
   // Registro Lote
   const addLote=()=>{
@@ -227,34 +243,34 @@ export default function Produtos_D(props) {
     } 
     
     if(a && b){
-        $.ajax({
-            type: 'post', 
-            url: `${cookies.get('server')}/api/lot/${cookies.get('enterprise')}`,
-            headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-            },
-            data: JSON.stringify({
-                cod_lot:idlot.lotea.value,
-                date_exp:idlot.date_exp.value,
-                user_register:cookies.get('user'),
-                cod_enterprise:cookies.get('enterprise')
-            }),
-            success: function (res){
-                idlot.lotea.className = classSuccess
-                toast.success(res,{duration: 6000, position:"top-right"})
-                idlot.lotea.value = ''
-                idlot.date_exp.value =''
-                idlot.lotea.className = 'form-control form-control-border'
-                idlot.date_exp.className = 'form-control form-control-border'
-                cargarlot()
-               
-            } , error(error){
-              console.log(error)
-            }
-        })
+      $.ajax({
+        type: 'post', 
+        url: `${cookies.get('server')}/api/lot/${cookies.get('enterprise')}`,
+        headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+        },
+        data: JSON.stringify({
+          cod_lot:idlot.lotea.value,
+          date_exp:idlot.date_exp.value,
+          user_register:cookies.get('user'),
+          cod_enterprise:cookies.get('enterprise')
+        }),
+        success: function (res){
+          idlot.lotea.className = classSuccess
+          toast.success(res,{duration: 6000, position:"top-right"})
+          idlot.lotea.value = ''
+          idlot.date_exp.value =''
+          idlot.lotea.className = 'form-control form-control-border'
+          idlot.date_exp.className = 'form-control form-control-border'
+          cargarlot()
+            
+        } , error(error){
+          console.log(error)
+        }
+      })
     }
-}
+  }
 
   // Registro Detalle
   const Rformdetalle=()=>{
@@ -266,127 +282,130 @@ export default function Produtos_D(props) {
     }else{a=true}
 
     if (a === true){
-        $.ajax({
-            type: 'post', 
-            url: `${cookies.get('server')}/api/DetalleLot`,
-            headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-            },
-            data: JSON.stringify({
-                cod_prod:rd.cod_prod.value,
-                cod_lot:rd.cod_lot.value
-            }),
-            success: function (res){
-                
-                toast.success(res,{duration: 6000, position:"top-right"})
-                cargarlot()
-                selectProd()
-                selectProds()
-            }, error: function(error){
-                console.log(error)
-            }
-        })
-        
-    }
-}
-
-    // Save data for method post =>>> ajax
-    const SaveData=(a,formu)=>{
-      if (a === true){
-        
-        $.ajax({
-          type: 'post', 
-          url: `${cookies.get('server')}/api/productos`,
-          headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-          },
-          data: JSON.stringify({
-            cod_prod: formu.cod_prod.value,
-            id_type_p:parseInt(formu.id_type_p.value),
-            name_product:formu.name_product.value,
-            full_name:formu.full_name.value,
-            unit_price:parseFloat(formu.unit_price.value),
-            user_register:formu.user_register.value,
-          }),
-          success: function (res){
-            toast.success(res,{duration: 6000, position:"top-right"})
-            selectProd()
-            // window.open=('/Detalle/Productos', '_blank')
-            setTimeout("location.href='/Detalle/Productos'", 1000);
+      $.ajax({
+        type: 'post', 
+        url: `${cookies.get('server')}/api/DetalleLot`,
+        headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+        },
+        data: JSON.stringify({
+            cod_prod:rd.cod_prod.value,
+            cod_lot:rd.cod_lot.value
+        }),
+        success: function (res){
             
-          } 
-        })
-
-      }
+          toast.success(res,{duration: 6000, position:"top-right"})
+          cargarlot()
+          selectProd()
+          selectProds()
+        }, error: function(error){
+          console.log(error)
+        }
+      })
     }
-    // 
-          
-    // Validations
-    var classSuccess = 'form-control is-valid form-control-border';
-    var classWarning = 'form-control form-control-border is-invalid';
-    const form = ()=>{
-        var formu = document.getElementById('formdata');
-        var a,b,c,d,e,f = false;
+  }
 
-        if(formu.id_type_p.value === ''){
-          b = false
-        }else{
-          b = true
-        }
-        if(formu.cod_prod.value === ''){
-          formu.cod_prod.className = classWarning;
-        }else{
-          f = true
-          formu.cod_prod.className = classSuccess;
-        }
-        if(formu.name_product.value === ''){
-          formu.name_product.className = classWarning;
-        }else{
-          c = true
-          formu.name_product.className = classSuccess;
-        }if(formu.full_name.value === ''){
-          formu.full_name.className = classWarning
-        }else{
-          d = true
-          formu.full_name.className = classSuccess;
-        }if(formu.unit_price.value === ''){
-          formu.unit_price.className = classWarning;
-        }else{
-          e = true
-          formu.unit_price.className = classSuccess;
-        }
-        if (b && c && d && e && f){
-          a = true;
-        }
-        SaveData(a,formu)
-    }
-
-    return (
+  // Save data for method post =>>> ajax
+  const SaveData=(a,formu)=>{
+    if (a === true){
       
-      <><div className="content-wrapper mb-3">
-      <div> <Toaster
-                   toastOptions={{
-                    success: {
-                    style: {
-                        border: '1px solid #738877',
-                        padding: '18px',
-                        width:'300px',
-                        color: '#f9f5f2',
-                        background: '#08a225b8',
-                    },
-                    },
-                    error: {
-                    style: {
-                        border: '1px solid #713200',
-                        padding: '16px',
-                        color: '#713200',
-                        width:'250px',
-                    },
-                    },
-                }}
-                /></div>
+      $.ajax({
+        type: 'post', 
+        url: `${cookies.get('server')}/api/productos`,
+        headers:{
+          'Accept':'application/json',
+          'Content-Type':'application/json'
+        },
+        data: JSON.stringify({
+          cod_prod: formu.cod_prod.value.toUpperCase(),
+          id_type_p:parseInt(formu.id_type_p.value),
+          name_product:formu.name_product.value,
+          full_name:formu.full_name.value,
+          unit_price:parseFloat(formu.unit_price.value),
+          user_register:formu.user_register.value,
+        }),
+        success: function (res){
+          toast.success(res,{duration: 6000, position:"top-right"})
+          selectProd()
+          setTimeout("location.href='/Detalle/Productos'", 1000);//Recargar la pagina en un segundo
+          
+        } 
+      })
+
+    }
+  }   
+  
+  
+  // Validaciones
+  var classSuccess = 'form-control is-valid form-control-border';//Estilo de valido
+  var classWarning = 'form-control form-control-border is-invalid';//Estilo de invalido
+  // Funcion para marcar como validos o invalidos los campos 
+  const form = ()=>{
+      var formu = document.getElementById('formdata');
+      var a,b,c,d,e,f = false;
+
+      if(formu.id_type_p.value === ''){
+        b = false
+      }else{
+        b = true
+      }
+      if(formu.cod_prod.value === ''){
+        formu.cod_prod.className = classWarning;
+      }else{
+        f = true
+        formu.cod_prod.className = classSuccess;
+      }
+      if(formu.name_product.value === ''){
+        formu.name_product.className = classWarning;
+      }else{
+        c = true
+        formu.name_product.className = classSuccess;
+      }if(formu.full_name.value === ''){
+        formu.full_name.className = classWarning
+      }else{
+        d = true
+        formu.full_name.className = classSuccess;
+      }if(formu.unit_price.value === ''){
+        formu.unit_price.className = classWarning;
+      }else{
+        e = true
+        formu.unit_price.className = classSuccess;
+      }
+      if (b && c && d && e && f){
+        a = true;
+      }
+      SaveData(a,formu)
+  }
+
+  return (
+    
+    <>
+      <div className="content-wrapper mb-3">
+        {/* alertas */}
+        <div> 
+          <Toaster
+            toastOptions={{
+                      success: {
+                      style: {
+                          border: '1px solid #738877',
+                          padding: '18px',
+                          width:'300px',
+                          color: '#f9f5f2',
+                          background: '#08a225b8',
+                      },
+                      },
+                      error: {
+                      style: {
+                          border: '1px solid #713200',
+                          padding: '16px',
+                          color: '#713200',
+                          width:'250px',
+                      },
+                      },
+            }}
+          />
+        </div>
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
@@ -395,7 +414,11 @@ export default function Produtos_D(props) {
               </div>{/* /.col */}
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                  {cookies.get('MenuPrincipal') === 'MenuPrincipal' &&
+                    <li className="breadcrumb-item">
+                      <a href="/dashboard">Inicio</a>
+                    </li>
+                  }
                   <li className="breadcrumb-item active">Detalle Productos</li>
                 </ol>
               </div>{/* /.col */}
@@ -459,6 +482,7 @@ export default function Produtos_D(props) {
         </section>
 
       </div>
+
       {/* Modal register product */}
       <div class="modal fade rounded shadow-lg" id="modal-product" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -474,7 +498,7 @@ export default function Produtos_D(props) {
                 {/*  */}
                 <div className="row">
                   <div class="form-group col-md-7">
-                      <label>Tipo Producto</label>
+                      <label><span className="fas fa-file-signature mr-2" />Tipo Producto</label>
                       <div className="select2-purple">
                           <select className='js-data-example' id='idselect' name='id_type_p' >
                           </select>
@@ -483,9 +507,12 @@ export default function Produtos_D(props) {
                           Campo vacio.
                       </div>
                   </div> 
-                  <div class="form-group col-md-4 mt-4 ">
+                  <div class="form-group col-md-4 mt-2 ">
                     <label></label>
-                      <input type="text" name="cod_prod"  className="form-control form-control-border" placeholder="Cod Producto"/>
+                      <button type="button" class="btn btn-secondary float-right  btn-sm" title="Generar Codigo" onClick={Gen_code}>
+                          <i class="fa fa-spinner"></i>
+                      </button>
+                      <input type="text" name="cod_prod"  id="cod_prod" className="form-control form-control-border" placeholder="Cod Producto"/>
                       <div class="invalid-feedback">
                             Campo vacio.
                       </div>
@@ -524,7 +551,8 @@ export default function Produtos_D(props) {
         </div>
       </div>
       {/*  */}
-      {/*  */}
+      
+      {/* Modal registro producto lote */}
       <div class="modal fade rounded shadow-lg" data-backdrop="static"  id="modalDetalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -588,13 +616,13 @@ export default function Produtos_D(props) {
                             {/*  */}
                         <div class="row">
                             <div class="form-group col-md-9" id='pro_entrada'>
-                                <label>Producto</label>
+                                <label><span className="fas fa-file-signature mr-2" />Producto</label>
                                 <select class="js-data-example" type="search"  name="cod_prod" id="id_select_pro">
                                 </select>
                             </div>
                             
                             <div class="form-group col-md-9" id="lot_entrada">
-                                        <label>Numero de lote</label>
+                                        <label><span className="fas fa-hashtag mr-2" />Numero de lote</label>
                                         <select class="js-data-example" name="cod_lot" id="id_select_lote" >
                                         </select>
                                         <div class="invalid-feedback">
@@ -615,8 +643,8 @@ export default function Produtos_D(props) {
         </div>
       </div>
       {/*  */}
-      </>
-      
-    )
+    </>
+    
+  )
   
-  }
+}

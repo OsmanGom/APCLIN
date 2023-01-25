@@ -28,10 +28,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="%PUBLIC_URL%/static/css/adminlte.min.css" />
     <!-- overlayScrollbars -->
-    <link
-      rel="stylesheet"
-      href="%PUBLIC_URL%/plugins/overlayScrollbars/css/OverlayScrollbars.min.css"
-    />
+    <link rel="stylesheet" href="%PUBLIC_URL%/plugins/overlayScrollbars/css/OverlayScrollbars.min.css"/>
     <!-- Daterange picker -->
     <link
       rel="stylesheet"
@@ -134,29 +131,86 @@
     <!-- <script src="%PUBLIC_URL%/../public/static/js/jspdf.debug.js"></script> -->
     
   <script>
+    const Mod=(a,b)=>{
+      
+      let formED = document.getElementById('formED');
+
+      $.ajax({
+        type: "DELETE", 
+        url:`${document.getElementById('root').placeholder}/api/incapacidades/${a}`,
+        success:function(json_data) { 
+          let  status_p
+          if(json_data[0]['status_p']){
+            status_p = '1'
+          }else{
+            status_p = '0'
+          }
+          document.getElementById('usern').innerHTML = json_data[0]['exp_nombres_apellidos']
+          formED.cod.value=json_data[0]['exp_codigo_alternativo']
+          formED.cod.id=a
+          // 
+          
+          formED.date_from.value=json_data[0]['date_from1']
+          formED.date_to.value=json_data[0]['date_to1']
+          formED.days.value=json_data[0]['days']
+          formED.condition.value=json_data[0]['condition']
+          formED.status_p.value=status_p
+          formED.date_p.value=json_data[0]['date_p1']
+          formED.days_p.value=json_data[0]['days_p']
+          formED.type_date.value=json_data[0]['type_date']
+          formED.diagnostic.value=json_data[0]['diagnostic']
+        }
+      })
+    } 
+
     const Reporte_Incapacidades_persona=(a,b)=>{
       console.log(a+'\n'+b)
-      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&busqueda=${parametro}&pais=${parametro1}`);
+      //window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_patienty=${a}`,'_blank');
     }    
 
     const Reporte_Firma_persona=(a,b)=>{
       console.log(a+'\n'+b)
-      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&busqueda=${parametro}&pais=${parametro1}`);
+      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_patienty=${a}`,'_blank');
       
     }
 
-
-    $(document).ready(function() {
-      $('.js-data-example2').select2({
-        width:'70%',
-      });
-      $('.js-data-example').select2({
-        width:'100%',
-      });
-if(document.getElementById('root').value){
-    let urlAPIS = document.getElementById('root').placeholder
+    var p = document.getElementById('idempres')
+  // select de empresa
+  if (p != null){
+      let options = document.querySelectorAll('#idempres option');
+          options.forEach(o => o.remove());
+      $.ajax({
+          type: "GET", 
+          url: `https://localhost:5001/api/empresa`,
       
-    var em = document.getElementById('id_select_em')
+          success: function(json_data) {  
+          const op = document.createElement('option') 
+          op.value = ''
+          op.text = '------ Seleccione -------'
+          p.appendChild(op)
+          if (json_data !== 'Not Data'){
+              for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['cia_codigo']
+                  option.text = json_data[i]['cia_descripcion']+'-'+json_data[i]['cia_abreviatura']
+                  p.appendChild(option);
+              }
+          }
+          }
+      })
+  }
+
+  $(document).ready(function() {
+    $('.js-data-example2').select2({
+      width:'70%',
+    });
+    $('.js-data-example').select2({
+      width:'100%',
+    });
+    if(document.getElementById('root').value){
+      let urlAPIS = document.getElementById('root').placeholder // url del servidor de las apis
+      
+      var em = document.getElementById('id_select_em')
       const selectEmployed=()=>{
         if (em != null){
           $.ajax({
@@ -315,42 +369,42 @@ if(document.getElementById('root').value){
           })
         }
       }
-    selectStor()
+      selectStor()
 
    
 
-    var tm = document.getElementById('select_tm')
-    const selectTmov=()=>{
-      if (tm != null){
-        $.ajax({
-          type: "GET", 
-          url:`${urlAPIS}/api/tipo_movimiento`,
-          success:function(json_data) {  
-            const po = document.createElement('option') 
-            if (json_data !== 'Not Data'){
+      var tm = document.getElementById('select_tm')
+      const selectTmov=()=>{
+        if (tm != null){
+          $.ajax({
+            type: "GET", 
+            url:`${urlAPIS}/api/tipo_movimiento`,
+            success:function(json_data) {  
+              const po = document.createElement('option') 
+              if (json_data !== 'Not Data'){
 
-              po.value = ''
-              po.text = '------ Seleccione -------'
-              tm.appendChild(po)
-              for (let i = 0; i < json_data.length; i++) {
-                const option = document.createElement('option')
-                option.value = json_data[i]['id']
-                option.text = json_data[i]['cod_type_move']+'-'+json_data[i]['detail']
-                option.title = json_data[i]['option_move']
-                tm.appendChild(option);
+                po.value = ''
+                po.text = '------ Seleccione -------'
+                tm.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['id']
+                  option.text = json_data[i]['cod_type_move']+'-'+json_data[i]['detail']
+                  option.title = json_data[i]['option_move']
+                  tm.appendChild(option);
+                }
+              }else{
+                po.value = ''
+                po.text = 'No existen registros'
+                tm.appendChild(po);
               }
-            }else{
-              po.value = ''
-              po.text = 'No existen registros'
-              tm.appendChild(po);
             }
-          }
-        })
+          })
+        }
       }
-    }
-    selectTmov()
+      selectTmov()
     
-    var ls = document.getElementById('id_select_prost')
+      var ls = document.getElementById('id_select_prost')
       const selectstock=()=>{
         if (ls != null){
           $.ajax({
@@ -385,8 +439,10 @@ if(document.getElementById('root').value){
       }
       selectstock()
 
+    }else{
+      console.log('no value')
     }
-    });
+  });
 
     
 

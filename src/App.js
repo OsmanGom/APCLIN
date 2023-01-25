@@ -10,7 +10,7 @@ import Ficapacidades from './components/pages/Registro_Incapacidads';
 import Incapacidades from './components/pages/Incapacidades'
 import Produtos_D from './components/pages/Productos_detalle'
 import Kardex from './components/pages/kardex'
-import R_Tipo_Producto from './components/pages/Registro_Tipo_Producto'
+import R_Base from './components/pages/Registros_Base.jsx'
 import TrazaKardez from './components/pages/TranzaKardex'
 import Semaforizacion_Rojo from './components/pages/Zemaforizacion_Rojo.jsx'
 import Semaforizacion_Amarillo from './components/pages/Zemaforizacion_Amarillo.jsx'
@@ -35,8 +35,8 @@ export default function App() {
           <Route exact path="/Detalle/Incapacidades" component={Incapacidades}/>
           <Route exact path="/Detalle/Productos" component={Produtos_D}/>
           <Route exact path="/kardex" component={Kardex}/>
-          <Route exact path="/Registros/Base" component={R_Tipo_Producto}/>
-          <Route exact path="/Kardez/Trazabilidad" component={TrazaKardez}/>
+          <Route exact path="/Registros/Base" component={R_Base}/>
+          <Route exact path="/Kardex/Trazabilidad" component={TrazaKardez}/>
           <Route exact path="/Semaforizacion/Rojo" component={Semaforizacion_Rojo}/>
           <Route exact path="/Semaforizacion/Amarillo" component={Semaforizacion_Amarillo}/>
           <Route exact path="/Semaforizacion/Verde" component={Semaforizacion_Verde}/>

@@ -4,7 +4,7 @@ import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
-import toast, { Toaster } from "react-hot-toast"
+
 
 const cookies = new Cookies();
 
@@ -14,61 +14,53 @@ $(document).ready(function () {
     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
     
   },
-//   order: [[5,'desc']],
+  order: [[1,'desc']],
     "responsive": true, "lengthChange": true, "autoWidth": true,
     
   });
-  $.ajax({
-    type: "PATCH",
-    url: `${cookies.get('server')}/api/stock/${cookies.get('enterprise')}`,
-   
-    success: function(json_data) {
-      if (json_data !== 'Not Data'){
-      
-        for (let i = 0; i < json_data.length; i++) {
-          t.row.add([
-            json_data[i]['detail_store'],
-            json_data[i]['date_exp'], 
-            json_data[i]['cod_lot'], 
-            json_data[i]['cod_prod'], 
-            json_data[i]['name_product'], 
-            json_data[i]['Semaforizacion'], 
-            json_data[i]['total_quantity']
-          ]).draw(false);
-            
+  if(window.location.href === `${cookies.get('local')}Semaforizacion/Verde`){
+    $.ajax({
+      type: "PATCH",
+      url: `${cookies.get('server')}/api/stock/${cookies.get('enterprise')}`,
+    
+      success: function(json_data) {
+        if (json_data !== 'Not Data'){
+        
+          for (let i = 0; i < json_data.length; i++) {
+            t.row.add([
+              json_data[i]['detail_store'],
+              json_data[i]['date_exp'], 
+              json_data[i]['cod_lot'], 
+              json_data[i]['cod_prod'], 
+              json_data[i]['name_product'], 
+              json_data[i]['Semaforizacion'], 
+              json_data[i]['total_quantity']
+            ]).draw(false);
+              
+          }
         }
       }
-    }
-  })
-
+    })
+  }
 });
 
 export default function Semaforizacion_Verde(props) {
     document.querySelector('title').textContent = 'Clinica | Zemaforizacion';
     
-    
-    
-    useEffect(()=>{
-      if(cookies.get('ID')){
-        props.history.push('/Semaforizacion/Verde');
-      }else{
-        props.history.push('/');
-      }
-    },[]); 
+  useEffect(()=>{
+    if(cookies.get('ID')){
+      props.history.push('/Semaforizacion/Verde');
+    }else{
+      props.history.push('/');
+    }
+  },[props.history]); 
 
 
     // 
    const Report_SVERDE=()=>{
-      console.log('entro')
-      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&busqueda=${parametro}&pais=${parametro1}`);
+      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_enterprise=${cookies.get('enterprise')}`,'_blank');
     }
-    const generaqr = () =>{
-        let cod = document.getElementById('idcode').value
-        let img = document.getElementById('idimg')
-        img.src = `https://barcode.tec-it.com/barcode.ashx?data=${cod}&code=Code128`
-        console.log(cod, img.src )
-
-    }
+    
     return (
       
       <><div className="content-wrapper mb-3">
@@ -80,7 +72,7 @@ export default function Semaforizacion_Verde(props) {
               </div>{/* /.col */}
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                  <li className="breadcrumb-item">Inicio</li>
                   <li className="breadcrumb-item active">Detalle Semaforizacion</li>
                 </ol>
               </div>{/* /.col */}

@@ -40,11 +40,11 @@ export default function TrazaKardez(props){
     
     useEffect(()=>{
       if(cookies.get('ID')){
-        props.history.push('/Kardez/Trazabilidad');
+        props.history.push('/Kardex/Trazabilidad');
       }else{
         props.history.push('/');
       }
-        },[]); 
+        },[props.history]); 
     
     //*********************** Validations *******************
     
@@ -56,7 +56,7 @@ export default function TrazaKardez(props){
         head.className = 'tab-pane fade' 
         detail.className = 'tab-pane fade active show'
     }
-
+    
     var formuk = document.getElementById('formk');
     const NextData=()=>{
         var a, b ,c = false
@@ -425,7 +425,8 @@ export default function TrazaKardez(props){
                         origin_product:parseInt(form1.origin_product.value),
                         date_tranzaction:form1.date_tranzaction.value,
                         reference:form1.reference.value,
-                        user_register:cookies.get('user')
+                        user_register:cookies.get('user'),
+                        id_enterprise:cookies.get('enterprise')
                     }),
                     success: function (json_data){
                         id_header = json_data[0]['header_id']
@@ -638,13 +639,15 @@ export default function TrazaKardez(props){
                     <div className="row mb-2">
                     <div className="col-sm-6">
                         {/* <h1 className="m-0">{cookies.get('user')}</h1> */}
-                        <h1>Trazabilidad Kardez</h1>
+                        <h1>Trazabilidad Kardex</h1>
                     </div>{/* /.col */}
                     <div className="col-sm-6">
                         <ol className="breadcrumb float-sm-right">
-                        <li className="breadcrumb-item"><a href="/dashboard">Home</a></li>
-                        <li className="breadcrumb-item active"><a href="/kardex">Kardez</a></li>
-                        <li className="breadcrumb-item active">Trazabilidad</li>
+                            {cookies.get('MenuPrincipal') === 'MenuPrincipal' &&
+                                <li className="breadcrumb-item "><a href="/dashboard">Inicio</a></li>
+                             }
+                            <li className="breadcrumb-item active"><a href="/kardex">Kardex</a></li>
+                            <li className="breadcrumb-item active">Trazabilidad</li>
                         </ol>
                     </div>{/* /.col */}
                     </div>{/* /.row */}
@@ -718,13 +721,13 @@ export default function TrazaKardez(props){
                                                         {/*  */}
                                                         <div className="row">
                                                             <div class="form-group col-md-4" id="fechae">
-                                                                <label>Fecha de Transacción:</label>
+                                                                <label><span className="fas fa-calendar mr-2" />Fecha de Transacción:</label>
                                                                 <div class="input-group date"  data-target-input="nearest">
                                                                     <input type="date" class="form-control form-control-border" name="date_tranzaction"/>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-md-8 mr-2">
-                                                                <label>Referencias</label>
+                                                                <label><span className="fas fa-file mr-2" />Referencias</label>
                                                                 <textarea class="form-control form-control-border" rows="4" placeholder="Enter ..." name="reference"></textarea>
                                                             </div>
                                                         </div> 
@@ -746,7 +749,7 @@ export default function TrazaKardez(props){
                                                             
                                                             <div class="form-group col-md-7" id='pro_en'>
                                                                 <label>Producto</label>
-                                                                <button type="button" class="btn btn-success float-right  btn-sm" data-toggle="modal" data-target="#modalDetalle" >
+                                                                <button type="button" class="btn btn-success float-right  btn-sm" data-toggle="modal" data-target="#modalDetalle" title="Agregar Producto a Lote">
                                                                     <i class="fas fa-plus"></i>
                                                                 </button>
                                                                 <select class="js-data-example" name="cod_prod" id="id_select_pros">
@@ -769,7 +772,7 @@ export default function TrazaKardez(props){
                                                             {/* SALIDA */}
                                                             
                                                             <div class="form-group col-md-5" id="id_bodega">
-                                                                <label >Codigo Bodega</label>
+                                                                <label ><span className="fas fa-store mr-2" />Codigo Bodega</label>
                                                                 <select class="js-data-example" name="cod_store" id="select_al" >
                                                                 </select>
                                                             </div> 
@@ -846,7 +849,7 @@ export default function TrazaKardez(props){
                                                     
                                                 </form>
                                                 <div class="modal-footer justify-content-between">
-                                                    <button type="button" class="btn btn-secondary" onClick={ReturnData}>Atras</button>
+                                                    <button type="button" class="btn btn-secondary" onClick={ReturnData}><span className="fas fa-arrow-left mr-2" />Atras</button>
                                                     <button type="button" class="btn btn-primary float-end" onClick={prueba}>Guardar</button>
                                                 </div>
                                             </div>

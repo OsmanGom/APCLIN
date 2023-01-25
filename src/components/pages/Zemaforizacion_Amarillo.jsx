@@ -4,7 +4,6 @@ import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
-import toast, { Toaster } from "react-hot-toast"
 
 const cookies = new Cookies();
 
@@ -14,10 +13,11 @@ $(document).ready(function () {
     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
     
   },
-//   order: [[5,'desc']],
+  order: [[1,'desc']],
     "responsive": true, "lengthChange": true, "autoWidth": true,
     
   });
+  if(window.location.href === `${cookies.get('local')}Semaforizacion/Amarillo`){
   $.ajax({
     type: "POST",
     url: `${cookies.get('server')}/api/stock/${cookies.get('enterprise')}`,
@@ -40,6 +40,7 @@ $(document).ready(function () {
       }
     }
   })
+  }
 
 });
 
@@ -54,85 +55,85 @@ export default function Semaforizacion_Amarillo(props) {
       }else{
         props.history.push('/');
       }
-    },[]); 
+    },[props.history]); 
 
 
-    // 
+    // Reporte stock productos menores a 6 meses y mayores a 3 de fecha de expiracion
    const Report_SAmarillo=()=>{
-      console.log('entro')
-      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&busqueda=${parametro}&pais=${parametro1}`);
+     // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_enterprise=${cookies.get('enterprise')}`,'_blank');
     }
 
     return (
       
-      <><div className="content-wrapper mb-3">
-        <div className="content-header">
-          <div className="container-fluid">
-            <div className="row mb-2">
-              <div className="col-sm-6">
-                <h1 className="m-0">Detalle Semaforizacion</h1>
-              </div>{/* /.col */}
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item"><a href="/dashboard">Home</a></li>
-                  <li className="breadcrumb-item active">Detalle Semaforizacion</li>
-                </ol>
-              </div>{/* /.col */}
-            </div>{/* /.row */}
-          </div>{/* /.container-fluid */}
-        </div>
+      <>
+        <div className="content-wrapper mb-3">
+          <div className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6">
+                  <h1 className="m-0">Detalle Semaforizacion</h1>
+                </div>{/* /.col */}
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">Inicio</li>
+                    <li className="breadcrumb-item active">Detalle Semaforizacion</li>
+                  </ol>
+                </div>{/* /.col */}
+              </div>{/* /.row */}
+            </div>{/* /.container-fluid */}
+          </div>
 
-        {/*Sections of tables  */}
-        <section className="content">
-          <div className="container-fluid">
-            <div className="row mb-2">
-              <div className="col-12">
-                <div className="card shadow rounded  card-warning card-outline">
-                  <div className="card-header ">
-                    <h1 className="card-title float-left">Productos a Expirar</h1>
-                    <button type="button" class="btn btn-warning btn-sm ml-1  float-right" title='Generar Reporte' onClick={Report_SAmarillo}>
-                    <i class="fa fa-file"></i> &nbsp;Reporte 
-                    </button>
-                    
-                    
+          {/*Sections of tables  */}
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-12">
+                  <div className="card shadow rounded  card-warning card-outline">
+                    <div className="card-header ">
+                      <h1 className="card-title float-left">Productos a Expirar</h1>
+                      <button type="button" class="btn btn-warning btn-sm ml-1  float-right" title='Generar Reporte' onClick={Report_SAmarillo}>
+                      <i class="fa fa-file"></i> &nbsp;Reporte 
+                      </button>
+                      
+                      
+                    </div>
+                    <div className="card-body table-responsive" id='data1'>
+                      <table id="semafo2" className="table order-column table-striped row-border hover order-column">
+                        <thead>
+
+                          <tr>
+                            <th>Almacen</th>
+                            <th>Fecha&nbsp;Expiracion</th>
+                            <th>Nombre&nbsp;Lote</th>
+                            <th>Codigo&nbsp;Producto</th>
+                            <th>Producto</th>
+                            <th>Alerta</th>
+                            <th>Existencia</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th>Almacen</th>
+                            <th>Fecha&nbsp;Expiracion</th>
+                            <th>Nombre&nbsp;Lote</th>
+                            <th>Codigo&nbsp;Producto</th>
+                            <th>Producto</th>
+                            <th>Alerta</th>
+                            <th>Existencia</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>{/* /.col */}
                   </div>
-                  <div className="card-body table-responsive" id='data1'>
-                    <table id="semafo2" className="table order-column table-striped row-border hover order-column">
-                      <thead>
-
-                        <tr>
-                          <th>Almacen</th>
-                          <th>Fecha&nbsp;Expiracion</th>
-                          <th>Nombre&nbsp;Lote</th>
-                          <th>Codigo&nbsp;Producto</th>
-                          <th>Producto</th>
-                          <th>Alerta</th>
-                          <th>Existencia</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <th>Almacen</th>
-                          <th>Fecha&nbsp;Expiracion</th>
-                          <th>Nombre&nbsp;Lote</th>
-                          <th>Codigo&nbsp;Producto</th>
-                          <th>Producto</th>
-                          <th>Alerta</th>
-                          <th>Existencia</th>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>{/* /.col */}
                 </div>
-              </div>
-            </div>{/* /.row */}
-          </div>{/* /.container-fluid */}
-        </section>
+              </div>{/* /.row */}
+            </div>{/* /.container-fluid */}
+          </section>
 
-      </div>
+        </div>
       </>
       
     )
