@@ -6,25 +6,7 @@ import toast, { Toaster } from "react-hot-toast"
 const cookies = new Cookies();
 
 
-const Correlative_Inc = () =>{
-  $.ajax({
-    type: "put", 
-    url:`${cookies.get('server')}/api/incapacidades/${cookies.get('enterprise')}`,
-    success:function(json_data) {  
-      const cod = document.getElementById('n_tranzability')
-      if (json_data !== 'Not Data'){
-        cod.innerText = json_data[0]['correlative']
-        cod.value = json_data[0]['correlative']
-      }else{
-        cod.innerText = 'No existen registros'
-        cod.value = ''
-      }
-    }
-  })
-}
-if(window.location.href === `${cookies.get('local')}Incapacidades`){
-  Correlative_Inc()
-}
+
 
 export default function Ficapacidades(props){
   document.querySelector('title').textContent = 'Clinica | Registros';
@@ -41,40 +23,92 @@ export default function Ficapacidades(props){
       },[props.history]); 
 
   // Validations
-  
+  const reloadD = () =>{
+    window.location.href = '#/dashboard'
+    window.location.reload();
+   }
+
+   const Correlative_Inc = () =>{
+    $.ajax({
+      type: "put", 
+      url:`${cookies.get('server')}/api/incapacidades/${cookies.get('enterprise')}`,
+      success:function(json_data) {  
+        const cod = document.getElementById('n_tranzability')
+        if (json_data !== 'Not Data'){
+          cod.innerText = json_data[0]['correlative']
+          cod.value = json_data[0]['correlative']
+        }else{
+          cod.innerText = 'No existen registros'
+          cod.value = ''
+        }
+      }
+    })
+  }
+  if(document.getElementById('n_tranzability')){
+    Correlative_Inc()
+  }
+   
   // Funcion para cambiar de estados los estilos
   const form =()=>{
       let formu = document.getElementById('quickForm1');
       let a,b = false
-      if(formu.days.value === ''){
-        formu.days.className = classWarning
-      }else{
-        a = true
-        formu.days.className = classSuccess
-      }
-      
-      if(formu.status_p.value === ''){
+      // if(formu.days.value === ''){
+      //   formu.days.className = classWarning
+      // }else{
+      //   a = true
+      //   formu.days.className = classSuccess
+      // }
+
+      if( formu.days.value === '' && formu.date_from.value === '' && formu.date_to.value === ''){
         
-        formu.status_p.className = 'custom-control-input is-invalid'
-      } else{
-        b = true
         formu.status_p.className = 'custom-control-input is-valid'
         formu.condition.className = classSuccess;
         formu.diagnostic.className = classSuccess;
         formu.days_p.className = classSuccess;
         formu.date_p.className = classSuccess;
+        formu.days.className = classSuccess;
+        formu.date_from.className = classSuccess;
+        formu.date_to.className = classSuccess;
+      }else {
+        b = true
+        a = true
       }
-      if (formu.date_from.value === ''){
-        formu.date_from.className = classWarning
-      }else{
-        formu.date_from.className  = classSuccess
+
+      if(formu.days_p.value === '' && formu.date_p.value === ''){
+     
+        formu.diagnostic.className = classSuccess;
+        formu.days_p.className = classSuccess;
+        formu.date_from.className = classSuccess;
+      }else {
+        b = true
+        a = true
       }
+
       
-      if (formu.date_to.value === ''){
-        formu.date_to.className = classWarning
-      }else{
-        formu.date_to.className  = classSuccess
-      }
+      // if(formu.status_p.value === ''){
+        
+      //   formu.status_p.className = 'custom-control-input is-invalid'
+      // } else{
+      //   b = true
+      //   formu.status_p.className = 'custom-control-input is-valid'
+      //   formu.condition.className = classSuccess;
+      //   formu.diagnostic.className = classSuccess;
+      //   formu.days_p.className = classSuccess;
+      //   formu.date_p.className = classSuccess;
+      // }
+
+
+      // if (formu.date_from.value === ''){
+      //   formu.date_from.className = classWarning
+      // }else{
+      //   formu.date_from.className  = classSuccess
+      // }
+      
+      // if (formu.date_to.value === ''){
+      //   formu.date_to.className = classWarning
+      // }else{
+      //   formu.date_to.className  = classSuccess
+      // }
       
       
       if (a && b){
@@ -84,8 +118,17 @@ export default function Ficapacidades(props){
 
   // Registro de incapacidades
   const SaveDataic=(formu)=>{
-    let condition, time_p, diagnostic
+    let condition, time_p, diagnostic, time_from, time_to, days_p, days
+   
     
+    if(formu.days_p.value === ''){
+      days_p = null
+    }else{days_p = formu.days_p.value}
+
+    if(formu.days.value === ''){
+      days = null
+    }else{days = formu.days.value}
+
     if(formu.condition.value === ''){
       condition = null
     }else{condition = formu.condition.value}
@@ -99,6 +142,17 @@ export default function Ficapacidades(props){
       diagnostic = null
     }else{diagnostic = formu.diagnostic.value}
 
+    if(formu.date_from.value === ''){
+      time_from = ''
+    }else{ time_from = formu.date_from.value}
+
+    if(formu.date_to.value === ''){
+      time_to = ''
+    }else{ time_to = formu.date_to.value}
+
+    // let f1 =  Date.parse(formu.date_from.value)
+    // let f2 =  Date.parse(formu.date_to.value)
+    // console.log(  f1 + '      -----    ' +  f2)
     $.ajax({
       type: 'post', 
       url: `${cookies.get('server')}/api/incapacidades`,
@@ -199,7 +253,7 @@ export default function Ficapacidades(props){
               <ol className="breadcrumb float-sm-right">
                 {cookies.get('MenuPrincipal') === 'MenuPrincipal' &&
                   <li className="breadcrumb-item">
-                    <a href="/dashboard">Inicio</a>
+                    <a href='#' onClick={reloadD}>Inicio</a>
                   </li>
                 }
                 <li className="breadcrumb-item active">Incapacidades</li>

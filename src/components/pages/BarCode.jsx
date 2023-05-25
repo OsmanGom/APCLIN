@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react'
 import Cookies from 'universal-cookie';
 import "jquery/dist/jquery.min.js";
-import $ from "jquery";
 
 
 
@@ -41,7 +40,7 @@ export default function BarCode(props) {
    }
   return (
     <div className="hold-transition login-page">
-      <div className="login-box">
+      <div className="col-5 ">
         <div className="card mt-4 card-danger card-outline ">
           <div className="card-body login-card-body shadow rounded">
             <p className="login-box-msg">Generar codigo de barras</p>
@@ -54,12 +53,12 @@ export default function BarCode(props) {
                 </select>
               </div>
               
-              <div id="htmli" className='col-12'>
+              <div id="htmli" className='col-8'>
        
                 <label className='text-dark'>Producto</label>
-                <a href="#" id='idaimg'>
+                <a href id='idaimg'>
                 
-                  <img alt='Barcode Generator'  width={'300px'} height={'100px'}id='idimg'/>
+                  <img alt='Barcode Generator'  width={'350px'} height={'150px'}id='idimg'/>
                 </a>
               </div>
               

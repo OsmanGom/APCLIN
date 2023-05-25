@@ -37,7 +37,6 @@ export default function TrazaKardez(props){
     
     document.querySelector('title').textContent = 'Clinica | Trazabilidad Kardex';
     
-    
     useEffect(()=>{
       if(cookies.get('ID')){
         props.history.push('/Kardex/Trazabilidad');
@@ -45,6 +44,15 @@ export default function TrazaKardez(props){
         props.history.push('/');
       }
         },[props.history]); 
+
+    const reloadD = () =>{
+        window.location.href = '#/dashboard'
+        window.location.reload();
+    }
+    const reloadk = (event) =>{
+        window.location.href = '#/kardex'
+        window.location.reload(); 
+      }
     
     //*********************** Validations *******************
     
@@ -343,7 +351,7 @@ export default function TrazaKardez(props){
         if(a && b){
             $.ajax({
                 type: 'post', 
-                url: `${cookies.get('server')}/api/lot`,
+                url: `${cookies.get('server')}/api/lot/${cookies.get('enterprise')}`,
                 headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
@@ -456,7 +464,8 @@ export default function TrazaKardez(props){
                         origin_product:parseInt(form1.origin_product.value),
                         date_tranzaction:form1.date_tranzaction.value,
                         reference:form1.reference.value,
-                        user_register:cookies.get('user')
+                        user_register:cookies.get('user'),
+                        id_enterprise:cookies.get('enterprise')
                     }),
                     success: function (json_data){
                         id_header = json_data[0]['header_id']
@@ -644,9 +653,9 @@ export default function TrazaKardez(props){
                     <div className="col-sm-6">
                         <ol className="breadcrumb float-sm-right">
                             {cookies.get('MenuPrincipal') === 'MenuPrincipal' &&
-                                <li className="breadcrumb-item "><a href="/dashboard">Inicio</a></li>
+                                <li className="breadcrumb-item "><a href="#" onClick={reloadD}>Inicio</a></li>
                              }
-                            <li className="breadcrumb-item active"><a href="/kardex">Kardex</a></li>
+                            <li className="breadcrumb-item active"><a href onClick={reloadk}>Kardex</a></li>
                             <li className="breadcrumb-item active">Trazabilidad</li>
                         </ol>
                     </div>{/* /.col */}

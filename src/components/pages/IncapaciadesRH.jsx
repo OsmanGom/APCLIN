@@ -8,14 +8,14 @@ import toast, { Toaster } from "react-hot-toast"
 
 const cookies = new Cookies();
 
-$(function (){
+$(document).ready(function (){
   if(document.getElementById('root').value){
     // Inicializacion de Datatable  de Incapacidades
-    var t2 = $("#example").DataTable({
+    var tRH = $("#exampleRH").DataTable({
       "language": {
       "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
     },
-      order: [[0,'desc']],
+    order: [[0,'desc']],
       "responsive": true, "lengthChange": true, "autoWidth": true,
     })
     
@@ -36,7 +36,7 @@ $(function (){
                 status = 'Permanente'
               }else{status = 'Temporal'}
               
-              t2.row.add([
+              tRH.row.add([
                 json_data[i]['n_tranzability'], 
                 json_data[i]['exp_codigo_alternativo'], 
                 json_data[i]['exp_nombres_apellidos'], 
@@ -44,8 +44,8 @@ $(function (){
                 //json_data[i]['puesto'], 
                 json_data[i]['days'], 
                 json_data[i]['diagnostic'],
-                //condition, 
-                // status, 
+                // condition, 
+                status, 
                 // json_data[i]['date_from'],
                 // json_data[i]['date_to'],
                 // json_data[i]['date_p'], 
@@ -55,8 +55,8 @@ $(function (){
                 // json_data[i]['diagnostic'], //onclick=`+"{Reporte_Incapacidades(this.value)}"+`
                 json_data[i]['cia_abreviatura'],
                 `<button class='btn btn-secondary  btn-md' value=`+json_data[i]['id']+` title='Reporte Firma'onclick=`+"{Reporte_Firma_persona(this.value,document.getElementById('root').value)}"+` ><i class="fa fa-file-export"></i></button>`,
-                `<button class='btn btn-warning  btn-md' value=`+json_data[i]['id']+` title='Reporte Incapacidad' onclick=`+"{Reporte_Incapacidades_persona(this.value,document.getElementById('root').value)}"+`><i class="fa fa-file-export"></i></button>`,
-                `<button class='btn btn-success  btn-md' value=`+json_data[i]['id']+` title='Modificar' data-toggle="modal" data-target="#edit" onclick=`+"{Mod(this.value,document.getElementById('root').value)}"+`><i class="nav-icon fas fa-edit"></i></button>`
+                `<button class='btn btn-warning  btn-md' value=`+json_data[i]['id']+` title='Reporte Incapacidad' onclick=`+"{Reporte_Incapacidades_persona(this.value,document.getElementById('root').value)}"+`><i class="fa fa-file-export"></i></button>`
+                //`<button class='btn btn-success  btn-md' value=`+json_data[i]['id']+` title='Modificar' data-toggle="modal" data-target="#edit" onclick=`+"{Mod(this.value,document.getElementById('root').value)}"+`><i class="nav-icon fas fa-edit"></i></button>`
               ]).draw(false);
                 
             }
@@ -68,12 +68,12 @@ $(function (){
   }
 });
 
-export default function Incapacidades(props) {
+export default function IncapacidadesRH(props) {
   document.querySelector('title').textContent = 'Clinica | Detalle Incapacidad';
     
     useEffect(()=>{
       if(cookies.get('ID')){
-        props.history.push('/Detalle/Incapacidades');
+        props.history.push('/Detalle/IncapacidadesRH');
       }else{
         props.history.push('/');
       }
@@ -216,7 +216,7 @@ export default function Incapacidades(props) {
                     </div>
                     <div className="card-body table-responsive" id='data1'>
 
-                      <table id="example" className="table  table-striped row-border hover order-column ">
+                      <table id="exampleRH" className="table  table-striped row-border hover order-column ">
                         <thead>
                           <tr>
                             <th>N°</th>
@@ -226,7 +226,7 @@ export default function Incapacidades(props) {
                             {/* <th>Cargo</th> */}
                             <th>Dias incap.</th>
                             <th>Diagnóstico</th> 
-                            {/* <th>Estado</th> */}
+                            <th>Estado</th>
                             {/* <th>Fecha Inicio</th>
                             <th>Fecha Fin</th> */}
                              {/* <th>Fecha&nbsp;Perm.</th> */}
@@ -237,7 +237,7 @@ export default function Incapacidades(props) {
                             <th> Empresa </th>
                             <th>R.Firma</th>
                             <th>R.Incap</th>
-                            <th>Editar</th>
+                            {/* <th>Editar</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -252,8 +252,7 @@ export default function Incapacidades(props) {
                             {/* <th>Cargo</th> */}
                             <th>Dias incap.</th>
                             <th>Diagnóstico</th> 
-                            {/* <th>Estado</th> */}
-
+                            <th>Estado</th>
                             {/* <th>Fecha Inicio</th>
                             <th>Fecha Fin</th> */}
                             {/* <th>Fecha&nbsp;Perm.</th> */}
@@ -264,7 +263,7 @@ export default function Incapacidades(props) {
                             <th> Empresa </th>
                              <th>R.Firma</th>
                             <th>R.Incap</th>
-                            <th>Editar</th>
+                            {/* <th>Editar</th> */}
                           </tr>
                         </tfoot>
                       </table>

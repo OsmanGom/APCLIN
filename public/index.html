@@ -50,10 +50,10 @@
     
    
     
-    <link
+    <!-- <link
       rel="stylesheet"
       href="%PUBLIC_URL%/fontawesomefree/js/all.min.js"
-    />
+    /> -->
     <!-- Theme style -->
 
     <link rel="stylesheet" href="%PUBLIC_URL%/plugins/fontawesome-free/css/all.min.css">
@@ -86,11 +86,11 @@
     <!-- jQuery -->
     <script src="%PUBLIC_URL%/plugins/jquery/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
-    <script src="%PUBLIC_URL%/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- <script src="%PUBLIC_URL%/plugins/jquery-ui/jquery-ui.min.js"></script> -->
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
+    <!-- <script>
       $.widget.bridge("uibutton", $.ui.button);
-    </script>
+    </script> -->
     <!-- Bootstrap 4 -->
     <script src="%PUBLIC_URL%/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- ChartJS -->
@@ -98,10 +98,10 @@
     <!-- Sparkline -->
     <script src="%PUBLIC_URL%/plugins/sparklines/sparkline.js"></script>
     <!-- JQVMap -->
-    <script src="%PUBLIC_URL%/plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="%PUBLIC_URL%/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- <script src="%PUBLIC_URL%/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="%PUBLIC_URL%/plugins/jqvmap/maps/jquery.vmap.usa.js"></script> -->
     <!-- jQuery Knob Chart -->
-    <script src="%PUBLIC_URL%/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- <script src="%PUBLIC_URL%/plugins/jquery-knob/jquery.knob.min.js"></script> -->
     <!-- daterangepicker -->
     <script src="%PUBLIC_URL%/plugins/moment/moment.min.js"></script>
     <script src="%PUBLIC_URL%/plugins/daterangepicker/daterangepicker.js"></script>
@@ -110,7 +110,7 @@
     <!-- Summernote -->
     <script src="%PUBLIC_URL%/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- overlayScrollbars -->
-    <script src="%PUBLIC_URL%/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- <script src="%PUBLIC_URL%/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> -->
     <!-- AdminLTE App -->
     <script src="%PUBLIC_URL%/static/js/adminlte.js"></script>
     <!-- AdminLTE for demo purposes -->
@@ -127,7 +127,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://unpkg.com/xlsx@latest/dist/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
-    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+    <!-- <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script> -->
     <!-- <script src="%PUBLIC_URL%/../public/static/js/jspdf.debug.js"></script> -->
     
   <script>
@@ -164,13 +164,13 @@
     } 
 
     const Reporte_Incapacidades_persona=(a,b)=>{
-      console.log(a+'\n'+b)
-      //window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_patienty=${a}`,'_blank');
+      // console.log(a+'\n'+b)
+      window.open(`http://sjysrv02/ReportServer/Pages/ReportViewer.aspx?%2fAPCLIN_REPORT%2fReporteIncapacidadEmpleado&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_patienty=${a}`,'_blank');
     }    
 
     const Reporte_Firma_persona=(a,b)=>{
-      console.log(a+'\n'+b)
-      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_patienty=${a}`,'_blank');
+      // console.log(a+'\n'+b)
+      window.open(`http://sjysrv02/ReportServer/Pages/ReportViewer.aspx?%2fAPCLIN_REPORT%2fReporteFirma&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_patienty=${a}`,'_blank');
       
     }
 
@@ -181,7 +181,7 @@
           options.forEach(o => o.remove());
       $.ajax({
           type: "GET", 
-          url: `https://localhost:5001/api/empresa`,
+          url: `http://${window.location.hostname}:5001/api/empresa`,
       
           success: function(json_data) {  
           const op = document.createElement('option') 
@@ -283,7 +283,7 @@
             type: "GET", 
             url:`${urlAPIS}/api/productos`,
             success:function(json_data) {  
-              const po = document.createElement('option') 
+              const op = document.createElement('option')
               if(json_data === 'Not Data'){
                 
                 op.value = ''
@@ -291,13 +291,13 @@
                 // op.disabled = true
                 p.appendChild(op)
               }else{
-                po.value = ''
-                po.text = '------ Seleccione -------'
-                p.appendChild(po)
+                op.value = ''
+                op.text = '------ Seleccione -------'
+                p.appendChild(op)
                 for (let i = 0; i < json_data.length; i++) {
                   const option = document.createElement('option')
                   option.value = json_data[i]['cod_prod']
-                  option.text = json_data[i]['cod_prod']+' | '+json_data[i]['name_product']+'-'+json_data[i]['unid_med']
+                  option.text = json_data[i]['cod_prod']+' | '+json_data[i]['name_product']+' | '+json_data[i]['full_name']+'-'+json_data[i]['unid_med']+'-'+json_data[i]['description_typeP']
                   p.appendChild(option);
                 }
             }
@@ -353,7 +353,7 @@
                 op.value = ''
                 op.text = 'No existen almacenes creados'
                 
-                ts.appendChild(op)
+                st.appendChild(op)
               }else{
                 op.value = ''
                 op.text = '------ Seleccione -------'

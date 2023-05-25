@@ -46,6 +46,10 @@ export default function R_Base(props){
 
 
     // Validations
+    const reloadD = () =>{
+        window.location.href = '#/dashboard'
+        window.location.reload();
+       }
     // Estilos globales
     var classSuccess = 'form-control is-valid form-control-border';
     var classWarning = 'form-control form-control-border is-invalid';
@@ -218,7 +222,7 @@ export default function R_Base(props){
                                 <ol className="breadcrumb float-sm-right">
                                     {cookies.get('MenuPrincipal') === 'MenuPrincipal' &&
                                     <li className="breadcrumb-item">
-                                        <a href="/dashboard">Inicio</a>
+                                         <a href='#' onClick={reloadD}>Inicio</a>
                                     </li>
                                     }
                                     <li className="breadcrumb-item active">Registros</li>

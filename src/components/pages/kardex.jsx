@@ -68,13 +68,18 @@ export default function Kardex(props) {
     document.querySelector('title').textContent = 'Clinica |  Kardex';
     
     useEffect(()=>{
-      if(cookies.get('ID')){
-        props.history.push('/Kardex');
-      }else{
+      if(!cookies.get('ID')){
         props.history.push('/');
+      }else{
+        props.history.push('/Kardex');
       }
     },[props.history]); 
 
+    const reloadD = () =>{
+      window.location.href = '#/dashboard'
+      window.location.reload();
+     }
+     
     // Reporte Kardex Entradas
     const Report_Entradas=()=>{
       
@@ -83,7 +88,7 @@ export default function Kardex(props) {
         toast.error('Campos Vacios',{duration: 6000, position:"top-right"})
       }else{
         console.log('Entradas')
-        // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&fechae=${data.f_i.value}&fechas=${data.f_s.value}&id_enterprise=${cookies.get('enterprise')}`,'_blank');
+        window.open(`http://sjysrv02/ReportServer/Pages/ReportViewer.aspx?%2fAPCLIN_REPORT%2fReporteTrazabalidadEntradas&rs:Command=Render&rs:embed=true&rc:Parameters=false&fechae=${data.f_i.value}&fechas=${data.f_s.value}&id_enterprise=${cookies.get('enterprise')}`,'_blank');
         data.f_i.value = ''
         data.f_s.value = ''
       }
@@ -97,7 +102,7 @@ export default function Kardex(props) {
         toast.error('Campos Vacios',{duration: 6000, position:"top-right"})
       }else{
         console.log('Salidas')
-        // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&fechae=${data2.f_i2.value}&fechas=${data2.f_s2.value}&id_enterprise=${cookies.get('enterprise')}`,'_blank');
+        window.open(`http://sjysrv02/ReportServer/Pages/ReportViewer.aspx?%2fAPCLIN_REPORT%2fReporteTrazabalidadSalida&rs:Command=Render&rs:embed=true&rc:Parameters=false&fechae=${data2.f_i2.value}&fechas=${data2.f_s2.value}&id_enterprise=${cookies.get('enterprise')}`,'_blank');
         data2.f_i2.value = ''
         data2.f_s2.value = ''
       }
@@ -138,7 +143,7 @@ export default function Kardex(props) {
                 <ol className="breadcrumb float-sm-right">
                 {cookies.get('MenuPrincipal') === 'MenuPrincipal' &&
                   <li className="breadcrumb-item">
-                    <a href="/dashboard">Inicio</a>
+                    <a href='#' onClick={reloadD}>Inicio</a>
                   </li>
                 }
                   <li className="breadcrumb-item active">Detalle KARDEX</li>

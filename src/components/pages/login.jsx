@@ -4,7 +4,8 @@ import axios from 'axios';
 import logo from "../img/sea1.png"
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
-import {OpcionesMenu} from '../security/PermisosMenu'
+import {OpcionesMenu} from '../security/PermisosMenu' 
+
 
 $(document).ready(function () {
   var p = document.getElementById('idempres')
@@ -14,7 +15,7 @@ $(document).ready(function () {
           options.forEach(o => o.remove());
       $.ajax({
           type: "GET", 
-          url: `https://localhost:5001/api/empresa`,
+          url: `http://${window.location.hostname}:5001/api/empresa`,
       
           success: function(json_data) {  
           const op = document.createElement('option') 
@@ -25,7 +26,7 @@ $(document).ready(function () {
               for (let i = 0; i < json_data.length; i++) {
                   const option = document.createElement('option')
                   option.value = json_data[i]['cia_codigo']
-                  option.text = json_data[i]['cia_descripcion']+'-'+json_data[i]['cia_abreviatura']
+                  option.text = json_data[i]['cia_abreviatura']
                   p.appendChild(option);
               }
           }
@@ -38,9 +39,9 @@ $(document).ready(function () {
 export default function Login(props) {
   document.querySelector('title').textContent = 'Clinica | Login';
   const datamenu = OpcionesMenu
-  const url = 'https://localhost:5001'//url del servidor de las apis
+  const url = `http://${window.location.hostname}:5001`//url del servidor de las apis
   const cookies = new Cookies();
-  
+  // console.log('ESTA ES LA URL DEL SERVER ',url)
   const peticionPost=async(data)=>{
     // console.log(data)
     await axios.post(`${url}/api/permisos`,data)
@@ -152,10 +153,17 @@ export default function Login(props) {
                     if(res[i].IdMenu === 210){
                       cookies.set('Incapacidades', res[i].NombreLogico , {path: '/'});
                     }
+                    if(res[i].IdMenu === 211){
+                      cookies.set('DetalleIncapacidadesRH',res[i].NombreLogico , {path: '/'});
+                    }
                  }
                   console.log(path)
                   
                   window.location.href=(`${path}`)
+                  window.location.reload();
+                  // props.history.push(`${path}`);
+                  // console.log(window.location.href)
+                  
                 }
               } 
             })

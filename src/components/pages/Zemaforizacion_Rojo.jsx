@@ -27,13 +27,14 @@ $(document).ready(function () {
         
           for (let i = 0; i < json_data.length; i++) {
             t.row.add([
-              json_data[i]['detail_store'],
-              json_data[i]['date_exp'], 
-              json_data[i]['cod_lot'], 
               json_data[i]['cod_prod'], 
-              json_data[i]['name_product'], 
+              json_data[i]['full_name'], 
+              json_data[i]['cod_lot'], 
+              json_data[i]['total_quantity'],
+              json_data[i]['unid_med'],
+              json_data[i]['date_exp'], 
               json_data[i]['Semaforizacion'], 
-              json_data[i]['total_quantity']
+              json_data[i]['detail_store']
             ]).draw(false);
               
           }
@@ -53,11 +54,15 @@ export default function Semaforizacion_Rojo(props) {
         props.history.push('/');
       }
     },[props.history]); 
-
+    
+    const reloadD = () =>{
+      window.location.href = '#/dashboard'
+      window.location.reload();
+     }
 
     // 
    const Report_SRojo=()=>{
-      // window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_enterprise=${cookies.get('enterprise')}`,'_blank');
+      window.open(`http://sjysrv02/ReportServer/Pages/ReportViewer.aspx?%2fAPCLIN_REPORT%2fReporteSemaforizaciónRojo&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_enterprise=${cookies.get('enterprise')}`,'_blank');
     }
 
     return (
@@ -71,7 +76,7 @@ export default function Semaforizacion_Rojo(props) {
               </div>{/* /.col */}
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">Inicio</li>
+                  <li className="breadcrumb-item"> <a href='#' onClick={reloadD}>Inicio</a></li>
                   <li className="breadcrumb-item active">Detalle Semaforizacion</li>
                 </ol>
               </div>{/* /.col */}
@@ -98,13 +103,14 @@ export default function Semaforizacion_Rojo(props) {
                       <thead>
 
                         <tr>
-                          <th>Almacen</th>
-                          <th>Fecha&nbsp;Expiracion</th>
-                          <th>Nombre&nbsp;Lote</th>
-                          <th>Codigo&nbsp;Producto</th>
+                        <th>Cód. Producto</th>
                           <th>Producto</th>
-                          <th>Alerta</th>
+                          <th>Nombre&nbsp;Lote</th>
                           <th>Existencia</th>
+                          <th>U/Medida</th>
+                          <th>Fecha&nbsp;Exp</th>                                        
+                          <th>Alerta</th>
+                          <th>Almacen</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -112,13 +118,14 @@ export default function Semaforizacion_Rojo(props) {
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th>Almacen</th>
-                          <th>Fecha&nbsp;Expiracion</th>
-                          <th>Nombre&nbsp;Lote</th>
-                          <th>Codigo&nbsp;Producto</th>
+                        <th>Cód. Producto</th>
                           <th>Producto</th>
-                          <th>Alerta</th>
+                          <th>Nombre&nbsp;Lote</th>
                           <th>Existencia</th>
+                          <th>U/Medida</th>
+                          <th>Fecha&nbsp;Exp</th>                                        
+                          <th>Alerta</th>
+                          <th>Almacen</th>
                         </tr>
                       </tfoot>
                     </table>

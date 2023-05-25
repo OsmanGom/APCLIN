@@ -7,6 +7,7 @@ import "datatables.net-dt/css/jquery.dataTables.min.css"
 
 const cookies = new Cookies();
 
+
 $(document).ready(function () {
   // Declaracion de datatable jquery
   var t1 = $("#tbld").DataTable({
@@ -14,7 +15,7 @@ $(document).ready(function () {
     "language": {
       "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
     },
-    "responsive": true, "lengthChange": true, "autoWidth": true,
+    "responsive": true, "lengthChange": true, "autoWidth": true
   })
   
   
@@ -29,11 +30,13 @@ $(document).ready(function () {
           
           for (let i = 0; i < json_data.length; i++) {
             t1.row.add([
+              json_data[i]['cod_prod'],
+              json_data[i]['name_product'],
               json_data[i]['cod_lot'],
-              json_data[i]['cod_prod'], 
-              json_data[i]['name_product'], 
+              json_data[i]['unid_med'],
+              json_data[i]['total_quantity'],
               json_data[i]['detail_store'], 
-              json_data[i]['total_quantity']
+       
             ]).draw(false);
               
           }
@@ -43,7 +46,7 @@ $(document).ready(function () {
     //Cargar datos de Zemaforizacion  
     $.ajax({
       type: "PUT",
-      url: `https://localhost:5001/api/stock/${cookies.get('enterprise')}`,
+      url: `${cookies.get('server')}/api/stock/${cookies.get('enterprise')}`,
      
       success: function(res) {
         if (res !== 'Not Data'){
@@ -80,19 +83,41 @@ $(document).ready(function () {
 
 export default function Dashboard(props) {
   document.querySelector('title').textContent = 'Clinica | Principal';
+  // console.log(cookies.get('local'),'\n',window.location.href)
+  
   
   useEffect(()=>{
-    if(cookies.get('ID')){
-      props.history.push('/dashboard');
-    }else{
+    if(!cookies.get('ID')){
       props.history.push('/');
     }
-      },[props.history]); 
-    
+  },[props.history]); 
+  
+  const reloadD = () =>{
+   window.location.href = '#/dashboard'
+   window.location.reload();
+  }
+  const reloadp = (event) =>{
+   window.location.href = '#/Detalle/Productos'
+   window.location.reload(); 
+  }
+
+  const reloadr = (event) =>{
+    window.location.href = '#/Semaforizacion/Rojo'
+    window.location.reload(); 
+   }
+   const reloada = (event) =>{
+    window.location.href = '#/Semaforizacion/Amarillo'
+    window.location.reload(); 
+   }
+   const reloadv = (event) =>{
+    window.location.href = '#/Semaforizacion/Verde'
+    window.location.reload(); 
+   }
     //Reporte de stock 
     const Report_Stock = ()=>{
       
-      //window.open(`http://atenea/ReportServer/Pages/ReportViewer.aspx?%2fUAC_REPORT%2fReporteDispositivos&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_enterprise=${cookies.get('enterprise')}`,'_blank');
+      window.open(`http://sjysrv02/ReportServer/Pages/ReportViewer.aspx?%2fAPCLIN_REPORT%2fReportestock&rs:Command=Render&rs:embed=true&rc:Parameters=false&id_enterprise=${cookies.get('enterprise')}`,'_blank');
+                  // https://myserver/Reportserver?/SQL+Server+User+Education+Team/_ContentTeams/folder123/team+project+report&teamgrouping2=xgroup&teamgrouping1=ygroup
     }
       
   return (
@@ -108,7 +133,7 @@ export default function Dashboard(props) {
               <ol className="breadcrumb float-sm-right">
                 {cookies.get('MenuPrincipal') === 'MenuPrincipal' &&
                   <li className="breadcrumb-item">
-                    <a href="/dashboard">Inicio</a>
+                    <a href="#" onClick={reloadD}>Inicio</a>
                   </li>
                 }
                 <li className="breadcrumb-item active">Inicio</li>
@@ -132,8 +157,8 @@ export default function Dashboard(props) {
                 </div>
                 <div className="icon">
                   <i className="ion ion-bag" />
-                </div>
-                <a href="/Detalle/Productos" className="small-box-footer">Mas info <i className="fas fa-arrow-circle-right" /></a>
+                </div> 
+                <a href="#/Detalle/Productos" className="small-box-footer" onClick={reloadp}>Mas info <i className="fas fa-arrow-circle-right" /></a>
               </div>
             </div>
             {/* ./col */}
@@ -147,7 +172,7 @@ export default function Dashboard(props) {
                 <div className="icon">
                   <i className="ion ion-stats-bars" />
                 </div>
-                <a href="/Semaforizacion/Verde" className="small-box-footer">Mas info <i className="fas fa-arrow-circle-right" /></a>
+                <a href="#/Semaforizacion/Verde" className="small-box-footer" onClick={reloadv}>Mas info <i className="fas fa-arrow-circle-right" /></a>
               </div>
             </div>
             {/* ./col */}
@@ -161,7 +186,7 @@ export default function Dashboard(props) {
                 <div className="icon">
                   <i className="ion ion-person-add" />
                 </div>
-                <a href="/Semaforizacion/Amarillo" className="small-box-footer">Mas info <i className="fas fa-arrow-circle-right" /></a>
+                <a href="#/Semaforizacion/Amarillo" className="small-box-footer" onClick={reloada}>Mas info <i className="fas fa-arrow-circle-right" /></a>
               </div>
             </div>
             {/* ./col */}
@@ -175,7 +200,7 @@ export default function Dashboard(props) {
                 <div className="icon">
                   <i className="ion ion-pie-graph" />
                 </div>
-                <a href="/Semaforizacion/Rojo" className="small-box-footer">Mas info <i className="fas fa-arrow-circle-right" /></a>
+                <a href="#/Semaforizacion/Rojo" className="small-box-footer" onClick={reloadr}>Mas info <i className="fas fa-arrow-circle-right" /></a>
               </div>
             </div>
             {/* ./col */}
@@ -201,11 +226,13 @@ export default function Dashboard(props) {
                           <thead>
 
                             <tr>
-                              <th>Nombre de Lote</th>
+                              
                               <th>Codigo de Producto</th>
                               <th>Nombre de producto</th>
-                              <th>Almacen</th>
+                              <th>Nombre de Lote</th>
+                              <th>Unidad de medida</th>
                               <th>Stock</th>
+                              <th>Almacen</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -213,11 +240,12 @@ export default function Dashboard(props) {
                           </tbody>
                           <tfoot>
                             <tr>
-                              <th>Nombre de Lote</th>
                               <th>Codigo de Producto</th>
                               <th>Nombre de producto</th>
-                              <th>Almacen</th>
+                              <th>Nombre de Lote</th>
+                              <th>Unidad de medida</th>
                               <th>Stock</th>
+                              <th>Almacen</th>
                             </tr>
                           </tfoot>
                         </table>

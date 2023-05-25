@@ -3,42 +3,47 @@ export const OpcionesMenu = [
     {
         NombreLogico: 'MenuPrincipal',
         NombreMenu: 'Menu Principal',
-        path:'/dashboard'
+        path:'#/dashboard'
     },
     {
         NombreLogico: 'Incapacidades',
         NombreMenu: 'Incapacidades',
-        path:'/Incapacidades'
+        path:'#/Incapacidades'
     },
     {
         NombreLogico: 'DetalleIncapacidades',
         NombreMenu: 'Detalle Incapacidades',
-        path:'/Detalle/Incapacidades'
+        path:'#/Detalle/Incapacidades'
+    },
+    {
+        NombreLogico: 'DetalleIncapacidadesRH',
+        NombreMenu: 'Detalle Incapacidad RH',
+        path:'#/Detalle/IncapacidadesRH'
     },
     {
         NombreLogico: 'DetalleProducto',
         NombreMenu: 'Detalle Producto',
-        path:'/Detalle/Productos'
+        path:'#/Detalle/Productos'
     },
     {
         NombreLogico: 'Kardex',
         NombreMenu: 'Kardex',
-        path:'/Kardex'
+        path:'#/Kardex'
     },
     {
         NombreLogico: 'TrazabilidadKardex',
         NombreMenu: 'Trazabilidad Kardex',
-        path:'/Kardex/Trazabilidad'
+        path:'#/Kardex/Trazabilidad'
     },
     {
         NombreLogico: 'RegistrosBase',
         NombreMenu: 'Registros Base',
-        path:'/Registros/Base'
+        path:'#/Registros/Base'
     },
     {
         NombreLogico: 'CodigoBarras',
         NombreMenu: 'Generar Codigo Barras',
-        path:'/barcode'
+        path:'#/barcode'
     }
     
 ];
