@@ -118,7 +118,7 @@ export default function Ficapacidades(props){
 
   // Registro de incapacidades
   const SaveDataic=(formu)=>{
-    let condition, time_p, diagnostic, time_from, time_to, days_p, days
+    let condition, time_p, diagnostic, time_from, time_to, days_p, days, id_Condition
    
     
     if(formu.days_p.value === ''){
@@ -129,9 +129,9 @@ export default function Ficapacidades(props){
       days = null
     }else{days = formu.days.value}
 
-    if(formu.condition.value === ''){
-      condition = null
-    }else{condition = formu.condition.value}
+    if(formu.id_Condition.value === ''){
+      id_Condition = null
+    }else{id_Condition = formu.id_Condition.value}
 
     if(formu.date_p.value === ''){
       time_p = ''
@@ -163,6 +163,7 @@ export default function Ficapacidades(props){
       data: JSON.stringify({
         cod_employed:formu.cod_employed.value.toUpperCase(),
         days:parseInt(formu.days.value),
+        id_Condition:formu.id_Condition.value,
         condition:condition,
         diagnostic:diagnostic,
         user_register:cookies.get('user'),
@@ -178,12 +179,14 @@ export default function Ficapacidades(props){
         toast.success(res,{duration: 6000, position:"top-right"})
         formu.cod_employed.value = ''
         formu.days.value = ''
-        formu.condition.value = ''
+        formu.id_Condition.value = ''
         formu.diagnostic.value = ''
         formu.n_tranzability.value = ''
         Correlative_Inc()
-        
+       
         selectEmployed()
+        selectCondition()
+        
         formu.date_p.value = ''
         formu.days_p.value = ''
         formu.type_date.value = ''
@@ -192,7 +195,8 @@ export default function Ficapacidades(props){
         formu.date_to.value = ''
 
         formu.days.className = classnormal
-        formu.condition.className = classnormal
+        //formu.id_Condition.className = classnormal
+        formu.Condition.className = classnormal
         formu.diagnostic.className = classnormal
         formu.date_p.className = classnormal
         formu.days_p.className = classnormal
@@ -237,6 +241,38 @@ export default function Ficapacidades(props){
       })
     }
   }
+
+
+  const selectCondition=()=>{
+    let Co = document.getElementById('id_select_co')
+    if (Co != null){
+      let options = document.querySelectorAll('#id_select_co option');
+      options.forEach(o => o.remove());
+      $.ajax({
+        type: "GET", 
+        url:`${cookies.get('server')}/api/condicion/${cookies.get('enterprise')}`,
+        success:function(json_data) {  
+          const po = document.createElement('option') 
+          if (json_data !== 'Not Data'){
+            po.value = ''
+            po.text = '------ Seleccione -------'
+            Co.appendChild(po)
+            for (let i = 0; i < json_data.length; i++) {
+              const option = document.createElement('option')
+              option.value = json_data[i]['id_Condition']
+              option.text = json_data[i]['id_Condition']+' '+json_data[i]['Condition']
+              Co.appendChild(option);
+            }
+          }else{
+            po.value = ''
+            po.text = 'No existen registros'
+          }
+        }
+      })
+    }
+  }
+  console.log()
+
 
   return ( 
     <div className="content-wrapper">
@@ -312,12 +348,15 @@ export default function Ficapacidades(props){
                           Campo vacio.
                         </div>
                     </div>
-                    <div class="form-group col-md-5">
-                      <input type="text" name="condition" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Condicion"/>
-                        <div class="invalid-feedback">
-                          Campo vacio.
+              
+                        <div class="input-group input-group-sm mb-1"> 
+                          <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01"> <span  className="fas fa-comment-medical" style={{color: "#6a6d71",}}  />  Condición</label>
+                          </div>
+                          <select class=" custom-select  form-control-border js-data-example3" name="id_Condition"  id='id_select_co'>
+                          </select> 
                         </div>
-                    </div>
+                      
                     <div class="col-sm-3  ml-3 mt-0">
                       <div class="form-group">
                           <div class="custom-control custom-radio ">

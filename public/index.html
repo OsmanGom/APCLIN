@@ -201,6 +201,9 @@
   }
 
   $(document).ready(function() {
+    $('.js-data-example3').select2({
+      width:'60%',
+    });
     $('.js-data-example2').select2({
       width:'70%',
     });
@@ -242,6 +245,38 @@
       }
       selectEmployed()
 
+
+      var Co = document.getElementById('id_select_co')
+      const selectCondition=()=>{
+        if (Co != null){
+          $.ajax({
+            type: "GET", 
+            url:`${urlAPIS}/api/condicion/${document.getElementById('root').value}`,
+            success:function(json_data) {  
+              const po = document.createElement('option')
+              
+              if(json_data === 'Not Data'){
+                
+                po.value = ''
+                po.text = 'No data'
+                // op.disabled = true
+                Co.appendChild(po)
+              }else{ 
+                po.value = ''
+                po.text = '------ Seleccione -------'
+                Co.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['id_Condition']
+                  option.text = json_data[i]['id_Condition']+' '+json_data[i]['Condition']//+' | '+json_data[i]['departamento']
+                  Co.appendChild(option);
+                }
+              }
+            }
+          })
+        }
+      }
+      selectCondition()
 
       var s = document.getElementById('id_select_lote')
       const selectLot=()=>{
