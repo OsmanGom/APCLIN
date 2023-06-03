@@ -17,6 +17,7 @@ import Semaforizacion_Rojo from './components/pages/Zemaforizacion_Rojo.jsx'
 import Semaforizacion_Amarillo from './components/pages/Zemaforizacion_Amarillo.jsx'
 import Semaforizacion_Verde from './components/pages/Zemaforizacion_Verde.jsx'
 import BarCode from './components/pages/BarCode.jsx'
+import Traslados from './components/pages/Traslados.jsx';
 
 
 
@@ -46,6 +47,7 @@ export default function App() {
           <Route exact path="/Semaforizacion/Amarillo" component={Semaforizacion_Amarillo}/>
           <Route exact path="/Semaforizacion/Verde" component={Semaforizacion_Verde}/>
           <Route exact path="/barcode" component={BarCode}/>
+          <Route exact path="/Traslados" component={Traslados}/>
         </div>
     {/* </Switch> */}
     {/* <Footer/> */}

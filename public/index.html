@@ -202,7 +202,7 @@
 
   $(document).ready(function() {
     $('.js-data-example3').select2({
-      width:'60%',
+      width:'40%',
     });
     $('.js-data-example2').select2({
       width:'70%',
@@ -342,6 +342,8 @@
       }
       selectProd()
 
+
+      
       var ps = document.getElementById('id_select_pros')
       const selectProds=()=>{
         if (ps != null){
@@ -372,7 +374,8 @@
         }
       }
       selectProds()
-     
+
+      
 
       var st = document.getElementById('select_al')
       const selectStor=()=>{
@@ -406,7 +409,38 @@
       }
       selectStor()
 
-   
+      var stDes = document.getElementById('select_alDes')
+      const selectStorDes=()=>{
+        if (stDes != null){
+          $.ajax({
+            type: "GET", 
+            url:`${urlAPIS}/api/almacen/${document.getElementById('root').value}`,
+            success:function(json_data) { 
+              
+              const ope = document.createElement('option') 
+              if(json_data === 'Not Data'){
+                
+                ope.value = ''
+                ope.text = 'No existen almacenes creados'
+                
+                st.appendChild(ope)
+              }else{
+                ope.value = ''
+                ope.text = '------ Seleccione -------'
+                stDes.appendChild(ope)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['detail_store']
+                  option.text = json_data[i]['detail_store']+' '+json_data[i]['cia_abreviatura']+'-'+json_data[i]['cia_descripcion']
+                  stDes.appendChild(option);
+                }
+            }
+            }
+          })
+        }
+      }
+      selectStorDes()
+
 
       var tm = document.getElementById('select_tm')
       const selectTmov=()=>{
@@ -455,7 +489,7 @@
                 for (let i = 0; i < json_data.length; i++) {
                   const option = document.createElement('option')
                   option.value = json_data[i]['id']
-                  option.text = json_data[i]['detail_store']+' || Lote-'+json_data[i]['cod_lot']+' | '+ json_data[i]['cod_prod']+' | '+json_data[i]['name_product']+' | Existencia '+json_data[i]['total_quantity']
+                  option.text = json_data[i]['detail_store']+' || Lote-'+json_data[i]['cod_lot']+' | '+ json_data[i]['cod_prod']+' | '+json_data[i]['full_name']+' | Existencia '+json_data[i]['total_quantity']
                   option.title = json_data[i]['cod_lot']
                   option.name = json_data[i]['cod_prod']
                   option.placeholder = json_data[i]['detail_store']
@@ -473,6 +507,42 @@
         }
       }
       selectstock()
+
+      var lst = document.getElementById('id_select_prostTras')
+      const selectstockTras=()=>{
+        if (lst != null){
+          $.ajax({
+            type: "GET", 
+            url:`${urlAPIS}/api/stock/${document.getElementById('root').value}`,
+            success:function(json_data) {  
+              const po = document.createElement('option') 
+              if (json_data !== 'Not Data'){
+
+                po.value = ''
+                po.text = '------ Seleccioneee -------'
+                lst.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['id']
+                  option.text = json_data[i]['detail_store']+' || Lote-'+json_data[i]['cod_lot']+' | '+ json_data[i]['cod_prod']+' | '+json_data[i]['full_name']+' | Existencia '+json_data[i]['total_quantity']
+                  option.title = json_data[i]['cod_lot']
+                  option.name = json_data[i]['cod_prod']
+                  option.placeholder = json_data[i]['detail_store']
+                  option.role = json_data[i]['total_quantity']
+                  lst.appendChild(option);
+                }
+                
+              }else{
+                  po.value = ''
+                  po.text = 'No existen registros'
+                  lst.appendChild(po);
+              }
+            }
+          })
+        }
+      }
+      selectstockTras()
+
 
     }else{
       console.log('no value')

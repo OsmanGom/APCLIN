@@ -31,7 +31,7 @@ $(document).ready(function () {
           for (let i = 0; i < json_data.length; i++) {
             t1.row.add([
               json_data[i]['cod_prod'],
-              json_data[i]['name_product'],
+              json_data[i]['full_name'],
               json_data[i]['cod_lot'],
               json_data[i]['unid_med'],
               json_data[i]['total_quantity'],

@@ -49,6 +49,10 @@ export default function Menu() {
     window.location.href = '#/dashboard'
     window.location.reload();
   }
+  const reloadTra = () => {
+    window.location.href = '#/Traslados'
+    window.location.reload();
+  }
 
 
   if (cookies.get('user')) {
@@ -167,6 +171,18 @@ export default function Menu() {
                   </a>
                 </li>
               }
+
+              {cookies.get('Traslados') === 'Traslados' &&
+                <li className="nav-item">
+                  <a href type="button" class="nav-link" onClick={reloadTra}>
+                    <span className="fa fa-object-ungroup mr-2" />
+                    <p>
+                      Traslados Kardex
+                      <i className="nav-icon far fa-circle text-danger right"></i>
+                    </p>
+                  </a>
+                </li>
+              }              
 
               <li className="nav-header">Registros</li>
 

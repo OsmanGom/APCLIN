@@ -25,12 +25,12 @@ $(function (){
       
         success: function(json_data) {
           if (json_data !== 'Not Data'){
-            let condition,status
+            let id_Condition,status
             for (let i = 0; i < json_data.length; i++) {
               
-              if(json_data[i]['condition'] === ''){
-                condition = 'Vacio'
-              }else{condition = json_data[i]['condition']}
+              if(json_data[i]['id_Condition'] === ''){
+                id_Condition = 'Vacio'
+              }else{id_Condition = json_data[i]['id_Condition']}
 
               if(json_data[i]['status_p'] === true){
                 status = 'Permanente'
@@ -44,7 +44,7 @@ $(function (){
                 //json_data[i]['puesto'], 
                 json_data[i]['days'], 
                 json_data[i]['diagnostic'],
-                //condition, 
+                //json_data[i]['id_Condition'], 
                 // status, 
                 // json_data[i]['date_from'],
                 // json_data[i]['date_to'],
@@ -134,7 +134,8 @@ export default function Incapacidades(props) {
           data: JSON.stringify({
             id:parseInt(formED.cod.id),
             days:parseInt(formED.days.value),
-            condition:formED.condition.value,
+            //condition:formED.condition.value,
+            id_Condition:parseInt(formED.id_Condition.value),
             diagnostic:formED.diagnostic.value,
             status_p:parseInt(status),
             date_p:formED.date_p.value,
@@ -150,6 +151,35 @@ export default function Incapacidades(props) {
             console.log(error.responseText)
           } 
         })
+    }
+
+    const selectCondition=()=>{
+      let Co = document.getElementById('id_select_co')
+      if (Co != null){
+        let options = document.querySelectorAll('#id_select_co option');
+        options.forEach(o => o.remove());
+        $.ajax({
+          type: "GET", 
+          url:`${cookies.get('server')}/api/condicion/${cookies.get('enterprise')}`,
+          success:function(json_data) {  
+            const po = document.createElement('option') 
+            if (json_data !== 'Not Data'){
+              po.value = ''
+              po.text = '------ Seleccione -------'
+              Co.appendChild(po)
+              for (let i = 0; i < json_data.length; i++) {
+                const option = document.createElement('option')
+                option.value = json_data[i]['id_Condition']
+                option.text = json_data[i]['id_Condition']+' '+json_data[i]['Condition']
+                Co.appendChild(option);
+              }
+            }else{
+              po.value = ''
+              po.text = 'No existen registros'
+            }
+          }
+        })
+      }
     }
     
     return (
@@ -399,9 +429,11 @@ export default function Incapacidades(props) {
                           Campo vacio.
                         </div>
                     </div>
-                    <div class="form-group col-md-5">
-                      <input type="text" name="condition" class="form-control form-control-border" id="exampleInputPassword1" placeholder="Condicion"/>
-                        <div class="invalid-feedback">
+                    <div class="form-group col-md-8">
+                      <label htmlFor="">Condición </label>
+                    <select class=" custom-select  form-control-border " name="id_Condition"  id='id_select_co'>  
+                          </select>                         
+                          <div class="invalid-feedback">
                           Campo vacio.
                         </div>
                     </div>

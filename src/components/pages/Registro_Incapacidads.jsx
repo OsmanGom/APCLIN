@@ -59,16 +59,18 @@ export default function Ficapacidades(props){
       //   formu.days.className = classSuccess
       // }
 
-      if( formu.days.value === '' && formu.date_from.value === '' && formu.date_to.value === ''){
+
+
+      if( formu.days.value === '' && formu.date_from.value === '' && formu.date_to.value === '' && formu.id_Condition === ''){
         
         formu.status_p.className = 'custom-control-input is-valid'
-        formu.condition.className = classSuccess;
-        formu.diagnostic.className = classSuccess;
-        formu.days_p.className = classSuccess;
-        formu.date_p.className = classSuccess;
-        formu.days.className = classSuccess;
-        formu.date_from.className = classSuccess;
-        formu.date_to.className = classSuccess;
+        formu.id_Condition.className = classWarning;
+        formu.diagnostic.className = classWarning;
+        formu.days_p.className = classWarning;
+        formu.date_p.className = classWarning;
+        formu.days.className = classWarning;
+        formu.date_from.className = classWarning;
+        formu.date_to.className = classWarning;
       }else {
         b = true
         a = true
@@ -76,9 +78,9 @@ export default function Ficapacidades(props){
 
       if(formu.days_p.value === '' && formu.date_p.value === ''){
      
-        formu.diagnostic.className = classSuccess;
-        formu.days_p.className = classSuccess;
-        formu.date_from.className = classSuccess;
+        formu.diagnostic.className = classWarning;
+        formu.days_p.className = classWarning;
+        formu.date_from.className = classWarning;
       }else {
         b = true
         a = true
@@ -129,9 +131,9 @@ export default function Ficapacidades(props){
       days = null
     }else{days = formu.days.value}
 
-    if(formu.id_Condition.value === ''){
-      id_Condition = null
-    }else{id_Condition = formu.id_Condition.value}
+    // if(formu.id_Condition.value === ''){
+    //   id_Condition = ''
+    // }else{id_Condition = formu.id_Condition.value}
 
     if(formu.date_p.value === ''){
       time_p = ''
@@ -347,15 +349,18 @@ export default function Ficapacidades(props){
                         <div class="invalid-feedback">
                           Campo vacio.
                         </div>
+
+                        
                     </div>
               
-                        <div class="input-group input-group-sm mb-1"> 
+                    <div class="input-group input-group-sm mb-1"> 
                           <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01"> <span  className="fas fa-comment-medical" style={{color: "#6a6d71",}}  />  Condición</label>
                           </div>
                           <select class=" custom-select  form-control-border js-data-example3" name="id_Condition"  id='id_select_co'>
                           </select> 
                         </div>
+
                       
                     <div class="col-sm-3  ml-3 mt-0">
                       <div class="form-group">
