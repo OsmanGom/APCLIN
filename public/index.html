@@ -210,6 +210,8 @@
     $('.js-data-example').select2({
       width:'100%',
     });
+    
+
     if(document.getElementById('root').value){
       let urlAPIS = document.getElementById('root').placeholder // url del servidor de las apis
       
@@ -379,6 +381,7 @@
 
       var st = document.getElementById('select_al')
       const selectStor=()=>{
+        
         if (st != null){
           $.ajax({
             type: "GET", 
@@ -411,6 +414,7 @@
 
       var stDes = document.getElementById('select_alDes')
       const selectStorDes=()=>{
+       
         if (stDes != null){
           $.ajax({
             type: "GET", 

@@ -18,6 +18,9 @@ import Semaforizacion_Amarillo from './components/pages/Zemaforizacion_Amarillo.
 import Semaforizacion_Verde from './components/pages/Zemaforizacion_Verde.jsx'
 import BarCode from './components/pages/BarCode.jsx'
 import Traslados from './components/pages/Traslados.jsx';
+import AlmacenD from './components/pages/Visor_Almacenes.jsx';
+import Type_prod from './components/pages/Visor_Tipo_producto.jsx'
+import Type_Move from './components/pages/Visor_Tipo_Movimiento.jsx'
 
 
 
@@ -48,6 +51,9 @@ export default function App() {
           <Route exact path="/Semaforizacion/Verde" component={Semaforizacion_Verde}/>
           <Route exact path="/barcode" component={BarCode}/>
           <Route exact path="/Traslados" component={Traslados}/>
+          <Route exact path="/Detalle/Almacen" component={AlmacenD}/>
+          <Route exact path="/Detalle/TipoProd" component={Type_prod}/>
+          <Route exact path="/Detalle/TipoMov" component={Type_Move}/>
         </div>
     {/* </Switch> */}
     {/* <Footer/> */}

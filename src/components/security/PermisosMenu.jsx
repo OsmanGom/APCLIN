@@ -21,6 +21,21 @@ export const OpcionesMenu = [
         path:'#/Detalle/IncapacidadesRH'
     },
     {
+        NombreLogico: 'DetalleAlmacen',
+        NombreMenu: 'Detalle Almacen',
+        path:'#/Detalle/Almacen'
+    },
+    {
+        NombreLogico: 'TipoProducto',
+        NombreMenu: 'Tipo Producto',
+        path:'#/Detalle/TipoProd'
+    },
+    {
+        NombreLogico: 'TipoMovimiento',
+        NombreMenu: 'Tipo Movimiento',
+        path:'#/Detalle/TipoMov'
+    },
+    {
         NombreLogico: 'DetalleProducto',
         NombreMenu: 'Detalle Producto',
         path:'#/Detalle/Productos'

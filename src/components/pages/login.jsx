@@ -156,6 +156,16 @@ export default function Login(props) {
                     if (res[i].IdMenu === 211) {
                       cookies.set('DetalleIncapacidadesRH', res[i].NombreLogico, { path: '/' });
                     }
+                    if (res[i].IdMenu === 230) {
+                      cookies.set('DetalleAlmacen', res[i].NombreLogico, { path: '/' });
+                    }
+                    if (res[i].IdMenu === 231) {
+                      cookies.set('TipoProducto', res[i].NombreLogico, { path: '/' });
+                    }
+                    if (res[i].IdMenu === 232) {
+                      cookies.set('TipoMovimiento', res[i].NombreLogico, { path: '/' });
+                    }
+                    
                   }
                   console.log(path)
 

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import Cookies from 'universal-cookie';
 import "jquery/dist/jquery.min.js";
 import $ from "jquery";
@@ -312,37 +312,85 @@ export default function Produtos_D(props) {
   }
 
   // Save data for method post =>>> ajax
-  const SaveData=(a,formu)=>{
-    if (a === true){
+  // const SaveData=(a,formu)=>{
+  //   if (a === true){
       
-      $.ajax({
-        type: 'post', 
-        url: `${cookies.get('server')}/api/productos`,
-        headers:{
-          'Accept':'application/json',
-          'Content-Type':'application/json'
-        },
-        data: JSON.stringify({
-          cod_prod: formu.cod_prod.value.toUpperCase(),
-          id_type_p:parseInt(formu.id_type_p.value),
-          name_product:formu.name_product.value,
-          full_name:formu.full_name.value,
-          unit_price:parseFloat(formu.unit_price.value),
-          user_register:formu.user_register.value,
-        }),
-        success: function (res){
-          toast.success(res,{duration: 6000, position:"top-right"})
-          selectProd()
-          // setTimeout("location.href='#/Detalle/Productos'", 1000);//Recargar la pagina en un segundo
-          window.location.href = '#/Detalle/Productos'
-          window.location.reload(); 
-        } 
-      })
+  //     $.ajax({
+  //       type: 'post', 
+  //       url: `${cookies.get('server')}/api/productos`,
+  //       headers:{
+  //         'Accept':'application/json',
+  //         'Content-Type':'application/json'
+  //       },
+  //       data: JSON.stringify({
+  //         cod_prod: formu.cod_prod.value.toUpperCase(),
+  //         id_type_p:parseInt(formu.id_type_p.value),
+  //         name_product:formu.name_product.value,
+  //         full_name:formu.full_name.value,
+  //         unit_price:parseFloat(formu.unit_price.value),
+  //         user_register:formu.user_register.value,
+  //       }),
+  //       success: function (res){
+  //         toast.success(res,{duration: 6000, position:"top-right"})
+  //         selectProd()
+  //         // setTimeout("location.href='#/Detalle/Productos'", 1000);//Recargar la pagina en un segundo
+  //         window.location.href = '#/Detalle/Productos'
+  //         window.location.reload(); 
+  //       } 
+  //     })
 
+  //   }
+  // }   
+  
+  const SaveData = (a, formu) => {
+    if (a === true) {
+      const codProd = formu.cod_prod.value.toUpperCase();
+  
+      // Realizar petición GET para verificar existencia de cod_prod
+      $.ajax({
+        type: 'get',
+        url: `${cookies.get('server')}/api/productos`,
+        data: {
+          cod_prod: codProd
+        },
+        success: function (response) {
+          // Verificar si el cod_prod ya existe en la base de datos
+          const productExists = response.some(product => product.cod_prod === codProd);
+  
+          if (productExists) {
+            // El cod_prod ya existe, mostrar mensaje de error
+            toast.error('El código de producto ya existe en el sistema', { autoClose: 3000 });
+          } else {
+            // El cod_prod no existe, realizar la petición POST para guardar el producto
+            $.ajax({
+              type: 'post',
+              url: `${cookies.get('server')}/api/productos`,
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              data: JSON.stringify({
+                cod_prod: codProd,
+                id_type_p: parseInt(formu.id_type_p.value),
+                name_product: formu.name_product.value,
+                full_name: formu.full_name.value,
+                unit_price: parseFloat(formu.unit_price.value),
+                user_register: formu.user_register.value,
+              }),
+              success: function (res) {
+                toast.success(res, { duration: 6000, position: "top-right" });
+                selectProd();
+                window.location.href = '#/Detalle/Productos';
+              }
+            });
+          }
+        }
+      });
     }
-  }   
+  };
   
   
+
   // Validaciones
   var classSuccess = 'form-control is-valid form-control-border';//Estilo de valido
   var classWarning = 'form-control form-control-border is-invalid';//Estilo de invalido
@@ -383,6 +431,8 @@ export default function Produtos_D(props) {
       }
       SaveData(a,formu)
   }
+
+  
 
   return (
     
@@ -440,6 +490,7 @@ export default function Produtos_D(props) {
                 <div className="card shadow rounded">
                   <div className="card-header ">
                     <h1 className="card-title float-left">Tabla Productos</h1>
+      
                     <button type="button" class="btn btn-warning btn-sm ml-1  float-right text-white" title='Generar Reporte' onClick={Report_Product}>
                     <i class="fa fa-file"></i> Reporte Productos
                     </button>

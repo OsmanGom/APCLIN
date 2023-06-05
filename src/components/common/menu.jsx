@@ -11,7 +11,7 @@ export default function Menu() {
 
 
   const cookies = new Cookies();
-  console.log(cookies.get('DetalleIncapacidadesRH'));
+  //console.log(cookies.get('DetalleIncapacidadesRH'));
   const reloadi = (event) => {
     window.location.href = '#/Incapacidades'
     window.location.reload();
@@ -27,6 +27,10 @@ export default function Menu() {
   }
   const reloadp = (event) => {
     window.location.href = '#/Detalle/Productos'
+    window.location.reload();
+  }
+  const reloada = (event) => {
+    window.location.href = '#/Detalle/Almacen'
     window.location.reload();
   }
   const reloadk = (event) => {
@@ -49,11 +53,16 @@ export default function Menu() {
     window.location.href = '#/dashboard'
     window.location.reload();
   }
-  const reloadTra = () => {
-    window.location.href = '#/Traslados'
+
+  const reloadTM = () => {
+    window.location.href = '#/Detalle/TipoMov'
     window.location.reload();
   }
 
+  const reloadTP = () => {
+    window.location.href = '#/Detalle/TipoProd'
+    window.location.reload();
+  }
 
   if (cookies.get('user')) {
     return (
@@ -172,18 +181,7 @@ export default function Menu() {
                 </li>
               }
 
-              {cookies.get('Traslados') === 'Traslados' &&
-                <li className="nav-item">
-                  <a href type="button" class="nav-link" onClick={reloadTra}>
-                    <span className="fa fa-object-ungroup mr-2" />
-                    <p>
-                      Traslados Kardex
-                      <i className="nav-icon far fa-circle text-danger right"></i>
-                    </p>
-                  </a>
-                </li>
-              }              
-
+             
               <li className="nav-header">Registros</li>
 
               <div class="btn-group ">
@@ -214,6 +212,48 @@ export default function Menu() {
                 </li>
 
               </div>
+
+              <li className="nav-header">Visores</li>
+
+                <div class="btn-group ">
+                  <button type="button" class="btn btn-danger dropdown-toggle col-12" data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample2">
+                    <span className="fas fa-layer-group mr-2" /> <span className='nav-header text-white'> Visores </span>
+                  </button>
+                </div>
+                <div class="collapse multi-collapse bg-dark col-12" id="multiCollapseExample3">
+                  <li class="card card-body  bg-dark ">
+                    
+                    {cookies.get('DetalleAlmacen') === 'DetalleAlmacen' &&
+                      <div class="nav-item" type="button">
+                        <a href type="button" class="nav-link" onClick={reloada}>
+                          <i className="far fa-circle nav-icon mr-2" />
+                          <span className='nav-header'>Visor Detalle Almacen</span>
+
+                        </a>
+                      </div>
+                    }
+                    {cookies.get('TipoProducto') === 'TipoProducto' &&
+                      <div class="nav-item" type="button">
+                        <a href type="button" class="nav-link" onClick={reloadTP}>
+                          <i className="far fa-circle nav-icon mr-2" />
+                          <span className='nav-header'>Visor Tipo Producto</span>
+
+                        </a>
+                      </div>
+                    }
+                     {cookies.get('TipoMovimiento') === 'TipoMovimiento' &&
+                      <div class="nav-item" type="button">
+                        <a href type="button" class="nav-link" onClick={reloadTM}>
+                          <i className="far fa-circle nav-icon mr-2" />
+                          <span className='nav-header'>Visor Tipo Movimiento</span>
+
+                        </a>
+                      </div>
+                    }
+
+                  </li>
+
+                </div>
 
 
             </ul>
