@@ -32,8 +32,9 @@ $(document).ready(function () {
             t1.row.add([
               json_data[i]['cod_prod'],
               json_data[i]['full_name'],
-              json_data[i]['cod_lot'],
+              json_data[i]['description_typeP'],
               json_data[i]['unid_med'],
+              json_data[i]['cod_lot'],
               json_data[i]['total_quantity'],
               json_data[i]['detail_store'], 
        
@@ -229,8 +230,9 @@ export default function Dashboard(props) {
                               
                               <th>Codigo de Producto</th>
                               <th>Nombre de producto</th>
-                              <th>Nombre de Lote</th>
+                              <th>Tipo Producto</th>
                               <th>Unidad de medida</th>
+                              <th>Nombre de Lote</th>
                               <th>Stock</th>
                               <th>Almacen</th>
                             </tr>
@@ -240,10 +242,11 @@ export default function Dashboard(props) {
                           </tbody>
                           <tfoot>
                             <tr>
-                              <th>Codigo de Producto</th>
+                            <th>Codigo de Producto</th>
                               <th>Nombre de producto</th>
-                              <th>Nombre de Lote</th>
+                              <th>Tipo Producto</th>
                               <th>Unidad de medida</th>
+                              <th>Nombre de Lote</th>
                               <th>Stock</th>
                               <th>Almacen</th>
                             </tr>

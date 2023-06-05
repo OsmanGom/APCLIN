@@ -30,9 +30,10 @@ $(document).ready(function () {
             t.row.add([
               json_data[i]['cod_prod'], 
               json_data[i]['full_name'], 
+              json_data[i]['description_typeP'],   
+              json_data[i]['unid_med'],            
               json_data[i]['cod_lot'], 
-              json_data[i]['total_quantity'],
-              json_data[i]['unid_med'],
+              json_data[i]['total_quantity'],           
               json_data[i]['date_exp'], 
               json_data[i]['Semaforizacion'], 
               json_data[i]['detail_store']
@@ -106,9 +107,10 @@ export default function Semaforizacion_Verde(props) {
                         <tr>
                           <th>Cód. Producto</th>
                           <th>Producto</th>
-                          <th>Nombre&nbsp;Lote</th>
-                          <th>Existencia</th>
+                          <th>Tipo Prod</th>
                           <th>U/Medida</th>
+                          <th>Nombre&nbsp;Lote</th>
+                          <th>Existencia</th>                   
                           <th>Fecha&nbsp;Exp</th>                                        
                           <th>Alerta</th>
                           <th>Almacen</th>
@@ -119,11 +121,12 @@ export default function Semaforizacion_Verde(props) {
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th>Cód. Producto</th>
+                        <th>Cód. Producto</th>
                           <th>Producto</th>
-                          <th>Nombre&nbsp;Lote</th>
-                          <th>Existencia</th>
+                          <th>Tipo Prod</th>
                           <th>U/Medida</th>
+                          <th>Nombre&nbsp;Lote</th>
+                          <th>Existencia</th>                   
                           <th>Fecha&nbsp;Exp</th>                                        
                           <th>Alerta</th>
                           <th>Almacen</th>
