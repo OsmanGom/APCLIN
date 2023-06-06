@@ -354,13 +354,13 @@ export default function Ficapacidades(props){
                     </div>
               
                     <div class="input-group input-group-sm mb-1"> 
-                          <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01"> <span  className="fas fa-comment-medical" style={{color: "#6a6d71",}}  />  Condición</label>
+                           
+                        </div>
+                        <div class="input-group-mb mb-1">
+                            <label class="input-group-text mb-1" for="inputGroupSelect01"> <span  className="fas fa-comment-medical" style={{color: "#6a6d71",}}  />  Condición</label>
                           </div>
                           <select class=" custom-select  form-control-border js-data-example3" name="id_Condition"  id='id_select_co'>
-                          </select> 
-                        </div>
-
+                          </select>
                       
                     <div class="col-sm-3  ml-3 mt-0">
                       <div class="form-group">

@@ -393,7 +393,7 @@ mostrarPropiedades(opcionSeleccionada);
 
     //*********************** REGISTROS ****************************
 
-    // Registro Lote
+    //Registro Lote
     const addLote = () => {
         const idlot = document.getElementById('formlote')
         let a, b = false
@@ -441,7 +441,66 @@ mostrarPropiedades(opcionSeleccionada);
         }
     }
 
-
+    // const addLote = () => {
+    //     const idlot = document.getElementById('formlote');
+    //     let a, b = false;
+      
+    //     if (idlot.lotea.value === '') {
+    //       idlot.lotea.className = classWarning;
+    //     } else {
+    //       a = true;
+    //       idlot.lotea.className = classSuccess;
+    //     }
+      
+    //     if (idlot.date_exp.value === '') {
+    //       idlot.date_exp.className = classWarning;
+    //     } else {
+    //       b = true;
+    //       idlot.date_exp.className = classSuccess;
+    //     }
+      
+    //     if (a && b) {
+    //       // Validar si el código de lote ya existe
+    //       $.ajax({
+    //         type: 'GET',
+    //         url: `${cookies.get('server')}/api/lot/${cookies.get('enterprise')}`,
+    //         success: function (json_data) {
+    //           const codLotExists = json_data.some(item => item.cod_lot === idlot.lotea.value);
+      
+    //           if (codLotExists) {
+    //             idlot.lotea.className = classWarning;
+    //             toast.error('El código de lote ya existe', { duration: 6000, position: "top-right" });
+    //           } else {
+    //             // El código de lote no existe, realizar la inserción
+    //             $.ajax({
+    //               type: 'POST',
+    //               url: `${cookies.get('server')}/api/lot/${cookies.get('enterprise')}`,
+    //               headers: {
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'application/json'
+    //               },
+    //               data: JSON.stringify({
+    //                 cod_lot: idlot.lotea.value,
+    //                 date_exp: idlot.date_exp.value,
+    //                 user_register: cookies.get('user'),
+    //                 cod_enterprise: cookies.get('enterprise')
+    //               }),
+    //               success: function (res) {
+    //                 idlot.lotea.className = classSuccess;
+    //                 toast.success(res, { duration: 6000, position: "top-right" });
+    //                 idlot.lotea.value = '';
+    //                 idlot.date_exp.value = '';
+    //                 idlot.lotea.className = 'form-control form-control-border';
+    //                 idlot.date_exp.className = 'form-control form-control-border';
+    //                 cargarlot();
+    //               }
+    //             });
+    //           }
+    //         }
+    //       });
+    //     }
+    //   };
+      
 
     // Registro Detalle
     const Rformdetalle = () => {

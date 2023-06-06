@@ -6,7 +6,6 @@ import "jquery/dist/jquery.min.js";
 import $ from "jquery";
 import { OpcionesMenu } from '../security/PermisosMenu'
 
-const systemVersion = '1.0.0';
 
 $(document).ready(function () {
   var p = document.getElementById('idempres')
@@ -103,7 +102,7 @@ export default function Login(props) {
             let respuesta = Response[0];
             // console.log(respuesta)
             cookies.set('ID', respuesta.IdUsuario, { path: '/' });//ID de retorno de login validacion
-            cookies.set('user', usern.value, { path: '/' });// Nombre usuario
+            cookies.set('user', usern.value.toUpperCase(), { path: '/' });// Nombre usuario
             cookies.set('enterprise', enterprise.value, { path: '/' });//Empresa Login
             cookies.set('local', window.location.href, { path: '/' });// url server del sistema
             cookies.set('server', url, { path: '/' });// variable url, url del servidor apis
@@ -250,9 +249,7 @@ export default function Login(props) {
                 {/* /.col */}
               </div>
 
-              <div className="form-group col-12" style={{ textAlign: 'right' }}>
-                <p>V. {systemVersion}</p>
-              </div>
+              
 
 
             </form>
