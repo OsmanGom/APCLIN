@@ -94,6 +94,7 @@ export default function Incapacidades(props) {
         data.f_i.value = ''
         data.f_s.value = ''
       }
+      
     }
     // Reportes de Incapacidades diarias
     const Report_Incapacidades_Diario=()=>{
@@ -153,6 +154,8 @@ export default function Incapacidades(props) {
         })
     }
 
+
+    
     const selectCondition=()=>{
       let Co = document.getElementById('id_select_co')
       if (Co != null){
