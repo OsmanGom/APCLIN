@@ -32,6 +32,7 @@ $(document).ready(function () {
             json_data[i]['name_product'], 
             json_data[i]['full_name'],
             json_data[i]['description_typeP'], 
+            json_data[i]['Origin_Product'], 
             json_data[i]['unid_med'], 
            // json_data[i]['user_register'], 
             json_data[i]['creation_date']
@@ -191,6 +192,33 @@ export default function Produtos_D(props) {
       })
     }
   }
+
+// Selects Productos
+const selectOrigin=()=>{
+  let p = document.getElementById('id_select_op')
+  if (p != null){
+    let options = document.querySelectorAll('#id_select_op option');
+    options.forEach(o => o.remove());
+    $.ajax({
+      type: "GET", 
+      url:`${cookies.get('server')}/api/origin`,
+      success:function(json_data) {  
+        const po = document.createElement('option') 
+        po.value = ''
+        po.text = '------ Seleccione -------'
+        p.appendChild(po)
+        for (let i = 0; i < json_data.length; i++) {
+          const option = document.createElement('option')
+          option.value = json_data[i]['id_Origin_Prod']
+          option.text = json_data[i]['id_Origin_Prod']+' '+json_data[i]['Origin_Product']
+          p.appendChild(option);
+        }
+      }
+    })
+  }
+}
+
+
 
   // Eliminar estilos de inputs
   const remove_data=()=>{
@@ -440,6 +468,7 @@ const addLote = () => {
               data: JSON.stringify({
                 cod_prod: codProd,
                 id_type_p: parseInt(formu.id_type_p.value),
+                id_Origin_Prod: parseInt(formu.id_Origin_Prod.value),
                 name_product: formu.name_product.value,
                 full_name: formu.full_name.value,
                 unit_price: parseFloat(formu.unit_price.value),
@@ -465,7 +494,7 @@ const addLote = () => {
   // Funcion para marcar como validos o invalidos los campos 
   const form = ()=>{
       var formu = document.getElementById('formdata');
-      var a,b,c,d,e,f = false;
+      var a,b,c,d,e,f,g = false;
 
       if(formu.id_type_p.value === ''){
         b = false
@@ -493,6 +522,11 @@ const addLote = () => {
       }else{
         e = true
         formu.unit_price.className = classSuccess;
+      }if(formu.id_Origin_Prod.value === ''){
+        formu.id_Origin_Prod.className = classWarning;
+      }else{
+        g = true
+        formu.id_Origin_Prod.className = classSuccess;
       }
       if (b && c && d && e && f){
         a = true;
@@ -578,7 +612,8 @@ const addLote = () => {
                           <th>Codigo&nbsp;Producto</th>
                           <th>Nombre&nbsp;Producto</th>
                           <th>Nombre&nbsp;Completo</th>
-                          <th>Tipo&nbsp;producto</th>                     
+                          <th>Tipo&nbsp;producto</th>  
+                          <th>Origen&nbsp;producto</th>                                       
                           <th>U&nbsp;Medida</th>
                           {/* <th>Usuario&nbsp;transacción</th> */}
                           <th>Fecha&nbsp;de&nbsp;Creacion</th>
@@ -592,7 +627,8 @@ const addLote = () => {
                         <th>Codigo&nbsp;Producto</th>
                           <th>Nombre&nbsp;Producto</th>
                           <th>Nombre&nbsp;Completo</th>
-                          <th>Tipo&nbsp;producto</th>                     
+                          <th>Tipo&nbsp;producto</th> 
+                          <th>Origen&nbsp;producto</th>                    
                           <th>U&nbsp;Medida</th>
                           {/* <th>Usuario&nbsp;transacción</th> */}
                           <th>Fecha&nbsp;de&nbsp;Creacion</th>
@@ -663,6 +699,17 @@ const addLote = () => {
                         Campo vacio.
                     </div>
                   </div>
+
+                  <div class="form-group col-md-7">
+                  <label><span className="fas fa-file-signature mr-2" />Origen Producto</label>
+                      <div className="select2-purple">
+                      <select class=" custom-select  form-control-border js-data-example" name="id_Origin_Prod"  id='id_select_op'>
+                          </select>
+                      </div>
+                      <div class="invalid-feedback">
+                          Campo vacio.
+                      </div>
+                  </div>  
                 </div>
                     
                 {/*  */}

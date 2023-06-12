@@ -166,7 +166,6 @@ export default function Ficapacidades(props){
         cod_employed:formu.cod_employed.value.toUpperCase(),
         days:parseInt(formu.days.value),
         id_Condition:formu.id_Condition.value,
-        condition:condition,
         diagnostic:diagnostic,
         user_register:cookies.get('user'),
         status_p:parseInt(formu.status_p.value),

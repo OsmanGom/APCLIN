@@ -308,6 +308,7 @@ mostrarPropiedades(opcionSeleccionada);
                         const option = document.createElement('option')
                         option.value = json_data[i]['cod_prod']
                         option.text = json_data[i]['cod_prod'] + ' | ' + json_data[i]['name_product'] + '-' + json_data[i]['unid_med']
+                        option.placeholder = json_data[i]['cod_prod']
                         p.appendChild(option);
                     }
                 }
@@ -526,6 +527,9 @@ mostrarPropiedades(opcionSeleccionada);
         let rd = document.getElementById('formdetalle')
         let a = false
 
+        
+    
+
         if (rd.cod_prod.value === '' || rd.cod_lot.value === '') {
             toast.error('Campos vacios', { duration: 6000, position: "top-right" })
         } else { a = true }
@@ -554,6 +558,8 @@ mostrarPropiedades(opcionSeleccionada);
 
         }
     }
+
+    
 
     // Registro Kardex
     const prueba = () => {
@@ -800,6 +806,7 @@ mostrarPropiedades(opcionSeleccionada);
     // ************************ Funciones **************************
     // Funcion tabla Entradas
     const add_tablaE = () => {
+       
         let formuk2 = document.getElementById('formk2');
         if (formuk2.cod_prod.value !== '' && formuk2.cod_store.value !== '' && formuk2.quantity.value !== '') {
 

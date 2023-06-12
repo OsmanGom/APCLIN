@@ -54,10 +54,10 @@ $(function (){
                 // json_data[i]['creation_date'], 
                 // json_data[i]['diagnostic'], //onclick=`+"{Reporte_Incapacidades(this.value)}"+`
                 json_data[i]['cia_abreviatura'],
-                `<button class='btn btn-secondary  btn-md' value=`+json_data[i]['id']+` title='Reporte Firma'onclick=`+"{Reporte_Firma_persona(this.value,document.getElementById('root').value)}"+` ><i class="fa fa-file-export"></i></button>`,
-                `<button class='btn btn-warning  btn-md' value=`+json_data[i]['id']+` title='Reporte Incapacidad' onclick=`+"{Reporte_Incapacidades_persona(this.value,document.getElementById('root').value)}"+`><i class="fa fa-file-export"></i></button>`,
-                `<button class='btn btn-success  btn-md' value=`+json_data[i]['id']+` title='Modificar' data-toggle="modal" data-target="#edit" onclick=`+"{Mod(this.value,document.getElementById('root').value)}"+`><i class="nav-icon fas fa-edit"></i></button>`,
-                `<button class='btn btn-danger btn-md' value=`+json_data[i]['id']+` title='Cambiar Estado de Incapacidad' onclick={CambiarEstadoIncapa(this.value)}{window.location.reload()}><i class="nav-icon fas fa-Trash"></i></button>`
+                `<button `+ (!json_data[i]['status'] ? 'disabled': 'enabled')+` class='btn btn-secondary  btn-md ' value=`+json_data[i]['id']+` title='Reporte Firma'onclick=`+"{Reporte_Firma_persona(this.value,document.getElementById('root').value)}"+` ><i class="fa fa-file-export"></i></button>`,
+                `<button `+ (!json_data[i]['status'] ? 'disabled': 'enabled')+`  class='btn btn-warning  btn-md' value=`+json_data[i]['id']+` title='Reporte Incapacidad' onclick=`+"{Reporte_Incapacidades_persona(this.value,document.getElementById('root').value)}"+`><i class="fa fa-file-export"></i></button>`,
+                `<button `+ (!json_data[i]['status'] ? 'disabled': 'enabled')+` class='btn btn-success  btn-md' value=`+json_data[i]['id']+` title='Modificar' data-toggle="modal" data-target="#edit" onclick=`+"{Mod(this.value,document.getElementById('root').value)}"+`><i class="nav-icon fas fa-edit"></i></button>`,
+                `<button `+ (!json_data[i]['status'] ? 'disabled': 'enabled')+` class='btn btn-danger btn-md' value=`+json_data[i]['id']+` title='Cambiar Estado de Incapacidad' onclick={CambiarEstadoIncapa(this.value)}{window.location.reload()}><i class="nav-icon fas fa-Trash"></i></button>`
               ]).draw(false);
                 
             }
@@ -128,7 +128,7 @@ export default function Incapacidades(props) {
         // 
         $.ajax({
           type: 'Patch', 
-          url: `${cookies.get('server')}/api/incapacidades`,
+          url: `http://${window.location.hostname}:5001/api/incapacidades`,
           headers:{
           'Accept':'application/json',
           'Content-Type':'application/json'

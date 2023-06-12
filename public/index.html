@@ -136,8 +136,8 @@
       let formED = document.getElementById('formED');
 
       $.ajax({
-        type: "DELETE", 
-        url:`${document.getElementById('root').placeholder}/api/incapacidades/${a}`,
+        type: "GET", 
+        url:`${document.getElementById('root').placeholder}/api/IncapacidadesGet/${a}`,
         success:function(json_data) { 
           let  status_p
           if(json_data[0]['status_p']){
@@ -149,11 +149,11 @@
           formED.cod.value=json_data[0]['exp_codigo_alternativo']
           formED.cod.id=a
           // 
-          
+          console.log(json_data)
           formED.date_from.value=json_data[0]['date_from1']
           formED.date_to.value=json_data[0]['date_to1']
           formED.days.value=json_data[0]['days']
-          formED.condition.value=json_data[0]['condition']
+          formED.id_Condition.value=json_data[0]['id_Condition']
           formED.status_p.value=status_p
           formED.date_p.value=json_data[0]['date_p1']
           formED.days_p.value=json_data[0]['days_p']
@@ -302,6 +302,41 @@
         }
       }
       selectCondition()
+
+      var OP = document.getElementById('id_select_op')
+      const selectOrigin=()=>{
+        if (OP != null){
+          $.ajax({
+            type: "GET", 
+            url:`${urlAPIS}/api/origin`,
+            success:function(json_data) {  
+              const po = document.createElement('option')
+              
+              if(json_data === 'Not Data'){
+                
+                po.value = ''
+                po.text = 'No data'
+                // op.disabled = true
+                OP.appendChild(po)
+              }else{ 
+                po.value = ''
+                po.text = '------ Seleccione -------'
+                OP.appendChild(po)
+                for (let i = 0; i < json_data.length; i++) {
+                  const option = document.createElement('option')
+                  option.value = json_data[i]['id_Origin_Prod']
+                  option.text = json_data[i]['id_Origin_Prod']+' '+json_data[i]['Origin_Product']
+                  OP.appendChild(option);
+                }
+              }
+            }
+          })
+        }
+      }
+      selectOrigin()
+
+
+
 
       var s = document.getElementById('id_select_lote')
       const selectLot=()=>{
