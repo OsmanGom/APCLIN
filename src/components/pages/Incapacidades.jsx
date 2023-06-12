@@ -56,7 +56,8 @@ $(function (){
                 json_data[i]['cia_abreviatura'],
                 `<button class='btn btn-secondary  btn-md' value=`+json_data[i]['id']+` title='Reporte Firma'onclick=`+"{Reporte_Firma_persona(this.value,document.getElementById('root').value)}"+` ><i class="fa fa-file-export"></i></button>`,
                 `<button class='btn btn-warning  btn-md' value=`+json_data[i]['id']+` title='Reporte Incapacidad' onclick=`+"{Reporte_Incapacidades_persona(this.value,document.getElementById('root').value)}"+`><i class="fa fa-file-export"></i></button>`,
-                `<button class='btn btn-success  btn-md' value=`+json_data[i]['id']+` title='Modificar' data-toggle="modal" data-target="#edit" onclick=`+"{Mod(this.value,document.getElementById('root').value)}"+`><i class="nav-icon fas fa-edit"></i></button>`
+                `<button class='btn btn-success  btn-md' value=`+json_data[i]['id']+` title='Modificar' data-toggle="modal" data-target="#edit" onclick=`+"{Mod(this.value,document.getElementById('root').value)}"+`><i class="nav-icon fas fa-edit"></i></button>`,
+                `<button class='btn btn-danger btn-md' value=`+json_data[i]['id']+` title='Cambiar Estado de Incapacidad' onclick={CambiarEstadoIncapa(this.value)}{window.location.reload()}><i class="nav-icon fas fa-Trash"></i></button>`
               ]).draw(false);
                 
             }
@@ -153,6 +154,8 @@ export default function Incapacidades(props) {
           } 
         })
     }
+
+   
 
 
     
@@ -271,6 +274,7 @@ export default function Incapacidades(props) {
                             <th>R.Firma</th>
                             <th>R.Incap</th>
                             <th>Editar</th>
+                            <th>Eliminar</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -298,6 +302,7 @@ export default function Incapacidades(props) {
                              <th>R.Firma</th>
                             <th>R.Incap</th>
                             <th>Editar</th>
+                            <th>Eliminar</th>
                           </tr>
                         </tfoot>
                       </table>

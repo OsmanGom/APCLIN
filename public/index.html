@@ -162,6 +162,29 @@
         }
       })
     } 
+    const CambiarEstadoIncapa=(id)=>{
+    
+ $.ajax({
+  
+   type: 'PUT', 
+   url: `http://${window.location.hostname}:5001/api/CambiarEstadoIncapacidad/${id}`,
+   headers:{
+   'Accept':'application/json',
+   'Content-Type':'application/json'
+   },
+   data: JSON.stringify({
+     id:parseInt(id),
+   }),
+   
+   success: function (res){
+     console.log(res)
+     
+   }, error: function(error){
+     console.log(error.responseText)
+   } 
+ })
+}
+
 
     const Reporte_Incapacidades_persona=(a,b)=>{
       // console.log(a+'\n'+b)
